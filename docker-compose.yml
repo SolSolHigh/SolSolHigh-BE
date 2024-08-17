@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   solsol-app:
     container_name: solsol-app
@@ -7,27 +5,36 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      mysql:
+      solsol-mysql:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/solsolhigh
+      SPRING_DATASOURCE_URL: jdbc:mysql://solsol-mysql:3306/solsolhigh
       SPRING_DATASOURCE_USERNAME: "root"
-      SPRING_DATASOURCE_PASSWORD: "qwer1234"
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       TZ: "Asia/Seoul"
     restart: always
+    networks:
+      - internal_network
 
-  mysql:
-    container_name: mysql
+  solsol-mysql:
+    container_name: solsol-mysql
     image: mysql:8.3.0
     ports:
-      - "3306:3306" # MySQL 기본 포트는 3306입니다.
+      - "3307:3306"
     environment:
       MYSQL_DATABASE: solsolhigh
       MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: 'qwer1234'
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       TZ: "Asia/Seoul"
     healthcheck:
       test: [ 'CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -u root --password=$MYSQL_ROOT_PASSWORD' ]
       interval: 10s
       timeout: 2s
       retries: 100
+    volumes:
+      - ~/solsol-high/database/mysql:/var/lib/mysql
+    networks:
+      - internal_network
+
+networks:
+  internal_network:
