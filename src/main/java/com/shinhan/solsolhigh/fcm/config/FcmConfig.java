@@ -5,7 +5,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -19,16 +18,17 @@ public class FcmConfig {
 
     private final String secretKeyDir = "solsolhigh-firebase-adminsdk-h6pxn-52d949def1.json";
     private final String firebaseScope = "https://www.googleapis.com/auth/cloud-platform";
+
     @Bean
     public InitializingBean firebaseConfig() {
         return () -> {
-            try{
+            try {
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(
                                 GoogleCredentials.fromStream(new ClassPathResource(secretKeyDir).getInputStream())
                                         .createScoped(List.of(firebaseScope)))
                         .build();
-                if(FirebaseApp.getApps().isEmpty()){
+                if (FirebaseApp.getApps().isEmpty()) {
                     FirebaseApp.initializeApp(options);
                     log.info("Firebase application has been initialized");
                 }
