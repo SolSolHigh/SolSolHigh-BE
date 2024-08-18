@@ -3,12 +3,16 @@ spring:
     show-sql: true
     open-in-view: false #default : true이기에 수정해야 함.
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         highlight_sql: true
         format_sql: true
         default_batch_fetch_size: 100
+
+  sql:
+    init:
+      mode: always
 
   profiles:
     include: dev
