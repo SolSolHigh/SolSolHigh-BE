@@ -1,4 +1,4 @@
-package com.shinhan.solsolhigh.promise.domain;
+package com.shinhan.solsolhigh.egg.domain;
 
 import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
@@ -6,27 +6,25 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "promise")
+@Table(name = "hold_special_egg")
 @Entity
-public class Promise {
+public class HoldSpecialEgg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "promise_ticket_id")
+    @Column(name = "hold_special_egg_id")
     private Integer id;
 
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id")
     private Child child;
 
-    @Column(name = "promise_publish_datetime")
-    private LocalDateTime publishDateTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "special_egg_id")
+    private SpecialEgg specialEgg;
 
-    @Column(name = "promise_used_datetime")
-    private LocalDateTime usedDateTime;
+    @Column(name = "egg_count")
+    private Integer count;
 }

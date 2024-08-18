@@ -11,30 +11,24 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "quiz_solve")
+@Table(name = "between_of_day_quiz_solve_log")
 @Entity
-public class QuizSolve {
+public class BetweenOfDatQuizSolveLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "quiz_solve_id")
+    @Column(name = "log_id")
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "financial_quiz_id")
-    private FinancialQuiz financialQuiz;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id")
     private Child child;
 
+    @Column(name = "started_at")
+    private LocalDateTime startedAt;
 
-    //이거 왜 Null이지? -> 안풀었을 때 null
-    @Column(name = "is_correct")
-    private Boolean isCorrect;
+    @Column(name = "end_at")
+    private LocalDateTime endAt;
 
-
-    @Column(name = "corrected_at")
-    private LocalDateTime correctedAt;
-
-
+    @Column
+    private Integer count;
 }

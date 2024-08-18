@@ -2,11 +2,9 @@ package com.shinhan.solsolhigh.user.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.checkerframework.checker.units.qual.C;
 
 @Getter
 @SuperBuilder
@@ -17,17 +15,17 @@ import org.checkerframework.checker.units.qual.C;
 @DiscriminatorValue("c")
 public class Child extends User {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Parent parent;
 
-    @Column
+    @Column(name = "max_exp")
     private Integer maxExp;
 
-    @Column
+    @Column(name = "current_exp")
     private Integer currentExp;
 
-    @Column
+    @Column(name = "goal_money")
     private Integer goalMoney;
 
 }

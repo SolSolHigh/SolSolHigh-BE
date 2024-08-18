@@ -1,10 +1,8 @@
 package com.shinhan.solsolhigh.account.domain;
 
-import com.shinhan.solsolhigh.user.domain.Child;
-import com.shinhan.solsolhigh.user.domain.Parent;
+import com.shinhan.solsolhigh.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -27,16 +25,17 @@ public class AutoTransferRule {
 
     @OneToOne
     @JoinColumn(name = "send_account_id")
-    private Account sendAccountId;
-
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Parent parent;
-
-    @ManyToOne
-    @JoinColumn(name = "child_id")
-    private Child child;
+    private Account sendAccount;
 
     @Column
     private Integer balance;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private User sender;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
+
 }

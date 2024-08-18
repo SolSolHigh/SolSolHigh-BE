@@ -2,7 +2,6 @@ package com.shinhan.solsolhigh.user.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -13,10 +12,10 @@ import java.time.LocalDate;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
-@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type")
+@Entity
+@Table(name = "user")
 public class User {
     @Id
     @Column(name = "user_id")
@@ -24,13 +23,16 @@ public class User {
     private Integer id;
 
     @Column
-    private String username;
+    private String email;
 
     @Column
     private String password;
 
     @Column
     private String name;
+
+    @Column
+    private String nickname;
 
     @Convert(converter = GenderConverter.class)
     @Column(name = "user_gender")
@@ -41,7 +43,7 @@ public class User {
 
 
     public Integer getAge() {
-        if(birthday == null){
+        if (birthday == null) {
             return null;
         }
         return LocalDate.now().getYear() - birthday.getYear() + 1;

@@ -21,16 +21,16 @@ public class Account {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "bank_code_id", columnDefinition = "CHAR(3)")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_code_id")
     private BankCode bankCode;
 
     @Column(name = "account_type")
     private Character accountType;
 
-    @Column(name = "account_number", columnDefinition = "VARCHAR(20)")
+    @Column(name = "account_number")
     private String accountNumber;
 
-    @Column(name = "account_name", columnDefinition = "VARCHAR(28)")
+    @Column(name = "account_name")
     private String accountName;
 }

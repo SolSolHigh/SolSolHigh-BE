@@ -1,8 +1,8 @@
 package com.shinhan.solsolhigh.user.domain;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -13,6 +13,5 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "parent")
 @Entity
 @DiscriminatorValue("p")
-public class Parent extends User{
-
+public class Parent extends User {
 }
