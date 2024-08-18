@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.checkerframework.checker.units.qual.C;
 
 @Getter
 @SuperBuilder
@@ -28,4 +29,5 @@ public class Child extends User {
 
     @Column
     private Integer goalMoney;
+
 }
