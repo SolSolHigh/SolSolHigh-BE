@@ -5,8 +5,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      solsol-mysql:
-        condition: service_healthy
+      - solsol-mysql
+      - solsol-redis
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://solsol-mysql:3306/solsolhigh
       SPRING_DATASOURCE_USERNAME: "root"
@@ -18,7 +18,7 @@ services:
 
   solsol-mysql:
     container_name: solsol-mysql
-    image: mysql:8.3.0
+    image: mysql
     ports:
       - "3307:3306"
     environment:
@@ -33,6 +33,14 @@ services:
       retries: 100
     volumes:
       - ~/solsol-high/database/mysql:/var/lib/mysql
+    networks:
+      - internal_network
+
+  solsol-redis:
+    image: redis
+    container_name: solsol-redis
+    ports:
+      - "6380:6379"
     networks:
       - internal_network
 
