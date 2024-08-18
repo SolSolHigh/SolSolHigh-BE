@@ -1,4 +1,4 @@
-package com.shinhan.solsolhigh.quiz.domain;
+package com.shinhan.solsolhigh.egg.domain;
 
 import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
@@ -11,30 +11,24 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "quiz_solve")
+@Table(name = "egg")
 @Entity
-public class QuizSolve {
+public class Egg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "quiz_solve_id")
+    @Column(name = "egg_id")
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "financial_quiz_id")
-    private FinancialQuiz financialQuiz;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id")
     private Child child;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    //이거 왜 Null이지? -> 안풀었을 때 null
-    @Column(name = "is_correct")
-    private Boolean isCorrect;
+    @Column(name = "destroyed_at")
+    private LocalDateTime destroyedAt;
 
-
-    @Column(name = "corrected_at")
-    private LocalDateTime correctedAt;
-
-
+    @Column(name = "hit_count")
+    private Integer hitCount;
 }

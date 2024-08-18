@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "mission")
 @Entity
-public class Misssion {
+public class Mission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +30,14 @@ public class Misssion {
     @Column(name = "is_finished")
     private Boolean isFinished;
 
-    @Column(name = "mission_start_datetime")
-    private LocalDateTime startDatetime;
+    @Column(name = "mission_start_at")
+    private LocalDateTime startAt;
 
-    @Column(name = "mission_end_datetime")
-    private LocalDateTime endDatetime;
+    @Column(name = "mission_end_at")
+    private LocalDateTime endAt;
 
-    @Column(name = "mission_finished_datetime")
-    private LocalDateTime finishedDatetime;
-
+    @Column(name = "mission_finished_at")
+    private LocalDateTime finishedAt;
 
     //상 중 하
     @Column(name = "mission_level")

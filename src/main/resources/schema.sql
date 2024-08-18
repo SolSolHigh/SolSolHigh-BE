@@ -35,28 +35,29 @@ create table user
 (
     user_id  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     type     CHAR(1),
-    username VARCHAR(40)  NOT NULL,
+    email    VARCHAR(40)  NOT NULL,
     password VARCHAR(255) NOT NULL,
     name     VARCHAR(52)  NOT NULL,
-    nickname VARCHAR(30)  NOT NULL
+    nickname VARCHAR(30)  NOT NULL,
+    birthday DATE         NOT NULL
 );
 
 create table parent
 (
-    parent_id INT NOT NULL PRIMARY KEY,
-    FOREIGN KEY (parent_id) REFERENCES user (user_id)
+    user_id INT NOT NULL PRIMARY KEY,
+    FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 
 
 create table child
 (
-    child_id    INT NOT NULL PRIMARY KEY,
+    user_id    INT NOT NULL PRIMARY KEY,
     parent_id   INT NOT NULL,
     current_exp INT NOT NULL,
     max_exp     INT NOT NULL,
     goal_money  INT NOT NULL,
-    FOREIGN KEY (child_id) REFERENCES user (user_id),
-    FOREIGN KEY (parent_id) REFERENCES parent (parent_id)
+    FOREIGN KEY (user_id) REFERENCES user (user_id),
+    FOREIGN KEY (parent_id) REFERENCES parent (user_id)
 );
 
 
@@ -126,7 +127,7 @@ create table mission
     mission_end_at      DATETIME     NOT NULL,
     mission_finished_at DATETIME NULL,
     mission_level       CHAR(1) NULL,
-    FOREIGN KEY (child_id) REFERENCES child (child_id)
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 create table child_savings_status_by_period
@@ -137,7 +138,7 @@ create table child_savings_status_by_period
     goal_money      INT  NOT NULL,
     start_date      DATE NOT NULL,
     end_date        DATE NOT NULL,
-    FOREIGN KEY (child_id) REFERENCES child (child_id)
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 ----------------------------------------------------------------------
@@ -147,7 +148,7 @@ create table promise_ticket
     promise_ticket_id    INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     child_id             INT      NOT NULL,
     promise_published_at DATETIME NOT NULL,
-    FOREIGN KEY (child_id) REFERENCES child (child_id)
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 create table promise_ticket_used_log
@@ -183,9 +184,9 @@ create table quiz_solve
     financial_quiz_id INT NOT NULL,
     child_id          INT NOT NULL,
     is_correct        BOOL NULL,
-    correct_at        DATE NULL,
+    corrected_at      DATE NULL,
     FOREIGN KEY (financial_quiz_id) REFERENCES financial_quiz (financial_quiz_id),
-    FOREIGN KEY (child_id) REFERENCES child (child_id)
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 create table between_of_day_quiz_solve_log
@@ -195,7 +196,7 @@ create table between_of_day_quiz_solve_log
     started_at DATE    NOT NULL,
     end_at     DATE    NOT NULL,
     count      TINYINT NOT NULL,
-    FOREIGN KEY (child_id) REFERENCES child (child_id)
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 create table selected_quiz_keyword
@@ -203,7 +204,7 @@ create table selected_quiz_keyword
     selected_quiz_keyword_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     child_id                 INT NOT NULL,
     quiz_keyword_id          INT NOT NULL,
-    FOREIGN KEY (child_id) REFERENCES child (child_id),
+    FOREIGN KEY (child_id) REFERENCES child (user_id),
     FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id)
 );
 
@@ -216,7 +217,7 @@ create table egg
     created_at   DATETIME NOT NULL,
     destroyed_at DATETIME NOT NULL,
     hit_count    SMALLINT NOT NULL,
-    FOREIGN KEY (child_id) REFERENCES child (child_id)
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 create table special_egg
@@ -234,7 +235,7 @@ create table hold_special_egg
     child_id            INT NOT NULL,
     special_egg_id      INT NOT NULL,
     egg_count           INT NOT NULL,
-    FOREIGN KEY (child_id) REFERENCES child (child_id),
+    FOREIGN KEY (child_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
 
@@ -245,7 +246,7 @@ create table egg_sell_board
     child_id            INT      NOT NULL,
     hold_special_egg_id INT      NOT NULL,
     wrote_at            DATETIME NOT NULL,
-    FOREIGN KEY (child_id) REFERENCES child (child_id),
+    FOREIGN KEY (child_id) REFERENCES child (user_id),
     FOREIGN KEY (hold_special_egg_id) REFERENCES hold_special_egg (hold_special_egg_id)
 );
 
@@ -257,8 +258,8 @@ create table egg_trade_log
     buyer_id         INT      NOT NULL,
     traded_at        DATETIME NOT NULL,
     special_egg_id   INT      NOT NULL,
-    egg_stock_count  INT      NOT NULL,
-    FOREIGN KEY (seller_id) REFERENCES child (child_id),
-    FOREIGN KEY (buyer_id) REFERENCES child (child_id),
+    count            INT      NOT NULL,
+    FOREIGN KEY (seller_id) REFERENCES child (user_id),
+    FOREIGN KEY (buyer_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );

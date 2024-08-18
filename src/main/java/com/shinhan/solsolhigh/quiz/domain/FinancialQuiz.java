@@ -23,7 +23,7 @@ public class FinancialQuiz {
     @Column
     private Boolean answer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_keyword_id")
     private QuizKeyword quizKeyword;
 
