@@ -7,12 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface ErrorConstantDefinition {
-    public String getMessage();
-    public String getStatusCode();
-    public HttpStatus getHttpStatus();
+    String getMessage();
+    String getStatusCode();
+    HttpStatus getHttpStatus();
 
-
-    public default ResponseEntity<?> toErrorResponseEntity() {
+    default ResponseEntity<?> toErrorResponseEntity() {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", getMessage());
         errors.put("status", getStatusCode());

@@ -41,6 +41,13 @@ public class User {
     @Column
     private LocalDate birthday;
 
+    @Column
+    private Boolean isSignUpCompleted;
+
+    @PrePersist
+    protected void onCreate() {
+        isSignUpCompleted = false;
+    }
 
     public Integer getAge() {
         if (birthday == null) {
