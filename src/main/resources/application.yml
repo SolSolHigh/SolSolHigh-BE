@@ -1,4 +1,10 @@
+server:
+  servlet:
+    session:
+      timeout: 86400
 spring:
+  profiles:
+    include: dev
   jpa:
     show-sql: true
     open-in-view: false #default : true이기에 수정해야 함.
@@ -13,6 +19,3 @@ spring:
   sql:
     init:
       mode: always
-
-  profiles:
-    include: dev
