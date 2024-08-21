@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomOAuthUserService customOAuthUserService;
+    private final OAuthLoginFailureExceptionHandler oAuthLoginFailureExceptionHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,7 +31,7 @@ public class SecurityConfig {
                 httpSecurityOAuth2LoginConfigurer
                         .loginPage("/oauth2/login")
                         .userInfoEndpoint(userInfoEndpointConfig ->
-                                userInfoEndpointConfig.userService(customOAuthUserService)));
+                                userInfoEndpointConfig.userService(customOAuthUserService)).failureHandler(oAuthLoginFailureExceptionHandler));
         return http.build();
     }
 }

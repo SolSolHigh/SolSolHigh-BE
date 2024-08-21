@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @DiscriminatorColumn(name = "type")
 @Entity
 @Table(name = "user")
+@DiscriminatorValue("u")
 public class User {
     @Id
     @Column(name = "user_id")

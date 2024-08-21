@@ -34,12 +34,14 @@ create table prefix_sum_exp
 create table user
 (
     user_id  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    type     CHAR(1),
+    type     CHAR(1)      NULL,
     email    VARCHAR(40)  NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NULL,
     name     VARCHAR(52)  NOT NULL,
-    nickname VARCHAR(30)  NOT NULL,
-    birthday DATE         NOT NULL
+    nickname VARCHAR(30)  NULL,
+    birthday DATE         NULL,
+    user_gender CHAR(1)   NULL,
+    is_sign_up_completed  BOOL NOT NULL
 );
 
 create table parent

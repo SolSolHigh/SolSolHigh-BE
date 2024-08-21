@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum UserErrorConstants implements ErrorConstantDefinition {
-    SIGNUP_NOT_COMPLETED("회원가입 미완료", "A001", HttpStatus.NO_CONTENT);
+    SIGNUP_NOT_COMPLETED("회원가입 미완료", "A001", HttpStatus.NOT_FOUND);
 
     private final String message;
     private final String statusCode;

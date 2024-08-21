@@ -34,6 +34,8 @@ public class Gender {
     }
 
     public static Gender of(String val) {
+        if(val == null || val.isEmpty()) return null;
+
         if("F".equalsIgnoreCase(val))
             return new Gender(Type.FEMALE);
 

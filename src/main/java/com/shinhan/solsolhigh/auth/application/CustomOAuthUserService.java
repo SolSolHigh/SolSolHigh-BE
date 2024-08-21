@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class CustomOAuthUserService extends DefaultOAuth2UserService {
+
     private final UserRepository userRepository;
     private final HttpSession httpSession;
 
@@ -27,13 +29,12 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(request);
-        System.out.println(oAuth2User.getAttributes());
 
         String registrationId = request.getClientRegistration().getRegistrationId();
         OAuthResponse response = switch (registrationId) {
             case "naver" -> NaverOAuthResponse.from(oAuth2User.getAttributes());
             case "kakao" -> KakaoOAuthResponse.from(oAuth2User.getAttributes());
-            default -> throw new OAuth2AuthenticationException("Auth Error");
+            default -> throw new OAuth2AuthenticationException("Auth error");
         };
 
         Optional<User> userOptional = userRepository.findByEmail(response.getEmail());
@@ -41,12 +42,12 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
         if(userOptional.isEmpty()) {
             User newUser = User.builder().email(response.getEmail()).name(response.getName()).build();
             userRepository.save(newUser);
-            throw new UserSignupNotCompletedException();
+            throw new OAuth2AuthenticationException(new OAuth2Error("User signup not completed"), new UserSignupNotCompletedException());
         }
 
         User user = userOptional.get();
         if(!user.getIsSignUpCompleted())
-            throw new UserSignupNotCompletedException();
+            throw new OAuth2AuthenticationException(new OAuth2Error("User signup not completed"), new UserSignupNotCompletedException());
 
         httpSession.setAttribute(SessionConstants.LOGIN_USER.name(), user.getId());
 
