@@ -13,5 +13,4 @@ public enum UserErrorConstants implements ErrorConstantDefinition {
     private final String message;
     private final String statusCode;
     private final HttpStatus httpStatus;
-
 }

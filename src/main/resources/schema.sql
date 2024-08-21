@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS fcm;
 DROP TABLE IF EXISTS promise;
 DROP TABLE IF EXISTS child;
 DROP TABLE IF EXISTS parent;
+DROP TABLE IF EXISTS temporary_user;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS prefix_sum_exp;
 
@@ -29,6 +30,13 @@ create table prefix_sum_exp
 (
     level          SMALLINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     prefix_sum_exp INT      NOT NULL
+);
+
+create table temporary_user
+(
+    temporary_user_id  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    email    VARCHAR(40)  NOT NULL,
+    name     VARCHAR(52)  NOT NULL
 );
 
 create table user
@@ -40,8 +48,7 @@ create table user
     name     VARCHAR(52)  NOT NULL,
     nickname VARCHAR(30)  NULL,
     birthday DATE         NULL,
-    user_gender CHAR(1)   NULL,
-    is_sign_up_completed  BOOL NOT NULL
+    user_gender CHAR(1)   NULL
 );
 
 create table parent
@@ -265,3 +272,6 @@ create table egg_trade_log
     FOREIGN KEY (buyer_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
+
+insert into user(type, email, password, name, nickname, birthday, user_gender)
+values ("p", "yuseung0429@naver.com", "?", "이유승", "yuseung0429", "1998-04-29", "M")

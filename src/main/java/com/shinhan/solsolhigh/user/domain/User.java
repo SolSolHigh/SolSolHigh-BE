@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
@@ -16,8 +18,7 @@ import java.time.LocalDate;
 @DiscriminatorColumn(name = "type")
 @Entity
 @Table(name = "user")
-@DiscriminatorValue("u")
-public class User {
+public abstract class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,14 +42,6 @@ public class User {
 
     @Column
     private LocalDate birthday;
-
-    @Column
-    private Boolean isSignUpCompleted;
-
-    @PrePersist
-    protected void onCreate() {
-        isSignUpCompleted = false;
-    }
 
     public Integer getAge() {
         if (birthday == null) {
