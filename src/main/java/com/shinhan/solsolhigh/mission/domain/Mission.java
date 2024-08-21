@@ -75,9 +75,8 @@ public class Mission {
             throw new IllegalArgumentException("Mission is finished");
         }
 
-
-
         if (updateRequest.getIsFinished() != null)
+            //TODO : 미션이 완료되었을 때 부모에게 알리는 로직 필요.
             this.isFinished = updateRequest.getIsFinished();
 
         if (updateRequest.getMissionStartAt() != null)
