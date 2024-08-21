@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @DiscriminatorColumn(name = "type")
 @Entity
 @Table(name = "user")
+@DiscriminatorValue("u")
 public class User {
     @Id
     @Column(name = "user_id")
@@ -41,6 +42,13 @@ public class User {
     @Column
     private LocalDate birthday;
 
+    @Column
+    private Boolean isSignUpCompleted;
+
+    @PrePersist
+    protected void onCreate() {
+        isSignUpCompleted = false;
+    }
 
     public Integer getAge() {
         if (birthday == null) {
