@@ -33,15 +33,15 @@ create table prefix_sum_exp
 
 create table user
 (
-    user_id  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    type     CHAR(1)      NULL,
-    email    VARCHAR(40)  NOT NULL,
-    password VARCHAR(255) NULL,
-    name     VARCHAR(52)  NOT NULL,
-    nickname VARCHAR(30)  NULL,
-    birthday DATE         NULL,
-    user_gender CHAR(1)   NULL,
-    is_sign_up_completed  BOOL NOT NULL
+    user_id              INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    type                 CHAR(1) NULL,
+    email                VARCHAR(40) NOT NULL,
+    password             VARCHAR(255) NULL,
+    name                 VARCHAR(52) NOT NULL,
+    nickname             VARCHAR(30) NULL,
+    birthday             DATE NULL,
+    user_gender          CHAR(1) NULL,
+    is_sign_up_completed BOOL        NOT NULL
 );
 
 create table parent
@@ -53,7 +53,7 @@ create table parent
 
 create table child
 (
-    user_id    INT NOT NULL PRIMARY KEY,
+    user_id     INT NOT NULL PRIMARY KEY,
     parent_id   INT NOT NULL,
     current_exp INT NOT NULL,
     max_exp     INT NOT NULL,
@@ -177,7 +177,10 @@ create table financial_quiz
     description       VARCHAR(200) NOT NULL,
     answer            BOOL         NOT NULL,
     quiz_keyword_id   INT          NOT NULL,
-    FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id)
+    child_id          INT          NOT NULL,
+    created_at        Date         NOT NULL,
+    FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id),
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 create table quiz_solve
