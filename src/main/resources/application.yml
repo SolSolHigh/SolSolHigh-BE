@@ -2,6 +2,8 @@ server:
   servlet:
     session:
       timeout: 86400
+      cookie:
+        name: SESSIONID
 
 spring:
   profiles:
@@ -20,4 +22,3 @@ spring:
   sql:
     init:
       mode: always
-

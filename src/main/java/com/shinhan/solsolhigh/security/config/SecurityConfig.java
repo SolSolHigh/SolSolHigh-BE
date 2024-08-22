@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -17,6 +18,7 @@ public class SecurityConfig {
 
     private final CustomOAuthUserService customOAuthUserService;
     private final OAuthLoginFailureExceptionHandler oAuthLoginFailureExceptionHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,6 +34,14 @@ public class SecurityConfig {
                         .loginPage("/oauth2/login")
                         .userInfoEndpoint(userInfoEndpointConfig ->
                                 userInfoEndpointConfig.userService(customOAuthUserService)).failureHandler(oAuthLoginFailureExceptionHandler));
+        http.logout(httpSecurityLogoutConfigurer ->
+                httpSecurityLogoutConfigurer
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessHandler(customLogoutSuccessHandler)
+                        .deleteCookies("SESSIONID"));
+        http.sessionManagement(httpSecuritySessionManagementConfigurer ->
+                httpSecuritySessionManagementConfigurer
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
         return http.build();
     }
 }
