@@ -23,4 +23,14 @@ public class SelectedQuizKeywordFindService {
         List<SelectedQuizKeyword> allByChildIdWithFetch = selectedQuizKeywordRepository.findAllByChild_idWithFetch(childId);
         return allByChildIdWithFetch.stream().map(selectedQuizKeyword -> KeywordView.toDto(selectedQuizKeyword.getQuizKeyword())).toList();
     }
+
+    @Transactional(readOnly = true)
+    public Integer countByChildId(Integer childId) {
+        return selectedQuizKeywordRepository.countAllByChild_Id(childId);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean isExistKeyword(Integer childId, Integer keywordId) {
+        return selectedQuizKeywordRepository.existsByQuizKeyword_IdAAndChild_Id(childId, keywordId);
+    }
 }

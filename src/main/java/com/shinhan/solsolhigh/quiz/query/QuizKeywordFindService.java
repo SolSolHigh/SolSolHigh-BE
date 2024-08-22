@@ -1,6 +1,8 @@
 package com.shinhan.solsolhigh.quiz.query;
 
+import com.shinhan.solsolhigh.quiz.domain.QuizKeyword;
 import com.shinhan.solsolhigh.quiz.domain.QuizKeywordRepository;
+import com.shinhan.solsolhigh.quiz.exception.QuizKeywordNotFoundException;
 import com.shinhan.solsolhigh.quiz.ui.dto.KeywordView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,5 +19,10 @@ public class QuizKeywordFindService {
     public List<KeywordView> keywordViewList() {
         return quizKeywordRepository.findAll().stream()
                 .map(KeywordView::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public QuizKeyword findById(Integer id) {
+        return quizKeywordRepository.findById(id).orElseThrow(QuizKeywordNotFoundException::new);
     }
 }
