@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -166,6 +167,35 @@ class MissionRegisterServiceTest {
         @Test
         void fail3() {
             //given
+            Child child = Child.builder()
+                    .currentExp(0)
+                    .email("test@test.test")
+                    .id(2)
+                    .name("name")
+                    .build();
+
+            MissionRegisterRequest request = MissionRegisterRequest
+                    .builder()
+                    .childId(1)
+                    .missionLevel('4')
+                    .missionStartAt(LocalDateTime.now().plusDays(1))
+                    .missionEndAt(LocalDateTime.now())
+                    .build();
+
+            //when
+
+            //then
+            assertThrows(IllegalArgumentException.class, () -> {
+                missionRegisterService.missionAdd(request);
+            });
+        }
+
+        @DisplayName("이미 등록된 미션이 5 이상일 때")
+        @Test
+        void fail4() {
+            //given
+            when(missionRepository.countByChildIdAndIsFinished(1, false)).thenReturn(6);
+
             Child child = Child.builder()
                     .currentExp(0)
                     .email("test@test.test")
