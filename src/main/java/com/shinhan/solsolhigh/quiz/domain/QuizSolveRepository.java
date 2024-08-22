@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface QuizSolveRepository extends JpaRepository<QuizSolve, Integer> {
 
-
 }
