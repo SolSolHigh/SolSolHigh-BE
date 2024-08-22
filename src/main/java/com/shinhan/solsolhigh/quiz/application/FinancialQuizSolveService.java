@@ -25,7 +25,7 @@ public class FinancialQuizSolveService {
         FinancialQuiz target = financialQuizRepository.findById(request.getQuizId()).orElseThrow(FinancialQuizNotFoundException::new);
         QuizSolve quizSolve = target.solve(request.getAnswer(), today);
         quizSolveRepository.save(quizSolve);
-        return QuizSolveSupport.createQuizAnswerView(quizSolve, target);
+        return QuizSolveSupport.createQuizAnswerView(quizSolve);
     }
 
 }

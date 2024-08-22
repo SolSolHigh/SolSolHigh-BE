@@ -7,15 +7,15 @@ import com.shinhan.solsolhigh.quiz.ui.dto.QuizAnswerView;
 public class QuizSolveSupport {
 
 
-    public static QuizAnswerView createQuizAnswerView(QuizSolve quizSolve, FinancialQuiz target) {
+    public static QuizAnswerView createQuizAnswerView(QuizSolve quizSolve) {
         QuizAnswerView quizAnswerView = new QuizAnswerView();
 
-        quizAnswerView.setRealAnswer(target.getAnswer());
+        quizAnswerView.setRealAnswer(quizSolve.getFinancialQuiz().getAnswer());
         if(quizSolve.getIsCorrect()) {
             quizAnswerView.setIsCorrect(true);
         }else {
             quizAnswerView.setIsCorrect(false);
-            quizAnswerView.setQuizExplanation(target.getQuizExplanation());
+            quizAnswerView.setQuizExplanation(quizAnswerView.getQuizExplanation());
         }
         return quizAnswerView;
     }
