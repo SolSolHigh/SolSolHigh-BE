@@ -10,4 +10,5 @@ import java.time.LocalDateTime;
 
 public interface MissionRepository extends JpaRepository<Mission, Integer> {
 
+    Integer countByChildIdAndIsFinished(Integer childId, Boolean isFinished);
 }

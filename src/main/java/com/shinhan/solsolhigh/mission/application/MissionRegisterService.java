@@ -16,6 +16,9 @@ public class MissionRegisterService {
 
     @Transactional
     public void missionAdd(MissionRegisterRequest request) {
+        if(missionRepository.countByChildIdAndIsFinished(request.getChildId(), false) >= 5) {
+            throw new IllegalArgumentException("미션은 최대 5개를 넘을 수 없습니다.");
+        }
         Mission mission = Mission.create(request);
         Mission mission1 = missionRepository.save(mission);
         missionValidCheckService.missionAuthenticationCheck(mission1.getId());
