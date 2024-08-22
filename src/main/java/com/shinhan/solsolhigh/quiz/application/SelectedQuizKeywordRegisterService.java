@@ -9,6 +9,7 @@ import com.shinhan.solsolhigh.quiz.exception.SelectedQuizCountOverException;
 import com.shinhan.solsolhigh.quiz.exception.SelectedQuizExistException;
 import com.shinhan.solsolhigh.quiz.query.QuizKeywordFindService;
 import com.shinhan.solsolhigh.quiz.query.SelectedQuizKeywordFindService;
+import com.shinhan.solsolhigh.user.domain.Child;
 import com.shinhan.solsolhigh.user.domain.ChildRepository;
 import com.shinhan.solsolhigh.user.query.FamilyCheckService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class SelectedQuizRegisterService {
+public class SelectedQuizKeywordRegisterService {
     private final SelectedQuizKeywordRepository selectedQuizKeywordRepository;
     private final SelectedQuizKeywordFindService selectedQuizKeywordFindService;
     private final QuizKeywordFindService quizKeywordFindService;
@@ -25,12 +26,11 @@ public class SelectedQuizRegisterService {
     private final ChildRepository childRepository;
 
     @Transactional
-    public void selectedQuizAdd(SelectedQuizKeywordRegisterRequest request, Integer sessionId) {
+    public void selectedQuizKeywordAdd(SelectedQuizKeywordRegisterRequest request, Integer sessionId) {
         validCheck(request, sessionId);
         QuizKeyword findQuizKeyword = quizKeywordFindService.findById(request.getKeywordId());
-
-        // TODO : 사용자 NOT FOUND Exception 추가 시 진행 예정
-//        childRepository.findById(request.getChildId()).orElseThrow()
+        Child child = childRepository.getReferenceById(request.getChildId());
+        selectedQuizKeywordRepository.save(findQuizKeyword.createSelectQuizKeyword(child));
     }
 
     private void validCheck(SelectedQuizKeywordRegisterRequest request, Integer sessionId) {

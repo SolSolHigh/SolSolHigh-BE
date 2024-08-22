@@ -1,11 +1,12 @@
 package com.shinhan.solsolhigh.quiz.ui;
 
-import com.shinhan.solsolhigh.quiz.application.dto.QuizKeywordRegisterRequest;
-import com.shinhan.solsolhigh.quiz.domain.QuizKeyword;
+import com.shinhan.solsolhigh.quiz.application.SelectedQuizKeywordRegisterService;
+import com.shinhan.solsolhigh.quiz.application.dto.SelectedQuizKeywordRegisterRequest;
 import com.shinhan.solsolhigh.quiz.query.QuizKeywordFindService;
 import com.shinhan.solsolhigh.quiz.query.SelectedQuizKeywordFindService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class KeywordController {
     private final QuizKeywordFindService quizKeywordFindService;
     private final SelectedQuizKeywordFindService selectedQuizKeywordFindService;
+    private final SelectedQuizKeywordRegisterService selectedQuizKeywordRegisterService;
     private final HttpSession httpSession;
 
     @GetMapping("/quizzes/keywords")
@@ -30,8 +32,10 @@ public class KeywordController {
     }
 
     @PostMapping("/children/keywords")
-    public ResponseEntity<?> addKeyword(@RequestBody QuizKeywordRegisterRequest request) {
-
+    public ResponseEntity<?> addKeyword(@RequestBody SelectedQuizKeywordRegisterRequest request) {
+        Integer parentId = (Integer) httpSession.getAttribute("USER_ID");
+        selectedQuizKeywordRegisterService.selectedQuizKeywordAdd(request, parentId);
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 
 }

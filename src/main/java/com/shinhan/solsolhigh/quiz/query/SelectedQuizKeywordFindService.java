@@ -31,6 +31,6 @@ public class SelectedQuizKeywordFindService {
 
     @Transactional(readOnly = true)
     public Boolean isExistKeyword(Integer childId, Integer keywordId) {
-        return selectedQuizKeywordRepository.existsByQuizKeyword_IdAAndChild_Id(childId, keywordId);
+        return selectedQuizKeywordRepository.existsByQuizKeyword_IdAndChild_Id(childId, keywordId);
     }
 }
