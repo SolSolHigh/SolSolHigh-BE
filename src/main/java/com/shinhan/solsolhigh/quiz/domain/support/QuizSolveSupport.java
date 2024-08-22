@@ -6,6 +6,7 @@ import com.shinhan.solsolhigh.quiz.ui.dto.QuizAnswerView;
 
 public class QuizSolveSupport {
 
+    private QuizSolveSupport() {}
 
     public static QuizAnswerView createQuizAnswerView(QuizSolve quizSolve) {
         QuizAnswerView quizAnswerView = new QuizAnswerView();
