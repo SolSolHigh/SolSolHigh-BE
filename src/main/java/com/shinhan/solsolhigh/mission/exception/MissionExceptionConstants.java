@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum MissionExceptionConstants implements ErrorConstantDefinition {
     MISSION_NOT_FOUND("미션을 찾을 수 없습니다", "M001", HttpStatus.NOT_FOUND),
+    MISSION_ACCESS_EXCEPTION("미션에 접근할 권한이 없습니다", "M002", HttpStatus.BAD_REQUEST),
     ;
 
     private final String message;

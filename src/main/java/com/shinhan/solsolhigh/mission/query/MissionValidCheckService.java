@@ -2,6 +2,7 @@ package com.shinhan.solsolhigh.mission.query;
 
 import com.shinhan.solsolhigh.mission.domain.Mission;
 import com.shinhan.solsolhigh.mission.domain.MissionRepository;
+import com.shinhan.solsolhigh.mission.exception.MissionAccessException;
 import com.shinhan.solsolhigh.mission.exception.MissionNotFoundException;
 import com.shinhan.solsolhigh.user.query.FamilyCheckService;
 import jakarta.servlet.http.HttpSession;
@@ -19,7 +20,7 @@ public class MissionValidCheckService {
     @Transactional(readOnly = true)
     public void missionAuthenticationCheck(Integer missionId) {
         Integer sessionId = (Integer) session.getAttribute("USER_ID");
-        Mission target = missionRepository.findById(missionId).orElseThrow(MissionNotFoundException::new);
+        Mission target = missionRepository.findById(missionId).orElseThrow(MissionAccessException::new);
 
         familyCheckService.familyCheck(target.getChildId(), sessionId);
     }
