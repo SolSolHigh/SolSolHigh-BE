@@ -48,7 +48,8 @@ create table user
     name     VARCHAR(52)  NOT NULL,
     nickname VARCHAR(30)  NULL,
     birthday DATE         NULL,
-    user_gender CHAR(1)   NULL
+    user_gender CHAR(1)   NULL,
+    is_deleted BOOL       NULL
 );
 
 create table parent
@@ -273,5 +274,5 @@ create table egg_trade_log
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
 
-insert into user(type, email, password, name, nickname, birthday, user_gender)
-values ("p", "yuseung0429@naver.com", "?", "이유승", "yuseung0429", "1998-04-29", "M")
+insert into user(type, email, password, name, nickname, birthday, user_gender, is_deleted)
+values ("p", "yuseung0429@naver.com", "?", "이유승", "yuseung0429", "1998-04-29", "M", false)

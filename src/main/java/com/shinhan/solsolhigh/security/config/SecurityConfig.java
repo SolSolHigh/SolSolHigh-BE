@@ -17,23 +17,25 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomOAuthUserService customOAuthUserService;
-    private final OAuthLoginFailureExceptionHandler oAuthLoginFailureExceptionHandler;
+    private final CustomOAuthLoginFailureExceptionHandler customOAuthLoginFailureExceptionHandler;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
+
         http.oauth2Login(Customizer.withDefaults());
         http.authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers("/*", "/oauth2/**", "/login/**").permitAll()
                         .anyRequest().authenticated());
         http.oauth2Login(httpSecurityOAuth2LoginConfigurer ->
                 httpSecurityOAuth2LoginConfigurer
                         .loginPage("/oauth2/login")
                         .userInfoEndpoint(userInfoEndpointConfig ->
-                                userInfoEndpointConfig.userService(customOAuthUserService)).failureHandler(oAuthLoginFailureExceptionHandler));
+                                userInfoEndpointConfig.userService(customOAuthUserService)).failureHandler(customOAuthLoginFailureExceptionHandler));
         http.logout(httpSecurityLogoutConfigurer ->
                 httpSecurityLogoutConfigurer
                         .logoutUrl("/auth/logout")
@@ -42,6 +44,9 @@ public class SecurityConfig {
         http.sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+        http.exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                httpSecurityExceptionHandlingConfigurer
+                        .authenticationEntryPoint(customAuthenticationEntryPoint));
         return http.build();
     }
 }
