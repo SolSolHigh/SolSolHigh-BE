@@ -48,12 +48,16 @@ public class FinancialQuiz {
         this.answer = false;
     }
 
+    public QuizSolve solve(Boolean chosenAnswer, LocalDateTime today) {
+        return QuizSolve.builder().financialQuiz(this).correctedAt(today).isCorrect(chosenAnswer.equals(answer)).build();
+    }
+
     public static FinancialQuiz create(AddQuizDto dto, QuizKeyword quizKeyword) {
         return FinancialQuiz.builder()
                 .answer(dto.getAnswer())
                 .description(dto.getDescription())
                 .quizKeyword(quizKeyword)
-                .createdAt(LocalDateTime.now())
+                .createdAt(LocalDate.now())
                 .build();
     }
 }
