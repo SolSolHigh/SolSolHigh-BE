@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class SelectedQuizKeywordRegisterRequest {
+public class SelectedQuizKeywordDto {
     private Integer keywordId;
     private Integer childId;
 }

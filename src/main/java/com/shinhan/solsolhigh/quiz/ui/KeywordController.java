@@ -1,7 +1,8 @@
 package com.shinhan.solsolhigh.quiz.ui;
 
 import com.shinhan.solsolhigh.quiz.application.SelectedQuizKeywordRegisterService;
-import com.shinhan.solsolhigh.quiz.application.dto.SelectedQuizKeywordRegisterRequest;
+import com.shinhan.solsolhigh.quiz.application.dto.SelectedQuizKeywordDto;
+import com.shinhan.solsolhigh.quiz.application.dto.SelectedQuizKeywordRemoveService;
 import com.shinhan.solsolhigh.quiz.query.QuizKeywordFindService;
 import com.shinhan.solsolhigh.quiz.query.SelectedQuizKeywordFindService;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ public class KeywordController {
     private final QuizKeywordFindService quizKeywordFindService;
     private final SelectedQuizKeywordFindService selectedQuizKeywordFindService;
     private final SelectedQuizKeywordRegisterService selectedQuizKeywordRegisterService;
+    private final SelectedQuizKeywordRemoveService selectedQuizKeywordRemoveService;
     private final HttpSession httpSession;
 
     @GetMapping("/quizzes/keywords")
@@ -32,10 +34,17 @@ public class KeywordController {
     }
 
     @PostMapping("/children/keywords")
-    public ResponseEntity<?> addKeyword(@RequestBody SelectedQuizKeywordRegisterRequest request) {
+    public ResponseEntity<?> keywordAdd(@RequestBody SelectedQuizKeywordDto request) {
         Integer parentId = (Integer) httpSession.getAttribute("USER_ID");
         selectedQuizKeywordRegisterService.selectedQuizKeywordAdd(request, parentId);
         return new ResponseEntity<>(null, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/children/keywords")
+    public ResponseEntity<?> keywordDelete(@RequestBody SelectedQuizKeywordDto request) {
+        Integer parentId = (Integer) httpSession.getAttribute("USER_ID");
+        selectedQuizKeywordRemoveService.selectedQuizKeywordRemove(request, parentId);
+        return ResponseEntity.noContent().build();
     }
 
 }
