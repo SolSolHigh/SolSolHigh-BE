@@ -62,7 +62,7 @@ create table parent
 create table child
 (
     user_id    INT NOT NULL PRIMARY KEY,
-    parent_id   INT NOT NULL,
+    parent_id   INT NULL,
     current_exp INT NOT NULL,
     max_exp     INT NOT NULL,
     goal_money  INT NOT NULL,
@@ -275,4 +275,14 @@ create table egg_trade_log
 );
 
 insert into user(type, email, password, name, nickname, birthday, user_gender, is_deleted)
-values ("p", "yuseung0429@naver.com", "?", "이유승", "yuseung0429", "1998-04-29", "M", false)
+values
+    ("p", "yuseung0429@naver.com", "?", "이유승", "yuseung0429", "1998-04-29", "M", false),
+    ("c", "altys31@gmail.com", "?", "양규현", "altys31", "1998-07-01", "F", false);
+
+INSERT INTO parent(user_id)
+values
+    (1);
+
+INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
+values
+    (2, 1, 0, 0, 0);

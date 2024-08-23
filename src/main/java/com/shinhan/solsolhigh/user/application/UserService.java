@@ -1,7 +1,7 @@
 package com.shinhan.solsolhigh.user.application;
 
-import com.shinhan.solsolhigh.user.domain.User;
-import com.shinhan.solsolhigh.user.domain.UserRepository;
+import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
+import com.shinhan.solsolhigh.user.domain.*;
 import com.shinhan.solsolhigh.user.exception.UserNicknameDuplicatedException;
 import com.shinhan.solsolhigh.user.exception.UserNotFoundException;
 import com.shinhan.solsolhigh.user.exception.UserWithdrawalException;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final ChildRepository childRepository;
 
     @Transactional(readOnly = true)
     public boolean checkDuplicatedNickname(String nickname) {
@@ -40,5 +41,12 @@ public class UserService {
                 throw new UserNicknameDuplicatedException();
             user.changeNickname(dto.getNickname());
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Authorized(allowed = Parent.class)
+    public ChildInfo getChlidInfoByNickname(String nickname) {
+        Child child = childRepository.findByNickname(nickname).orElseThrow(UserNotFoundException::new);
+        return ChildInfo.from(child);
     }
 }

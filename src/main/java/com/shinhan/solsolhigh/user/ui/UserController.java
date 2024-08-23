@@ -1,5 +1,6 @@
 package com.shinhan.solsolhigh.user.ui;
 
+import com.shinhan.solsolhigh.user.application.ChildInfo;
 import com.shinhan.solsolhigh.user.application.UserService;
 import com.shinhan.solsolhigh.user.application.UserInfo;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
@@ -32,5 +33,11 @@ public class UserController {
                                                    @RequestBody @Valid SessionUserInfoModifyRequest request) {
         userService.modifyUserInfo(request.toDto(userPrinciple.getId()));
         return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/children")
+    public ResponseEntity<?> searchChlidInfoByNickname(@RequestBody ChildSearchRequest request){
+        ChildInfo childInfo = userService.getChlidInfoByNickname(request.getNickname());
+        return ResponseEntity.ok(ChildSearchResponse.from(childInfo));
     }
 }

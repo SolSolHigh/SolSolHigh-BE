@@ -29,7 +29,7 @@ public class SecurityConfig {
 
         http.oauth2Login(Customizer.withDefaults());
         http.authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/*", "/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers("/", "/oauth2/**", "/login/**").permitAll()
                         .anyRequest().authenticated());
         http.oauth2Login(httpSecurityOAuth2LoginConfigurer ->
                 httpSecurityOAuth2LoginConfigurer

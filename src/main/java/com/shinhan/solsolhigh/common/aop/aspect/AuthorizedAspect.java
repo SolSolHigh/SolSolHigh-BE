@@ -16,12 +16,11 @@ public class AuthorizedAspect {
 
     @Before("@annotation(com.shinhan.solsolhigh.common.aop.annotation.Authorized)")
     public void checkAuthorized(JoinPoint joinPoint) {
-
-        UserPrinciple loginUser = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         MethodSignature ms = (MethodSignature)joinPoint.getSignature();
         Authorized authorized = ms.getMethod().getAnnotation(Authorized.class);
-        Class<?> classType = loginUser.getUserClass();
+        Class<?> classType = userPrinciple.getUserClass();
 
         if(classType != authorized.allowed())
             throw new UserBadRequestException();
