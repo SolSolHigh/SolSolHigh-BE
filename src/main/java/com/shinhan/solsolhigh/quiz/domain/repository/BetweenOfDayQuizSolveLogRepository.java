@@ -1,8 +1,8 @@
-package com.shinhan.solsolhigh.quiz.domain;
+package com.shinhan.solsolhigh.quiz.domain.repository;
 
+import com.shinhan.solsolhigh.quiz.domain.BetweenOfDayQuizSolveLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 

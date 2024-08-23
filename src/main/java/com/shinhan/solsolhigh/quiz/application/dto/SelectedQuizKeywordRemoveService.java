@@ -1,6 +1,6 @@
 package com.shinhan.solsolhigh.quiz.application.dto;
 
-import com.shinhan.solsolhigh.quiz.domain.SelectedQuizKeywordRepository;
+import com.shinhan.solsolhigh.quiz.domain.repository.SelectedQuizKeywordRepository;
 import com.shinhan.solsolhigh.user.query.FamilyCheckService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

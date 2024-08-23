@@ -1,6 +1,8 @@
 package com.shinhan.solsolhigh.quiz.application;
 
 import com.shinhan.solsolhigh.quiz.domain.*;
+import com.shinhan.solsolhigh.quiz.domain.repository.FinancialQuizRepository;
+import com.shinhan.solsolhigh.quiz.domain.repository.SelectedQuizKeywordRepository;
 import com.shinhan.solsolhigh.quiz.exception.SelectedQuizNotFoundException;
 import com.shinhan.solsolhigh.quiz.infra.AddQuizDto;
 import com.shinhan.solsolhigh.quiz.infra.QuizAiChat;

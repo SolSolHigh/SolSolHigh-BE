@@ -2,9 +2,9 @@ package com.shinhan.solsolhigh.quiz.application;
 
 import com.shinhan.solsolhigh.quiz.application.dto.QuizSolveRequest;
 import com.shinhan.solsolhigh.quiz.domain.FinancialQuiz;
-import com.shinhan.solsolhigh.quiz.domain.FinancialQuizRepository;
+import com.shinhan.solsolhigh.quiz.domain.repository.FinancialQuizRepository;
 import com.shinhan.solsolhigh.quiz.domain.QuizSolve;
-import com.shinhan.solsolhigh.quiz.domain.QuizSolveRepository;
+import com.shinhan.solsolhigh.quiz.domain.repository.QuizSolveRepository;
 import com.shinhan.solsolhigh.quiz.domain.support.QuizSolveSupport;
 import com.shinhan.solsolhigh.quiz.exception.FinancialQuizNotFoundException;
 import com.shinhan.solsolhigh.quiz.ui.dto.QuizAnswerView;

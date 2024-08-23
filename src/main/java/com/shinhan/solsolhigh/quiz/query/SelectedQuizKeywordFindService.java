@@ -1,7 +1,7 @@
 package com.shinhan.solsolhigh.quiz.query;
 
 import com.shinhan.solsolhigh.quiz.domain.SelectedQuizKeyword;
-import com.shinhan.solsolhigh.quiz.domain.SelectedQuizKeywordRepository;
+import com.shinhan.solsolhigh.quiz.domain.repository.SelectedQuizKeywordRepository;
 import com.shinhan.solsolhigh.quiz.ui.dto.KeywordView;
 import com.shinhan.solsolhigh.user.query.FamilyCheckService;
 import lombok.RequiredArgsConstructor;

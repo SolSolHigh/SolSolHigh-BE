@@ -1,14 +1,13 @@
 package com.shinhan.solsolhigh.quiz.query;
 
 import com.shinhan.solsolhigh.quiz.domain.BetweenOfDayQuizSolveLog;
-import com.shinhan.solsolhigh.quiz.domain.BetweenOfDayQuizSolveLogRepository;
+import com.shinhan.solsolhigh.quiz.domain.repository.BetweenOfDayQuizSolveLogRepository;
 import com.shinhan.solsolhigh.quiz.ui.dto.SolveStrickView;
 import com.shinhan.solsolhigh.user.query.FamilyCheckService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

@@ -2,7 +2,7 @@ package com.shinhan.solsolhigh.quiz.query;
 
 import com.shinhan.solsolhigh.quiz.application.FinancialQuizRegisterService;
 import com.shinhan.solsolhigh.quiz.domain.FinancialQuiz;
-import com.shinhan.solsolhigh.quiz.domain.FinancialQuizRepository;
+import com.shinhan.solsolhigh.quiz.domain.repository.FinancialQuizRepository;
 import com.shinhan.solsolhigh.quiz.ui.dto.QuizView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

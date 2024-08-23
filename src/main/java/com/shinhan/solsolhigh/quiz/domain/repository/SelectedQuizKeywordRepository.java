@@ -1,5 +1,6 @@
-package com.shinhan.solsolhigh.quiz.domain;
+package com.shinhan.solsolhigh.quiz.domain.repository;
 
+import com.shinhan.solsolhigh.quiz.domain.SelectedQuizKeyword;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
