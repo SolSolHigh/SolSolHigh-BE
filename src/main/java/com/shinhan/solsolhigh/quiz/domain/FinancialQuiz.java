@@ -48,8 +48,8 @@ public class FinancialQuiz {
         this.answer = false;
     }
 
-    public QuizSolve solve(Boolean chosenAnswer, LocalDateTime today) {
-        return QuizSolve.builder().financialQuiz(this).correctedAt(today).isCorrect(chosenAnswer.equals(answer)).build();
+    public QuizSolve solve(Boolean chosenAnswer, LocalDateTime today, Child child) {
+        return QuizSolve.builder().financialQuiz(this).child(child).correctedAt(today).isCorrect(chosenAnswer.equals(answer)).build();
     }
 
     public static FinancialQuiz create(AddQuizDto dto, QuizKeyword quizKeyword) {

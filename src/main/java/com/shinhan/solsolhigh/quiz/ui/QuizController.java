@@ -37,7 +37,7 @@ public class QuizController {
     @PostMapping("/quizzes/solve")
     public ResponseEntity<?> solveQuiz(@RequestBody QuizSolveRequest request) {
         Integer childId = (Integer) httpSession.getAttribute("USER_ID");
-        QuizAnswerView quizAnswerView = financialQuizSolveService.quizSolve(request, LocalDateTime.now());
+        QuizAnswerView quizAnswerView = financialQuizSolveService.quizSolve(request, LocalDateTime.now(), childId);
 
         return ResponseEntity.ok(quizAnswerView);
     }

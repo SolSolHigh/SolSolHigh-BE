@@ -3,16 +3,12 @@ package com.shinhan.solsolhigh.quiz.domain;
 
 import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
+@Builder(access = AccessLevel.PRIVATE)
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "between_of_day_quiz_solve_log")
@@ -42,7 +38,26 @@ public class BetweenOfDayQuizSolveLog {
         this.count = 0;
     }
 
+    @Transient
+    private static final Integer GAP = 7;
+
+
+    public static BetweenOfDayQuizSolveLog create(Child child, LocalDate startDate) {
+        return BetweenOfDayQuizSolveLog.builder()
+                .startDate(startDate)
+                .endDate(startDate.plusDays(GAP))
+                .child(child).build();
+    }
+
+    public void plusCount() {
+        this.count++;
+    }
+
     public boolean isEnd() {
         return LocalDate.now().isAfter(endDate);
+    }
+
+    public boolean isBroken(LocalDate today) {
+        return !startDate.equals(today.minusDays(count));
     }
 }
