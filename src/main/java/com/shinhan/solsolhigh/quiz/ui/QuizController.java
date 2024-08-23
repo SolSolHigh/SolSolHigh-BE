@@ -3,10 +3,14 @@ package com.shinhan.solsolhigh.quiz.ui;
 import com.shinhan.solsolhigh.quiz.application.FinancialQuizSolveService;
 import com.shinhan.solsolhigh.quiz.application.dto.QuizSolveRequest;
 import com.shinhan.solsolhigh.quiz.query.FinancialQuizFindService;
+import com.shinhan.solsolhigh.quiz.query.QuizSolveFindService;
 import com.shinhan.solsolhigh.quiz.ui.dto.QuizAnswerView;
+import com.shinhan.solsolhigh.quiz.ui.dto.QuizSolveView;
 import com.shinhan.solsolhigh.quiz.ui.dto.QuizView;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +23,7 @@ import java.time.LocalDateTime;
 public class QuizController {
     private final FinancialQuizFindService financialQuizFindService;
     private final FinancialQuizSolveService financialQuizSolveService;
+    private final QuizSolveFindService quizSolveFindService;
     private final HttpSession httpSession;
 
     @GetMapping("/quizzes/today")
@@ -37,4 +42,9 @@ public class QuizController {
         return ResponseEntity.ok(quizAnswerView);
     }
 
+    @GetMapping("/children/{childId}/quizzes/solved")
+    public ResponseEntity<?> getSolvedQuizzes(@PathVariable Integer childId, Pageable pageable) {
+        Slice<QuizSolveView> sliceByChildIdAndPageable = quizSolveFindService.findSliceByChildIdAndPageable(childId, pageable);
+        return ResponseEntity.ok(sliceByChildIdAndPageable);
+    }
 }

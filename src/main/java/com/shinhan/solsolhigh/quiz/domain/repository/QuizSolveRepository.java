@@ -1,9 +1,21 @@
 package com.shinhan.solsolhigh.quiz.domain.repository;
 
 import com.shinhan.solsolhigh.quiz.domain.QuizSolve;
+import com.shinhan.solsolhigh.quiz.ui.dto.QuizSolveView;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 
 public interface QuizSolveRepository extends JpaRepository<QuizSolve, Integer> {
 
+    @Query("SELECT new com.shinhan.solsolhigh.quiz.ui.dto.QuizSolveView(qs.financialQuiz.description, qs.financialQuiz.quizKeyword.keyword, qs.financialQuiz.id, qs.isCorrect, qs.financialQuiz.quizExplanation, qs.correctedAt) " +
+            "FROM QuizSolve qs " +
+                "JOIN FETCH qs.financialQuiz " +
+            "WHERE qs.child.id = :childId")
+    Slice<QuizSolveView> queryQuizSolveByChildId(@Param("childId") Integer childId, Pageable pageable);
 }
