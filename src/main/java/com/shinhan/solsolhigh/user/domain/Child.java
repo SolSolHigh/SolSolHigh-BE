@@ -34,8 +34,13 @@ public class Child extends User {
     private Integer goalMoney;
 
     public void changeParent(Parent parent){
-        if(this.parent.equals(parent))
+        if(Objects.equals(this.parent, parent))
             throw new ChildParentSameException();
         this.parent = parent;
+    }
+
+    @Override
+    public Class<?> getType() {
+        return Child.class;
     }
 }

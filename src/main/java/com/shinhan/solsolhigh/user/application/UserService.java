@@ -1,12 +1,20 @@
 package com.shinhan.solsolhigh.user.application;
 
+import com.shinhan.solsolhigh.alarm.domain.Alarm;
+import com.shinhan.solsolhigh.alarm.domain.AlarmRepository;
+import com.shinhan.solsolhigh.alarm.domain.ChildRegisterAlarm;
+import com.shinhan.solsolhigh.alarm.domain.ChildRegisterAlarmRepository;
+import com.shinhan.solsolhigh.alarm.exception.AlarmMisMatchException;
+import com.shinhan.solsolhigh.alarm.exception.AlarmNotFoundException;
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
+import com.shinhan.solsolhigh.common.util.JPAUtils;
 import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.user.domain.*;
 import com.shinhan.solsolhigh.user.exception.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +27,7 @@ public class UserService {
     private final HttpSession session;
     private final UserRepository userRepository;
     private final ChildRepository childRepository;
+    private final ChildRegisterAlarmRepository childRegisterAlarmRepository;
 
     @Transactional(readOnly = true)
     public boolean checkDuplicatedNickname(String nickname) {
@@ -77,18 +86,47 @@ public class UserService {
         Child child = childRepository.findByNickname(dto.getNickname()).orElseThrow(UserNotFoundException::new);
         checkDeletedUser(child);
         checkExistsParent(child);
-        //TODO. FCM 등록 로직
+        //TODO. 알림 서비스 호출
     }
 
     @Transactional
     public void withdrawalUser(Integer id) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        if(user instanceof Child)
+        if(user.getType()==Child.class)
             childDeletePreProcessing(user);
         else
             parentDeletePreProcessing(user);
         userRepository.delete(user);
         session.invalidate();;
+    }
+
+    @Transactional
+    @Authorized(allowed = Child.class)
+    public void responseRegisterChildFromParent(ChildRegisterResponseFromParentDto dto) {
+        Child child = childRepository.findById(dto.getId()).orElseThrow(UserNotFoundException::new);
+        checkDeletedUser(child);
+        checkExistsParent(child);
+
+        ChildRegisterAlarm alarm = childRegisterAlarmRepository.findById(dto.getAlarmId()).orElseThrow(AlarmNotFoundException::new);
+
+        if(!alarm.getReceiver().equals(child))
+            throw new AlarmMisMatchException();
+
+        User user = alarm.getSender();
+        if(user.getType() != Parent.class)
+            throw new UserTypeMismatchException();
+
+        Parent parent = JPAUtils.typeCast(Parent.class, user);
+        checkDeletedUser(parent);
+
+        if(dto.getIsAccept()){
+            alarm.changeState(ChildRegisterAlarm.State.ACCEPTED);
+            child.changeParent(parent);
+            //TODO. 수락 알림 서비스 호출
+        } else {
+            alarm.changeState(ChildRegisterAlarm.State.REJECTED);
+            //TODO. 거절 알림 서비스 호출
+        }
     }
 
     private void checkDeletedUser(User user){

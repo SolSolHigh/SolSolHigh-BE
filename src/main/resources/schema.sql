@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS child_register_alarm;
+DROP TABLE IF EXISTS alarm;
 DROP TABLE IF EXISTS egg_trade_log;
 DROP TABLE IF EXISTS egg_sell_board;
 DROP TABLE IF EXISTS hold_special_egg;
@@ -274,10 +276,29 @@ create table egg_trade_log
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
 
+create table alarm
+(
+    alarm_id    INT     NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    sender_id   INT     NOT NULL,
+    receiver_id INT     NOT NULL,
+    created_at  DATETIME    NOT NULL,
+    is_deleted  BOOL    NOT NULL,
+    type     CHAR(1)      NULL,
+    FOREIGN KEY (sender_id) REFERENCES user (user_id),
+    FOREIGN KEY (receiver_id) REFERENCES user (user_id)
+);
+
+create table child_register_alarm
+(
+    alarm_id INT NOT NULL PRIMARY KEY,
+    state CHAR(10)  NOT NULL,
+    FOREIGN KEY (alarm_id) REFERENCES alarm (alarm_id)
+);
+
 insert into user(type, email, password, name, nickname, birthday, user_gender, is_deleted)
 values
     ("p", "yuseung0429@naver.com", "?", "이유승", "yuseung0429", "1998-04-29", "M", false),
-    ("c", "altys31@gmail.com", "?", "양규현", "altys31", "1998-07-01", "F", false),
+    ("c", "didrbgus777@naver.com", "?", "양규현", "altys31", "1998-07-01", "F", false),
     ("c", "altys30@gmail.com", "?", "양규현2", "altys30", "1998-07-02", "F", true);
 
 INSERT INTO parent(user_id)
@@ -288,3 +309,11 @@ INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
 values
     (2, 1, 0, 0, 0),
     (3, 1, 0, 0, 0);
+
+INSERT INTO alarm(alarm_id, sender_id, receiver_id, created_at, is_deleted, type)
+values
+    (1, 1, 2, "2024-08-25T12:00:00", false, "c");
+
+INSERT INTO child_register_alarm(alarm_id, state)
+values
+    (1, "REQUESTED");

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum UserErrorConstants implements ErrorConstantDefinition {
+    USER_TYPE_MISMATCH("사용자 타입 불일치", "U001", HttpStatus.BAD_REQUEST),
     USER_WITHDRAWAL("탈퇴한 사용자", "U002", HttpStatus.NOT_FOUND),
     USER_NOT_FOUND("존재하지 않는 사용자", "U003", HttpStatus.NOT_FOUND),
     SIGNUP_NOT_COMPLETED("회원가입 미완료", "U004", HttpStatus.NOT_FOUND),
@@ -16,7 +17,8 @@ public enum UserErrorConstants implements ErrorConstantDefinition {
     USER_NICKNAME_MISMATCH("닉네임 형식 불일치", "U007", HttpStatus.BAD_REQUEST),
     CHILD_UNREGISTERED("등록되지 않은 자식", "U008", HttpStatus.BAD_REQUEST),
     CHILD_PARENT_SAME("이전과 같은 부모", "U009", HttpStatus.BAD_REQUEST),
-    CHILD_ALREADY_EXISTS_PARENT("이미 부모가 존재하는 자식", "U010", HttpStatus.CONFLICT);
+    CHILD_ALREADY_EXISTS_PARENT("이미 부모가 존재하는 자식", "U010", HttpStatus.CONFLICT),
+    PARENT_NOT_FOUND("부모가 존재하지 않는 자식", "U011", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final String statusCode;

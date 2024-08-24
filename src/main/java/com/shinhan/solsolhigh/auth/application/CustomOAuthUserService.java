@@ -52,7 +52,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
                 .gender(user.getGender())
                 .birthday(user.getBirthday())
                 .attributes(oAuth2User.getAttributes())
-                .userClass(user instanceof Parent ? Parent.class : Child.class)
+                .type(user.getType())
                 .email(user.getEmail())
                 .name(user.getName())
                 .build();

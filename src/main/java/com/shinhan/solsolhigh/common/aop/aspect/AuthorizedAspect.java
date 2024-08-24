@@ -20,7 +20,7 @@ public class AuthorizedAspect {
 
         MethodSignature ms = (MethodSignature)joinPoint.getSignature();
         Authorized authorized = ms.getMethod().getAnnotation(Authorized.class);
-        Class<?> classType = userPrinciple.getUserClass();
+        Class<?> classType = userPrinciple.getType();
 
         if(classType != authorized.allowed())
             throw new UserBadRequestException();

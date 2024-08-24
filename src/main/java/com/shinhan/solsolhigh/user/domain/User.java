@@ -61,7 +61,7 @@ public abstract class User {
     }
 
     public void changeNickname(String nickname) {
-        if(this.nickname.equals(nickname))
+        if(Objects.equals(this.nickname, nickname))
             throw new UserNicknameSameException();
         this.nickname = nickname;
     }
@@ -78,4 +78,6 @@ public abstract class User {
     public int hashCode() {
         return Objects.hashCode(this.getId());
     }
+
+    public abstract Class<?> getType();
 }

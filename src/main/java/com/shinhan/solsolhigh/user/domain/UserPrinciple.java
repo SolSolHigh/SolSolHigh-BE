@@ -19,7 +19,7 @@ public class UserPrinciple implements OAuth2User, Serializable {
     private String name;
     private String email;
     private LocalDate birthday;
-    private Class<?> userClass;
+    private Class<?> type;
     private Gender gender;
 
     @Override

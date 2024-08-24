@@ -5,10 +5,7 @@ import com.shinhan.solsolhigh.user.application.ChildInfo;
 import com.shinhan.solsolhigh.user.application.UserService;
 import com.shinhan.solsolhigh.user.application.UserInfo;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
-import com.shinhan.solsolhigh.user.ui.request.ChildRegisterRequestFromParentRequest;
-import com.shinhan.solsolhigh.user.ui.request.ChildRemoveFromParentRequest;
-import com.shinhan.solsolhigh.user.ui.request.ChildSearchRequest;
-import com.shinhan.solsolhigh.user.ui.request.SessionUserInfoModifyRequest;
+import com.shinhan.solsolhigh.user.ui.request.*;
 import com.shinhan.solsolhigh.user.ui.response.ChildSearchResponse;
 import com.shinhan.solsolhigh.user.ui.response.SessionChildInfoResponse;
 import com.shinhan.solsolhigh.user.ui.response.SessionUserInfoResponse;
@@ -35,7 +32,7 @@ public class UserController {
     @GetMapping("/users/info")
     public ResponseEntity<?> getSessionUserInfo(@AuthenticationPrincipal UserPrinciple userPrinciple) {
         UserInfo userInfo = userService.getUserInfo(userPrinciple.getId());
-        return ResponseEntity.ok(SessionUserInfoResponse.of(userInfo, userPrinciple.getUserClass()));
+        return ResponseEntity.ok(SessionUserInfoResponse.of(userInfo, userPrinciple.getType()));
     }
 
     @PatchMapping("/users/info")
@@ -79,5 +76,12 @@ public class UserController {
     @RequestMapping(value = "/users/info", method = RequestMethod.OPTIONS)
     public ResponseEntity<?> validateSession(){
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/children/parent")
+    public ResponseEntity<?> responseRegisterChildFromParent(@AuthenticationPrincipal UserPrinciple userPrinciple,
+            @RequestBody ChildRegisterResponseFromParentRequest request){
+        userService.responseRegisterChildFromParent(request.toDto(userPrinciple.getId()));
+        return ResponseEntity.accepted().build();
     }
 }

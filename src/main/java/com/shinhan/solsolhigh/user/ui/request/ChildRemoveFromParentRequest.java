@@ -1,7 +1,6 @@
 package com.shinhan.solsolhigh.user.ui.request;
 
 import com.shinhan.solsolhigh.user.application.ChildRemoveFromParentDto;
-import com.shinhan.solsolhigh.user.application.UserInfoModifyDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
