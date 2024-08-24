@@ -1,4 +1,4 @@
-package com.shinhan.solsolhigh.user.ui;
+package com.shinhan.solsolhigh.user.ui.response;
 
 import com.shinhan.solsolhigh.user.domain.Parent;
 import com.shinhan.solsolhigh.user.application.UserInfo;

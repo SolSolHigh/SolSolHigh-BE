@@ -5,6 +5,12 @@ import com.shinhan.solsolhigh.user.application.ChildInfo;
 import com.shinhan.solsolhigh.user.application.UserService;
 import com.shinhan.solsolhigh.user.application.UserInfo;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
+import com.shinhan.solsolhigh.user.ui.request.ChildRemoveFromParentRequest;
+import com.shinhan.solsolhigh.user.ui.request.ChildSearchRequest;
+import com.shinhan.solsolhigh.user.ui.request.SessionUserInfoModifyRequest;
+import com.shinhan.solsolhigh.user.ui.response.ChildSearchResponse;
+import com.shinhan.solsolhigh.user.ui.response.SessionChildInfoResponse;
+import com.shinhan.solsolhigh.user.ui.response.SessionUserInfoResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +54,12 @@ public class UserController {
     public ResponseEntity<?> getSessionChildrenInfo(@AuthenticationPrincipal UserPrinciple userPrinciple){
         List<ChildInfo> childInfos = userService.getSessionChildrenInfo(userPrinciple.getId());
         return ResponseEntity.ok(ListUtils.applyFunctionToElements(childInfos, SessionChildInfoResponse::from));
+    }
+
+    @PatchMapping("/parents/children")
+    public ResponseEntity<?> removeChildFromParent(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                                   @RequestBody ChildRemoveFromParentRequest request){
+        userService.removeChildFromParent(request.toDto(userPrinciple.getId()));
+        return ResponseEntity.accepted().build();
     }
 }

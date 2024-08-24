@@ -3,6 +3,7 @@ package com.shinhan.solsolhigh.user.application;
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
 import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.user.domain.*;
+import com.shinhan.solsolhigh.user.exception.ChildUnregisteredException;
 import com.shinhan.solsolhigh.user.exception.UserNicknameDuplicatedException;
 import com.shinhan.solsolhigh.user.exception.UserNotFoundException;
 import com.shinhan.solsolhigh.user.exception.UserWithdrawalException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -48,8 +50,7 @@ public class UserService {
     @Authorized(allowed = Parent.class)
     public ChildInfo getChildInfoByNickname(String nickname) {
         Child child = childRepository.findByNickname(nickname).orElseThrow(UserNotFoundException::new);
-        if(child.getIsDeleted())
-            throw new UserWithdrawalException();
+        checkDeletedUser(child);
         return ChildInfo.from(child);
     }
 
@@ -58,5 +59,20 @@ public class UserService {
     public List<ChildInfo> getSessionChildrenInfo(Integer id) {
         List<Child> children = ListUtils.removeIf(childRepository.findByParentId(id), User::getIsDeleted);
         return ListUtils.applyFunctionToElements(children, ChildInfo::from);
+    }
+
+    @Transactional
+    @Authorized(allowed = Parent.class)
+    public void removeChildFromParent(ChildRemoveFromParentDto dto) {
+        Child child = childRepository.findByNickname(dto.getNickname()).orElseThrow(UserNotFoundException::new);
+        checkDeletedUser(child);
+        if(child.getParent() == null || !Objects.equals(child.getParent().getId(), dto.getId()))
+            throw new ChildUnregisteredException();
+        child.changeParent(null);
+    }
+
+    private void checkDeletedUser(User user){
+        if(user.getIsDeleted())
+            throw new UserWithdrawalException();
     }
 }
