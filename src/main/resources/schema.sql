@@ -277,7 +277,8 @@ create table egg_trade_log
 insert into user(type, email, password, name, nickname, birthday, user_gender, is_deleted)
 values
     ("p", "yuseung0429@naver.com", "?", "이유승", "yuseung0429", "1998-04-29", "M", false),
-    ("c", "altys31@gmail.com", "?", "양규현", "altys31", "1998-07-01", "F", false);
+    ("c", "altys31@gmail.com", "?", "양규현", "altys31", "1998-07-01", "F", false),
+    ("c", "altys30@gmail.com", "?", "양규현2", "altys30", "1998-07-02", "F", true);
 
 INSERT INTO parent(user_id)
 values
@@ -285,4 +286,5 @@ values
 
 INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
 values
-    (2, 1, 0, 0, 0);
+    (2, 1, 0, 0, 0),
+    (3, 1, 0, 0, 0);

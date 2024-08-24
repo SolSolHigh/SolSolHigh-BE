@@ -1,5 +1,6 @@
 package com.shinhan.solsolhigh.user.ui;
 
+import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.user.application.ChildInfo;
 import com.shinhan.solsolhigh.user.application.UserService;
 import com.shinhan.solsolhigh.user.application.UserInfo;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -36,8 +39,14 @@ public class UserController {
     }
 
     @PostMapping("/children")
-    public ResponseEntity<?> searchChlidInfoByNickname(@RequestBody ChildSearchRequest request){
-        ChildInfo childInfo = userService.getChlidInfoByNickname(request.getNickname());
+    public ResponseEntity<?> searchChildInfoByNickname(@RequestBody ChildSearchRequest request){
+        ChildInfo childInfo = userService.getChildInfoByNickname(request.getNickname());
         return ResponseEntity.ok(ChildSearchResponse.from(childInfo));
+    }
+
+    @GetMapping("/parents/children")
+    public ResponseEntity<?> getSessionChildrenInfo(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        List<ChildInfo> childInfos = userService.getSessionChildrenInfo(userPrinciple.getId());
+        return ResponseEntity.ok(ListUtils.applyFunctionToElements(childInfos, SessionChildInfoResponse::from));
     }
 }

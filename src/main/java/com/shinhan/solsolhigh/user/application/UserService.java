@@ -1,6 +1,7 @@
 package com.shinhan.solsolhigh.user.application;
 
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
+import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.user.domain.*;
 import com.shinhan.solsolhigh.user.exception.UserNicknameDuplicatedException;
 import com.shinhan.solsolhigh.user.exception.UserNotFoundException;
@@ -9,6 +10,8 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -24,8 +27,6 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserInfo getUserInfo(Integer id) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        if(user.getIsDeleted())
-            throw new UserWithdrawalException();
         return UserInfo.from(user);
     }
 
@@ -45,8 +46,17 @@ public class UserService {
 
     @Transactional(readOnly = true)
     @Authorized(allowed = Parent.class)
-    public ChildInfo getChlidInfoByNickname(String nickname) {
+    public ChildInfo getChildInfoByNickname(String nickname) {
         Child child = childRepository.findByNickname(nickname).orElseThrow(UserNotFoundException::new);
+        if(child.getIsDeleted())
+            throw new UserWithdrawalException();
         return ChildInfo.from(child);
+    }
+
+    @Transactional(readOnly = true)
+    @Authorized(allowed = Parent.class)
+    public List<ChildInfo> getSessionChildrenInfo(Integer id) {
+        List<Child> children = ListUtils.removeIf(childRepository.findByParentId(id), User::getIsDeleted);
+        return ListUtils.applyFunctionToElements(children, ChildInfo::from);
     }
 }
