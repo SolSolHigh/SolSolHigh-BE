@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 
 public interface QuizSolveRepository extends JpaRepository<QuizSolve, Integer> {
 
-    @Query("SELECT new com.shinhan.solsolhigh.quiz.ui.dto.QuizSolveView(qs.financialQuiz.description, qs.financialQuiz.quizKeyword.keyword, qs.financialQuiz.id, qs.isCorrect, qs.financialQuiz.quizExplanation, qs.correctedAt) " +
+    @Query("SELECT new com.shinhan.solsolhigh.quiz.ui.dto.QuizSolveView(fq.description, qk.keyword, qs.financialQuiz.id, qs.isCorrect, fq.quizExplanation, qs.correctedAt) " +
             "FROM QuizSolve qs " +
-            "JOIN FETCH qs.financialQuiz " +
+            "JOIN FinancialQuiz fq ON fq = qs.financialQuiz " +
+            "JOIN QuizKeyword qk ON fq.quizKeyword = qk " +
             "WHERE qs.child.id = :childId")
     Slice<QuizSolveView> queryQuizSolveByChildId(@Param("childId") Integer childId, Pageable pageable);
 

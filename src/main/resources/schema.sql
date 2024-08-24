@@ -274,11 +274,11 @@ INSERT INTO quiz_keyword(quiz_keyword_id, keyword) VALUES (1, '통장'),
                                                           (3, '대출'),
                                                           (4, '대출 연체'),
                                                           (5, '펀드'),
-                                                          (1, '신용카드'),
-                                                          (1, '대포통장'),
-                                                          (1, '핀테크'),
-                                                          (1, '환율'),
-                                                          (1, '찢어진 돈');
+                                                          (6, '신용카드'),
+                                                          (7, '대포통장'),
+                                                          (8, '핀테크'),
+                                                          (9, '환율'),
+                                                          (10, '찢어진 돈');
 
 INSERT INTO user(user_id, type, email, password, name, nickname, birthday, user_gender, is_sign_up_completed) VALUES
     (1, 'p', 'test1@test.test', '1234', '테스트용 부모', '테스트 부모 계정', '1997-09-09', 'm', true),
