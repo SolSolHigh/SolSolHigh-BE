@@ -4,6 +4,7 @@ import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
 import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.user.domain.*;
 import com.shinhan.solsolhigh.user.exception.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Service
 @AllArgsConstructor
 public class UserService {
+    private final HttpSession session;
     private final UserRepository userRepository;
     private final ChildRepository childRepository;
 
@@ -78,6 +80,17 @@ public class UserService {
         //TODO. FCM 등록 로직
     }
 
+    @Transactional
+    public void withdrawalUser(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        if(user instanceof Child)
+            childDeletePreProcessing(user);
+        else
+            parentDeletePreProcessing(user);
+        userRepository.delete(user);
+        session.invalidate();;
+    }
+
     private void checkDeletedUser(User user){
         if(user.getIsDeleted())
             throw new UserWithdrawalException();
@@ -86,5 +99,14 @@ public class UserService {
     private void checkExistsParent(Child child){
         if(child.getParent() != null)
             throw new ChildAlreadyExistsParentException();
+    }
+
+    private void childDeletePreProcessing(User user){
+        Child child = (Child) user;
+    }
+
+    private void parentDeletePreProcessing(User user){
+        Parent parent = (Parent) user;
+        childRepository.removeParent(parent);
     }
 }

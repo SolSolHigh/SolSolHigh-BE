@@ -69,4 +69,10 @@ public class UserController {
         userService.requestRegisterChildFromParent(request.toDto());
         return ResponseEntity.accepted().build();
     }
+
+    @DeleteMapping("/users/info")
+    public ResponseEntity<?> withdrawalUser(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        userService.withdrawalUser(userPrinciple.getId());
+        return ResponseEntity.accepted().build();
+    }
 }
