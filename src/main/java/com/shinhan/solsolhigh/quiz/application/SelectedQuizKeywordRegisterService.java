@@ -34,11 +34,11 @@ public class SelectedQuizKeywordRegisterService {
     private void validCheck(SelectedQuizKeywordDto request, Integer sessionId) {
         familyCheckService.familyCheck(request.getChildId(), sessionId);
 
-        if(selectedQuizKeywordFindService.countByChildId(request.getChildId()) > 10) {
+        if (selectedQuizKeywordFindService.countByChildId(request.getChildId()) > 10) {
             throw new SelectedQuizCountOverException();
         }
 
-        if(selectedQuizKeywordFindService.isExistKeyword(request.getChildId(), request.getKeywordId())){
+        if (selectedQuizKeywordFindService.isExistKeyword(request.getChildId(), request.getKeywordId())) {
             throw new SelectedQuizExistException();
         }
     }

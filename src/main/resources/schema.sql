@@ -268,3 +268,22 @@ create table egg_trade_log
     FOREIGN KEY (buyer_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
+
+INSERT INTO quiz_keyword(quiz_keyword_id, keyword) VALUES (1, '통장'),
+                                                          (2, '이자'),
+                                                          (3, '대출'),
+                                                          (4, '대출 연체'),
+                                                          (5, '펀드'),
+                                                          (1, '신용카드'),
+                                                          (1, '대포통장'),
+                                                          (1, '핀테크'),
+                                                          (1, '환율'),
+                                                          (1, '찢어진 돈');
+
+INSERT INTO user(user_id, type, email, password, name, nickname, birthday, user_gender, is_sign_up_completed) VALUES
+    (1, 'p', 'test1@test.test', '1234', '테스트용 부모', '테스트 부모 계정', '1997-09-09', 'm', true),
+    (2, 'c', 'test2@test.test', '1234', '테스트용 아이', '테스트 아이 계정', '2019-06-24', 'm', true);
+
+INSERT INTO parent(user_id) VALUES (1);
+
+INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money) values (2,  1, 0, 0, 0);

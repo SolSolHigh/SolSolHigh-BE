@@ -1,4 +1,4 @@
-package com.shinhan.solsolhigh.quiz.application.dto;
+package com.shinhan.solsolhigh.quiz.application;
 
 import com.shinhan.solsolhigh.quiz.domain.BetweenOfDayQuizSolveLog;
 import com.shinhan.solsolhigh.quiz.domain.repository.BetweenOfDayQuizSolveLogRepository;
@@ -27,7 +27,6 @@ public class BetweenOfDayQuizSolveLogUpdater {
             if(firstByChildIdOrderByStartDateDesc.isEmpty() || (log = firstByChildIdOrderByStartDateDesc.get()).isEnd() || log.isBroken(today)) {
                 BetweenOfDayQuizSolveLog betweenOfDayQuizSolveLog = create(today, child);
                 betweenOfDayQuizSolveLog.plusCount();
-                betweenOfDayQuizSolveLogRepository.save(betweenOfDayQuizSolveLog);
                 return;
             }
             log.plusCount();

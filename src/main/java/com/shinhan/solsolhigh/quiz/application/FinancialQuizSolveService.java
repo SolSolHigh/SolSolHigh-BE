@@ -1,6 +1,5 @@
 package com.shinhan.solsolhigh.quiz.application;
 
-import com.shinhan.solsolhigh.quiz.application.dto.BetweenOfDayQuizSolveLogUpdater;
 import com.shinhan.solsolhigh.quiz.application.dto.QuizSolveRequest;
 import com.shinhan.solsolhigh.quiz.domain.FinancialQuiz;
 import com.shinhan.solsolhigh.quiz.domain.repository.FinancialQuizRepository;

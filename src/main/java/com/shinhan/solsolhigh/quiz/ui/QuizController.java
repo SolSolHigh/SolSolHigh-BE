@@ -29,7 +29,6 @@ public class QuizController {
     @GetMapping("/quizzes/today")
     public ResponseEntity<?> getTodayQuiz() {
         Integer childId = (Integer) httpSession.getAttribute("USER_ID");
-
         QuizView quiz = financialQuizFindService.getQuiz(childId, LocalDate.now());
         return ResponseEntity.ok(quiz);
     }
@@ -38,7 +37,6 @@ public class QuizController {
     public ResponseEntity<?> solveQuiz(@RequestBody QuizSolveRequest request) {
         Integer childId = (Integer) httpSession.getAttribute("USER_ID");
         QuizAnswerView quizAnswerView = financialQuizSolveService.quizSolve(request, LocalDateTime.now(), childId);
-
         return ResponseEntity.ok(quizAnswerView);
     }
 

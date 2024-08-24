@@ -52,12 +52,13 @@ public class FinancialQuiz {
         return QuizSolve.builder().financialQuiz(this).child(child).correctedAt(today).isCorrect(chosenAnswer.equals(answer)).build();
     }
 
-    public static FinancialQuiz create(AddQuizDto dto, QuizKeyword quizKeyword) {
+    public static FinancialQuiz create(AddQuizDto dto, QuizKeyword quizKeyword, Child child) {
         return FinancialQuiz.builder()
                 .answer(dto.getAnswer())
                 .description(dto.getDescription())
                 .quizKeyword(quizKeyword)
                 .createdAt(LocalDate.now())
+                .child(child)
                 .build();
     }
 }
