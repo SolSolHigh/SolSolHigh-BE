@@ -5,6 +5,7 @@ import com.shinhan.solsolhigh.user.application.ChildInfo;
 import com.shinhan.solsolhigh.user.application.UserService;
 import com.shinhan.solsolhigh.user.application.UserInfo;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
+import com.shinhan.solsolhigh.user.ui.request.ChildRegisterRequestFromParentRequest;
 import com.shinhan.solsolhigh.user.ui.request.ChildRemoveFromParentRequest;
 import com.shinhan.solsolhigh.user.ui.request.ChildSearchRequest;
 import com.shinhan.solsolhigh.user.ui.request.SessionUserInfoModifyRequest;
@@ -60,6 +61,12 @@ public class UserController {
     public ResponseEntity<?> removeChildFromParent(@AuthenticationPrincipal UserPrinciple userPrinciple,
                                                    @RequestBody ChildRemoveFromParentRequest request){
         userService.removeChildFromParent(request.toDto(userPrinciple.getId()));
+        return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/parents/children/request")
+    public ResponseEntity<?> requestRegisterChildFromParent(@RequestBody ChildRegisterRequestFromParentRequest request){
+        userService.requestRegisterChildFromParent(request.toDto());
         return ResponseEntity.accepted().build();
     }
 }

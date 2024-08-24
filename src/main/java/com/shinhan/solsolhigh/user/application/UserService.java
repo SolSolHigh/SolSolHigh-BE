@@ -3,10 +3,7 @@ package com.shinhan.solsolhigh.user.application;
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
 import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.user.domain.*;
-import com.shinhan.solsolhigh.user.exception.ChildUnregisteredException;
-import com.shinhan.solsolhigh.user.exception.UserNicknameDuplicatedException;
-import com.shinhan.solsolhigh.user.exception.UserNotFoundException;
-import com.shinhan.solsolhigh.user.exception.UserWithdrawalException;
+import com.shinhan.solsolhigh.user.exception.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -71,8 +68,23 @@ public class UserService {
         child.changeParent(null);
     }
 
+
+    @Transactional
+    @Authorized(allowed = Parent.class)
+    public void requestRegisterChildFromParent(ChildRegisterRequestFromParentDto dto) {
+        Child child = childRepository.findByNickname(dto.getNickname()).orElseThrow(UserNotFoundException::new);
+        checkDeletedUser(child);
+        checkExistsParent(child);
+        //TODO. FCM 등록 로직
+    }
+
     private void checkDeletedUser(User user){
         if(user.getIsDeleted())
             throw new UserWithdrawalException();
+    }
+
+    private void checkExistsParent(Child child){
+        if(child.getParent() != null)
+            throw new ChildAlreadyExistsParentException();
     }
 }

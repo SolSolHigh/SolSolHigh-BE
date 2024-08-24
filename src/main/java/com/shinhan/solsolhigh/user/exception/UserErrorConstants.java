@@ -15,7 +15,8 @@ public enum UserErrorConstants implements ErrorConstantDefinition {
     USER_NICKNAME_DUPLICATED("중복된 닉네임", "U006", HttpStatus.CONFLICT),
     USER_NICKNAME_MISMATCH("닉네임 형식 불일치", "U007", HttpStatus.BAD_REQUEST),
     CHILD_UNREGISTERED("등록되지 않은 자식", "U008", HttpStatus.BAD_REQUEST),
-    CHILD_PARENT_SAME("이전과 같은 부모", "U009", HttpStatus.BAD_REQUEST);
+    CHILD_PARENT_SAME("이전과 같은 부모", "U009", HttpStatus.BAD_REQUEST),
+    CHILD_ALREADY_EXISTS_PARENT("이미 부모가 존재하는 자식", "U010", HttpStatus.CONFLICT);
 
     private final String message;
     private final String statusCode;
