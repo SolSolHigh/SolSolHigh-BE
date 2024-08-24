@@ -75,4 +75,9 @@ public class UserController {
         userService.withdrawalUser(userPrinciple.getId());
         return ResponseEntity.accepted().build();
     }
+
+    @RequestMapping(value = "/users/info", method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> validateSession(){
+        return ResponseEntity.ok().build();
+    }
 }
