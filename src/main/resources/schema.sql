@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS child_register_alarm;
+DROP TABLE IF EXISTS alarm;
 DROP TABLE IF EXISTS egg_trade_log;
 DROP TABLE IF EXISTS egg_sell_board;
 DROP TABLE IF EXISTS hold_special_egg;
@@ -21,6 +23,7 @@ DROP TABLE IF EXISTS fcm;
 DROP TABLE IF EXISTS promise;
 DROP TABLE IF EXISTS child;
 DROP TABLE IF EXISTS parent;
+DROP TABLE IF EXISTS temporary_user;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS prefix_sum_exp;
 
@@ -31,17 +34,23 @@ create table prefix_sum_exp
     prefix_sum_exp INT      NOT NULL
 );
 
+create table temporary_user
+(
+    temporary_user_id  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    email    VARCHAR(40)  NOT NULL,
+    name     VARCHAR(52)  NOT NULL
+);
+
 create table user
 (
-    user_id              INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    type                 CHAR(1) NULL,
-    email                VARCHAR(40) NOT NULL,
-    password             VARCHAR(255) NULL,
-    name                 VARCHAR(52) NOT NULL,
-    nickname             VARCHAR(30) NULL,
-    birthday             DATE NULL,
-    user_gender          CHAR(1) NULL,
-    is_sign_up_completed BOOL        NOT NULL
+    user_id  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    type     CHAR(1)      NULL,
+    email    VARCHAR(40)  NOT NULL,
+    name     VARCHAR(52)  NOT NULL,
+    nickname VARCHAR(30)  NULL,
+    birthday DATE         NULL,
+    user_gender CHAR(1)   NULL,
+    is_deleted BOOL       NULL
 );
 
 create table parent
@@ -53,8 +62,8 @@ create table parent
 
 create table child
 (
-    user_id     INT NOT NULL PRIMARY KEY,
-    parent_id   INT NOT NULL,
+    user_id    INT NOT NULL PRIMARY KEY,
+    parent_id   INT NULL,
     current_exp INT NOT NULL,
     max_exp     INT NOT NULL,
     goal_money  INT NOT NULL,
@@ -268,22 +277,21 @@ create table egg_trade_log
     FOREIGN KEY (buyer_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
+create table alarm
+(
+    alarm_id    INT     NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    sender_id   INT     NOT NULL,
+    receiver_id INT     NOT NULL,
+    created_at  DATETIME    NOT NULL,
+    is_deleted  BOOL    NOT NULL,
+    type     CHAR(1)      NULL,
+    FOREIGN KEY (sender_id) REFERENCES user (user_id),
+    FOREIGN KEY (receiver_id) REFERENCES user (user_id)
+);
 
-INSERT INTO quiz_keyword(quiz_keyword_id, keyword) VALUES (1, '통장'),
-                                                          (2, '이자'),
-                                                          (3, '대출'),
-                                                          (4, '대출 연체'),
-                                                          (5, '펀드'),
-                                                          (6, '신용카드'),
-                                                          (7, '대포통장'),
-                                                          (8, '핀테크'),
-                                                          (9, '환율'),
-                                                          (10, '찢어진 돈');
-
-INSERT INTO user(user_id, type, email, password, name, nickname, birthday, user_gender, is_sign_up_completed) VALUES
-    (1, 'p', 'test1@test.test', '1234', '테스트용 부모', '테스트 부모 계정', '1997-09-09', 'm', true),
-    (2, 'c', 'test2@test.test', '1234', '테스트용 아이', '테스트 아이 계정', '2019-06-24', 'm', true);
-
-INSERT INTO parent(user_id) VALUES (1);
-
-INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money) values (2,  1, 0, 0, 0);
+create table child_register_alarm
+(
+    alarm_id INT NOT NULL PRIMARY KEY,
+    state CHAR(10)  NOT NULL,
+    FOREIGN KEY (alarm_id) REFERENCES alarm (alarm_id)
+);

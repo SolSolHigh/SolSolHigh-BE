@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shinhan.solsolhigh.user.exception.UserSignupNotCompletedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -11,9 +12,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class OAuthLoginFailureExceptionHandler implements AuthenticationFailureHandler {
+@AllArgsConstructor
+public class CustomOAuthLoginFailureExceptionHandler implements AuthenticationFailureHandler {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
