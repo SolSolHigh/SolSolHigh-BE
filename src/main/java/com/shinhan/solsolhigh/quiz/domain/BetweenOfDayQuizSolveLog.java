@@ -3,13 +3,12 @@ package com.shinhan.solsolhigh.quiz.domain;
 
 import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "between_of_day_quiz_solve_log")
@@ -25,11 +24,11 @@ public class BetweenOfDayQuizSolveLog {
     @JoinColumn(name = "child_id")
     private Child child;
 
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
+    @Column(name = "started_at")
+    private LocalDate startDate;
 
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
+    @Column(name = "end_at")
+    private LocalDate endDate;
 
     @Column
     private Integer count;
@@ -37,5 +36,28 @@ public class BetweenOfDayQuizSolveLog {
     @PrePersist
     private void setDefaultCount() {
         this.count = 0;
+    }
+
+    @Transient
+    private static final Integer GAP = 7;
+
+
+    public static BetweenOfDayQuizSolveLog create(Child child, LocalDate startDate) {
+        return BetweenOfDayQuizSolveLog.builder()
+                .startDate(startDate)
+                .endDate(startDate.plusDays(GAP))
+                .child(child).build();
+    }
+
+    public void plusCount() {
+        this.count++;
+    }
+
+    public boolean isEnd() {
+        return LocalDate.now().isAfter(endDate);
+    }
+
+    public boolean isBroken(LocalDate today) {
+        return !startDate.equals(today.minusDays(count));
     }
 }

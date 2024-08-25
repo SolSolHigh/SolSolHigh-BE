@@ -8,7 +8,10 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.savedrequest.NullRequestCache;
 
 @Configuration
 @EnableWebSecurity
@@ -16,22 +19,37 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomOAuthUserService customOAuthUserService;
-    private final OAuthLoginFailureExceptionHandler oAuthLoginFailureExceptionHandler;
+    private final CustomOAuthLoginFailureExceptionHandler customOAuthLoginFailureExceptionHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
-        http.oauth2Login(Customizer.withDefaults());
+        http.anonymous(AbstractHttpConfigurer::disable);
+        http.requestCache(requestCacheConfigurer ->
+                requestCacheConfigurer.requestCache(new NullRequestCache()));
         http.authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers("/", "/oauth2/**", "/login/**", "/users").permitAll()
                         .anyRequest().authenticated());
         http.oauth2Login(httpSecurityOAuth2LoginConfigurer ->
                 httpSecurityOAuth2LoginConfigurer
                         .loginPage("/oauth2/login")
                         .userInfoEndpoint(userInfoEndpointConfig ->
-                                userInfoEndpointConfig.userService(customOAuthUserService)).failureHandler(oAuthLoginFailureExceptionHandler));
+                                userInfoEndpointConfig.userService(customOAuthUserService)).failureHandler(customOAuthLoginFailureExceptionHandler));
+        http.logout(httpSecurityLogoutConfigurer ->
+                httpSecurityLogoutConfigurer
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessHandler(customLogoutSuccessHandler)
+                        .deleteCookies("SESSIONID"));
+        http.sessionManagement(httpSecuritySessionManagementConfigurer ->
+                httpSecuritySessionManagementConfigurer
+                        .sessionCreationPolicy(SessionCreationPolicy.NEVER));
+        http.exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                httpSecurityExceptionHandlingConfigurer
+                        .authenticationEntryPoint(customAuthenticationEntryPoint));
         return http.build();
     }
 }

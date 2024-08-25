@@ -1,11 +1,13 @@
 package com.shinhan.solsolhigh.user.domain;
 
 import lombok.Getter;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
-public class Gender {
+public class Gender implements Serializable{
     private Type type;
 
     public static final Type MALE = Type.MALE;

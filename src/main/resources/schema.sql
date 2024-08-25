@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS child_register_alarm;
+DROP TABLE IF EXISTS alarm;
 DROP TABLE IF EXISTS egg_trade_log;
 DROP TABLE IF EXISTS egg_sell_board;
 DROP TABLE IF EXISTS hold_special_egg;
@@ -21,6 +23,7 @@ DROP TABLE IF EXISTS fcm;
 DROP TABLE IF EXISTS promise;
 DROP TABLE IF EXISTS child;
 DROP TABLE IF EXISTS parent;
+DROP TABLE IF EXISTS temporary_user;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS prefix_sum_exp;
 
@@ -31,17 +34,23 @@ create table prefix_sum_exp
     prefix_sum_exp INT      NOT NULL
 );
 
+create table temporary_user
+(
+    temporary_user_id  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    email    VARCHAR(40)  NOT NULL,
+    name     VARCHAR(52)  NOT NULL
+);
+
 create table user
 (
     user_id  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     type     CHAR(1)      NULL,
     email    VARCHAR(40)  NOT NULL,
-    password VARCHAR(255) NULL,
     name     VARCHAR(52)  NOT NULL,
     nickname VARCHAR(30)  NULL,
     birthday DATE         NULL,
     user_gender CHAR(1)   NULL,
-    is_sign_up_completed  BOOL NOT NULL
+    is_deleted BOOL       NULL
 );
 
 create table parent
@@ -54,7 +63,7 @@ create table parent
 create table child
 (
     user_id    INT NOT NULL PRIMARY KEY,
-    parent_id   INT NOT NULL,
+    parent_id   INT NULL,
     current_exp INT NOT NULL,
     max_exp     INT NOT NULL,
     goal_money  INT NOT NULL,
@@ -177,7 +186,10 @@ create table financial_quiz
     description       VARCHAR(200) NOT NULL,
     answer            BOOL         NOT NULL,
     quiz_keyword_id   INT          NOT NULL,
-    FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id)
+    child_id          INT          NOT NULL,
+    created_at        Date         NOT NULL,
+    FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id),
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 create table quiz_solve
@@ -264,4 +276,22 @@ create table egg_trade_log
     FOREIGN KEY (seller_id) REFERENCES child (user_id),
     FOREIGN KEY (buyer_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
+);
+create table alarm
+(
+    alarm_id    INT     NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    sender_id   INT     NOT NULL,
+    receiver_id INT     NOT NULL,
+    created_at  DATETIME    NOT NULL,
+    is_deleted  BOOL    NOT NULL,
+    type     CHAR(1)      NULL,
+    FOREIGN KEY (sender_id) REFERENCES user (user_id),
+    FOREIGN KEY (receiver_id) REFERENCES user (user_id)
+);
+
+create table child_register_alarm
+(
+    alarm_id INT NOT NULL PRIMARY KEY,
+    state CHAR(10)  NOT NULL,
+    FOREIGN KEY (alarm_id) REFERENCES alarm (alarm_id)
 );
