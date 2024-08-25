@@ -24,7 +24,8 @@ public enum UserErrorConstants implements ErrorConstantDefinition {
     USER_NAME_MISMATCH("이름 형식 불일치", "U014", HttpStatus.BAD_REQUEST),
     USER_EMAIL_MISMATCH("이메일 형식 불일치", "U015", HttpStatus.BAD_REQUEST),
     USER_BIRTHDAY_MISMATCH("생년월일 형식 불일치", "U016", HttpStatus.BAD_REQUEST),
-    USER_GENDER_MISMATCH("성별 형식 불일치", "U017", HttpStatus.BAD_REQUEST);
+    USER_GENDER_MISMATCH("성별 형식 불일치", "U017", HttpStatus.BAD_REQUEST),
+    FAMILY_NOT_EXIST("자식과 연관관계가 없습니다.", "U018", HttpStatus.NOT_FOUND);
     private final String message;
     private final String statusCode;
     private final HttpStatus httpStatus;

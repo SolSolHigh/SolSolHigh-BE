@@ -21,4 +21,5 @@ public interface ChildRepository extends JpaRepository<Child, Integer> {
            """)
     void removeParent(@Param("parent") Parent parent);
 
+    Boolean existsByIdAndParentId(Integer id, Integer parentId);
 }
