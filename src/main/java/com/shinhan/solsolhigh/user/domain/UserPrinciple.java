@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import com.shinhan.solsolhigh.user.domain.User.Type;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ public class UserPrinciple implements OAuth2User, Serializable {
     private String name;
     private String email;
     private LocalDate birthday;
-    private Class<?> type;
+    private Type type;
     private Gender gender;
 
     @Override

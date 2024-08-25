@@ -1,7 +1,5 @@
 package com.shinhan.solsolhigh.user.application;
 
-import com.shinhan.solsolhigh.alarm.domain.Alarm;
-import com.shinhan.solsolhigh.alarm.domain.AlarmRepository;
 import com.shinhan.solsolhigh.alarm.domain.ChildRegisterAlarm;
 import com.shinhan.solsolhigh.alarm.domain.ChildRegisterAlarmRepository;
 import com.shinhan.solsolhigh.alarm.exception.AlarmMisMatchException;
@@ -14,7 +12,6 @@ import com.shinhan.solsolhigh.user.exception.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final ChildRepository childRepository;
     private final ChildRegisterAlarmRepository childRegisterAlarmRepository;
+    private final TemporaryUserRepository temporaryUserRepository;
+    private final ParentRepository parentRepository;
 
     @Transactional(readOnly = true)
     public boolean checkDuplicatedNickname(String nickname) {
@@ -55,7 +54,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    @Authorized(allowed = Parent.class)
+    @Authorized(allowed = User.Type.PARENT)
     public ChildInfo getChildInfoByNickname(String nickname) {
         Child child = childRepository.findByNickname(nickname).orElseThrow(UserNotFoundException::new);
         checkDeletedUser(child);
@@ -63,14 +62,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    @Authorized(allowed = Parent.class)
+    @Authorized(allowed = User.Type.PARENT)
     public List<ChildInfo> getSessionChildrenInfo(Integer id) {
         List<Child> children = ListUtils.removeIf(childRepository.findByParentId(id), User::getIsDeleted);
         return ListUtils.applyFunctionToElements(children, ChildInfo::from);
     }
 
     @Transactional
-    @Authorized(allowed = Parent.class)
+    @Authorized(allowed = User.Type.PARENT)
     public void removeChildFromParent(ChildRemoveFromParentDto dto) {
         Child child = childRepository.findByNickname(dto.getNickname()).orElseThrow(UserNotFoundException::new);
         checkDeletedUser(child);
@@ -81,7 +80,7 @@ public class UserService {
 
 
     @Transactional
-    @Authorized(allowed = Parent.class)
+    @Authorized(allowed = User.Type.PARENT)
     public void requestRegisterChildFromParent(ChildRegisterRequestFromParentDto dto) {
         Child child = childRepository.findByNickname(dto.getNickname()).orElseThrow(UserNotFoundException::new);
         checkDeletedUser(child);
@@ -92,7 +91,7 @@ public class UserService {
     @Transactional
     public void withdrawalUser(Integer id) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        if(user.getType()==Child.class)
+        if(user.getType()== User.Type.CHILD)
             childDeletePreProcessing(user);
         else
             parentDeletePreProcessing(user);
@@ -101,7 +100,7 @@ public class UserService {
     }
 
     @Transactional
-    @Authorized(allowed = Child.class)
+    @Authorized(allowed = User.Type.CHILD)
     public void responseRegisterChildFromParent(ChildRegisterResponseFromParentDto dto) {
         Child child = childRepository.findById(dto.getId()).orElseThrow(UserNotFoundException::new);
         checkDeletedUser(child);
@@ -113,7 +112,7 @@ public class UserService {
             throw new AlarmMisMatchException();
 
         User user = alarm.getSender();
-        if(user.getType() != Parent.class)
+        if(user.getType() != User.Type.PARENT)
             throw new UserTypeMismatchException();
 
         Parent parent = JPAUtils.typeCast(Parent.class, user);
@@ -127,6 +126,20 @@ public class UserService {
             alarm.changeState(ChildRegisterAlarm.State.REJECTED);
             //TODO. 거절 알림 서비스 호출
         }
+    }
+
+    @Transactional
+    public void signupUser(@Valid UserSignupDto dto) {
+        TemporaryUser temporaryUser = temporaryUserRepository.findByEmail(dto.getEmail()).orElseThrow(TemporaryUserNotFoundException::new);
+        if(userRepository.findByEmail(dto.getEmail()).isPresent())
+            throw new UserAlreadyExistsException();
+
+        if(dto.getType() == User.Type.PARENT)
+            parentRepository.save(dto.toParent());
+        else
+            childRepository.save(dto.toChild());
+
+        temporaryUserRepository.delete(temporaryUser);
     }
 
     private void checkDeletedUser(User user){

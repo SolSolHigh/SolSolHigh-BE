@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.Hibernate;
-import org.springframework.context.annotation.Profile;
 
 import java.util.Objects;
 
@@ -40,7 +38,16 @@ public class Child extends User {
     }
 
     @Override
-    public Class<?> getType() {
-        return Child.class;
+    public Type getType() {
+        return Type.CHILD;
+    }
+
+    @Override
+    public void prePersist() {
+        super.prePersist();
+        parent = null;
+        maxExp = 0;
+        currentExp = 0;
+        goalMoney = 0;
     }
 }

@@ -2,6 +2,7 @@ package com.shinhan.solsolhigh.user.application;
 
 import com.shinhan.solsolhigh.user.domain.Gender;
 import com.shinhan.solsolhigh.user.domain.User;
+import com.shinhan.solsolhigh.user.domain.User.Type;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,6 +15,7 @@ public class UserInfo {
     private String email;
     private String name;
     private Gender gender;
+    private Type type;
     private LocalDate birthday;
 
     public static UserInfo from(User user) {
@@ -22,6 +24,7 @@ public class UserInfo {
                 .email(user.getEmail())
                 .name(user.getName())
                 .gender(user.getGender())
+                .type(user.getType())
                 .birthday(user.getBirthday())
                 .build();
     }

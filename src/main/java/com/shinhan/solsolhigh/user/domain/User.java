@@ -22,6 +22,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "user")
 public abstract class User {
+
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +30,6 @@ public abstract class User {
 
     @Column
     private String email;
-
-    @Column
-    private String password;
 
     @Column
     private String name;
@@ -79,5 +77,9 @@ public abstract class User {
         return Objects.hashCode(this.getId());
     }
 
-    public abstract Class<?> getType();
+    public abstract Type getType();
+
+    public enum Type {
+        PARENT, CHILD
+    }
 }

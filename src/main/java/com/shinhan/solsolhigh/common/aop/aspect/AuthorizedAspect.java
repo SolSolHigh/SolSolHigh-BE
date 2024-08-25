@@ -2,7 +2,9 @@ package com.shinhan.solsolhigh.common.aop.aspect;
 
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
 import com.shinhan.solsolhigh.common.exception.UserBadRequestException;
+import com.shinhan.solsolhigh.user.domain.User;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
+import com.shinhan.solsolhigh.user.domain.User.Type;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -20,9 +22,9 @@ public class AuthorizedAspect {
 
         MethodSignature ms = (MethodSignature)joinPoint.getSignature();
         Authorized authorized = ms.getMethod().getAnnotation(Authorized.class);
-        Class<?> classType = userPrinciple.getType();
+        Type type = userPrinciple.getType();
 
-        if(classType != authorized.allowed())
+        if(type != authorized.allowed())
             throw new UserBadRequestException();
     }
 }

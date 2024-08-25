@@ -18,8 +18,13 @@ public enum UserErrorConstants implements ErrorConstantDefinition {
     CHILD_UNREGISTERED("등록되지 않은 자식", "U008", HttpStatus.BAD_REQUEST),
     CHILD_PARENT_SAME("이전과 같은 부모", "U009", HttpStatus.BAD_REQUEST),
     CHILD_ALREADY_EXISTS_PARENT("이미 부모가 존재하는 자식", "U010", HttpStatus.CONFLICT),
-    PARENT_NOT_FOUND("부모가 존재하지 않는 자식", "U011", HttpStatus.BAD_REQUEST);
-
+    PARENT_NOT_FOUND("부모가 존재하지 않는 자식", "U011", HttpStatus.BAD_REQUEST),
+    USER_ALREADY_EXISTS("이미 존재하는 사용자", "U012", HttpStatus.CONFLICT),
+    TEMPORARYUSER_NOT_FOUND("임시 가입 정보가 없는 사용자", "U013", HttpStatus.NOT_FOUND),
+    USER_NAME_MISMATCH("이름 형식 불일치", "U014", HttpStatus.BAD_REQUEST),
+    USER_EMAIL_MISMATCH("이메일 형식 불일치", "U015", HttpStatus.BAD_REQUEST),
+    USER_BIRTHDAY_MISMATCH("생년월일 형식 불일치", "U016", HttpStatus.BAD_REQUEST),
+    USER_GENDER_MISMATCH("성별 형식 불일치", "U017", HttpStatus.BAD_REQUEST);
     private final String message;
     private final String statusCode;
     private final HttpStatus httpStatus;

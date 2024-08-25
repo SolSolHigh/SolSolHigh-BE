@@ -32,7 +32,7 @@ public class SecurityConfig {
         http.requestCache(requestCacheConfigurer ->
                 requestCacheConfigurer.requestCache(new NullRequestCache()));
         http.authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers("/", "/oauth2/**", "/login/**", "/users").permitAll()
                         .anyRequest().authenticated());
         http.oauth2Login(httpSecurityOAuth2LoginConfigurer ->
                 httpSecurityOAuth2LoginConfigurer

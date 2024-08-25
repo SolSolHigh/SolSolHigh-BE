@@ -14,8 +14,9 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @DiscriminatorValue("p")
 public class Parent extends User {
+
     @Override
-    public Class<?> getType() {
-        return Parent.class;
+    public Type getType() {
+        return Type.PARENT;
     }
 }

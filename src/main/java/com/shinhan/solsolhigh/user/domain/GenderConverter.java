@@ -1,6 +1,5 @@
 package com.shinhan.solsolhigh.user.domain;
 
-
 import jakarta.persistence.AttributeConverter;
 
 public class GenderConverter implements AttributeConverter<Gender, String> {

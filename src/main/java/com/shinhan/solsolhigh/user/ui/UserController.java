@@ -32,7 +32,7 @@ public class UserController {
     @GetMapping("/users/info")
     public ResponseEntity<?> getSessionUserInfo(@AuthenticationPrincipal UserPrinciple userPrinciple) {
         UserInfo userInfo = userService.getUserInfo(userPrinciple.getId());
-        return ResponseEntity.ok(SessionUserInfoResponse.of(userInfo, userPrinciple.getType()));
+        return ResponseEntity.ok(SessionUserInfoResponse.of(userInfo));
     }
 
     @PatchMapping("/users/info")
@@ -84,4 +84,11 @@ public class UserController {
         userService.responseRegisterChildFromParent(request.toDto(userPrinciple.getId()));
         return ResponseEntity.accepted().build();
     }
+
+    @PostMapping("/users")
+    public ResponseEntity<?> signupUser(@RequestBody @Valid UserSignupRequest request){
+        userService.signupUser(request.toDto());
+        return ResponseEntity.accepted().build();
+    }
+
 }
