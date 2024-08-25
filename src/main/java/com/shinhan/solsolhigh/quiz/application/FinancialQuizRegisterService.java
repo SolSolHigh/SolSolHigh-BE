@@ -1,12 +1,10 @@
 package com.shinhan.solsolhigh.quiz.application;
 
-import com.shinhan.solsolhigh.quiz.domain.FinancialQuiz;
-import com.shinhan.solsolhigh.quiz.domain.FinancialQuizRepository;
-import com.shinhan.solsolhigh.quiz.domain.QuizKeyword;
+import com.shinhan.solsolhigh.quiz.domain.*;
+import com.shinhan.solsolhigh.quiz.domain.repository.FinancialQuizRepository;
 import com.shinhan.solsolhigh.quiz.infra.AddQuizDto;
 import com.shinhan.solsolhigh.quiz.infra.QuizAiChat;
-import com.shinhan.solsolhigh.user.domain.Child;
-import com.shinhan.solsolhigh.user.domain.ChildRepository;
+import com.shinhan.solsolhigh.quiz.query.SelectedQuizKeywordFindService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,13 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class FinancialQuizRegisterService {
+    private final QuizAiChat quizAiChat;
     private final FinancialQuizRepository financialQuizRepository;
-    private final ChildRepository childRepository;
+    private final SelectedQuizKeywordFindService selectedQuizKeywordFindService;
 
 
     @Transactional
-    public FinancialQuiz addFinancialQuiz(AddQuizDto quizDto, QuizKeyword quizKeyword) {
-        FinancialQuiz financialQuiz = FinancialQuiz.create(quizDto, quizKeyword);
+    public FinancialQuiz addFinancialQuiz(Integer childId) {
+        SelectedQuizKeyword selectedQuizKeyword = selectedQuizKeywordFindService.getSelectedQuizKeywordWithRandom(childId);
+
+        AddQuizDto addQuizFromKeyword = quizAiChat.getAddQuizFromKeyword(selectedQuizKeyword.getQuizKeyword(), selectedQuizKeyword.getChild());
+        FinancialQuiz financialQuiz = FinancialQuiz.create(addQuizFromKeyword,  selectedQuizKeyword.getQuizKeyword(), selectedQuizKeyword.getChild());
         return financialQuizRepository.save(financialQuiz);
     }
+
+
 }
