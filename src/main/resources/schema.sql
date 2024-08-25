@@ -186,7 +186,10 @@ create table financial_quiz
     description       VARCHAR(200) NOT NULL,
     answer            BOOL         NOT NULL,
     quiz_keyword_id   INT          NOT NULL,
-    FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id)
+    child_id          INT          NOT NULL,
+    created_at        Date         NOT NULL,
+    FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id),
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 create table quiz_solve
@@ -274,7 +277,6 @@ create table egg_trade_log
     FOREIGN KEY (buyer_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
-
 create table alarm
 (
     alarm_id    INT     NOT NULL AUTO_INCREMENT PRIMARY KEY,

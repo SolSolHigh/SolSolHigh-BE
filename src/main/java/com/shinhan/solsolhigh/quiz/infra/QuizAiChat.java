@@ -28,7 +28,7 @@ public class QuizAiChat {
                         description, answer, quizExplanation을 가진 json으로 답변해. json 외에 다른 답변은 주지마.
                         'description'은 문제를 알려 주고
                         'answer'는 너가 문제낸 정답이 O 이면 true, 틀리면 false를 주는거야.
-                        'quizExplanation'는 퀴즈의 풀이을 적어줘.
+                        'quizExplanation'는 퀴즈의 풀이를 적어줘.
                         말투는 상냥하게 하도록 해.
                         """
         );
