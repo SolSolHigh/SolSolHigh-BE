@@ -46,8 +46,6 @@ class MissionDataRepositoryTest {
                 .gender(Gender.of("m"))
                 .birthday(LocalDate.now())
                 .nickname("이힛")
-                .isSignUpCompleted(Boolean.TRUE)
-                .password("21312313")
                 .build();
 
         Child child = Child.builder()
@@ -59,7 +57,6 @@ class MissionDataRepositoryTest {
                 .birthday(LocalDate.now())
                 .nickname("자식")
                 .name("자식임")
-                .isSignUpCompleted(true)
                 .parent(parent)
                 .build();
 
@@ -69,7 +66,7 @@ class MissionDataRepositoryTest {
                 .endAt(LocalDateTime.now().plusDays(1))
                 .level('1')
                 .description("테스트 데이터입니다.")
-                .childId(2)
+                .child(child)
                 .isFinished(false)
                 .build();
 

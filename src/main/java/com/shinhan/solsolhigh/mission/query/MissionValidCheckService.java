@@ -22,7 +22,7 @@ public class MissionValidCheckService {
         Integer sessionId = (Integer) session.getAttribute(SessionConstants.LOGIN_USER.name());
         Mission target = missionRepository.findById(missionId).orElseThrow(MissionAccessException::new);
 
-        familyCheckService.familyCheck(target.getChildId(), sessionId);
+        familyCheckService.familyCheck(target.getChild().getId(), sessionId);
     }
 
 }

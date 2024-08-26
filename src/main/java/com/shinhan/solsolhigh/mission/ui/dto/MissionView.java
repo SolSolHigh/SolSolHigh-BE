@@ -1,6 +1,5 @@
 package com.shinhan.solsolhigh.mission.ui.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -22,8 +21,8 @@ public class MissionView {
     private LocalDateTime missionEndAt;
     private Character missionLevel;
 
-    public MissionView(Integer childId, String childName, Integer missionId, String description, Boolean isFinished, LocalDateTime missionStartAt, LocalDateTime missionEndAt, Character missionLevel) {
-        this.childInfo = new ChildInfo(childId, childName);
+    public MissionView(String nickname, String childName, Integer missionId, String description, Boolean isFinished, LocalDateTime missionStartAt, LocalDateTime missionEndAt, Character missionLevel) {
+        this.childInfo = new ChildInfo(childName, nickname);
         this.missionId = missionId;
         this.description = description;
         this.isFinished = isFinished;
@@ -41,27 +40,11 @@ public class MissionView {
         this.missionLevel = missionLevel;
     }
 
-    @JsonIgnore
-    public Integer getChildId() {
-        if(this.childInfo == null) {
-            return null;
-        }
-        return this.childInfo.childId;
-    }
-
-    @JsonIgnore
-    public String getChildName() {
-        if(this.childInfo == null) {
-            return null;
-        }
-        return this.childInfo.name;
-    }
-
 
     @AllArgsConstructor
     @Getter
     public static class ChildInfo {
-        private Integer childId;
         private String name;
+        private String nickname;
     }
 }

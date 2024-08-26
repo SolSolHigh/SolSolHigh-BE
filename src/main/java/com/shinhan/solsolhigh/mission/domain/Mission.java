@@ -2,6 +2,7 @@ package com.shinhan.solsolhigh.mission.domain;
 
 import com.shinhan.solsolhigh.mission.application.MissionRegisterRequest;
 import com.shinhan.solsolhigh.mission.application.MissionUpdateRequest;
+import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,8 +24,9 @@ public class Mission {
     @Column(name = "mission_id")
     private Integer id;
 
-    @Column(name = "child_id")
-    private Integer childId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "child_id")
+    private Child child;
 
     @Column(name = "mission_description")
     private String description;
@@ -47,9 +49,9 @@ public class Mission {
 
 
     @Builder
-    protected Mission(Integer id, Integer childId, String description, Boolean isFinished, LocalDateTime startAt, LocalDateTime endAt, Character level) {
+    protected Mission(Integer id, Child child, String description, Boolean isFinished, LocalDateTime startAt, LocalDateTime endAt, Character level) {
         this.id = id;
-        this.childId = childId;
+        this.child = child;
         this.description = description;
         this.isFinished = isFinished;
         this.startAt = startAt;
@@ -57,12 +59,12 @@ public class Mission {
         this.endAt = endAt;
     }
 
-    public static Mission create(MissionRegisterRequest registerRequest) {
+    public static Mission create(MissionRegisterRequest registerRequest, Child child) {
         Mission.checkValidateLevel(registerRequest.getMissionLevel());
         Mission.checkValidateDatetime(registerRequest.getMissionStartAt(), registerRequest.getMissionEndAt());
         return Mission.builder()
                 .level(registerRequest.getMissionLevel())
-                .childId(registerRequest.getChildId())
+                .child(child)
                 .description(registerRequest.getDescription())
                 .startAt(registerRequest.getMissionStartAt())
                 .endAt(registerRequest.getMissionEndAt())

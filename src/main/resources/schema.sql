@@ -298,9 +298,9 @@ create table child_register_alarm
 );
 
 
-INSERT INTO user(type, email, name, nickname, birthday, user_gender, is_deleted)
-VALUES ('c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
-       ('p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
+INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
+VALUES (1, 'c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
+       (2, 'p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
 
 INSERT INTO parent(user_id)
 VALUES (2);

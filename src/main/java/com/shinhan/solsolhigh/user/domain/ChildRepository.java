@@ -13,6 +13,8 @@ public interface ChildRepository extends JpaRepository<Child, Integer> {
 
     List<Child> findByParentId(Integer id);
 
+    Child getReferenceByNickname(String nickname);
+
     @Modifying
     @Query("""
            UPDATE Child c
