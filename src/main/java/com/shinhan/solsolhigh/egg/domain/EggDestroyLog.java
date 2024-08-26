@@ -4,10 +4,12 @@ import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,4 +33,15 @@ public class EggDestroyLog {
 
     @Column(name = "hit_count")
     private Integer hitCount;
+
+    @Transient
+    private static final Integer NEED_HIT_COUNT = 100;
+
+    public Integer getNeedHitCount() {
+        if(hitCount == null || hitCount == 0) {
+            return NEED_HIT_COUNT;
+        }else {
+            return NEED_HIT_COUNT - hitCount;
+        }
+    }
 }
