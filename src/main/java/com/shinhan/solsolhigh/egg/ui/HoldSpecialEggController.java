@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("")
 @RestController
-public class SpecialEggController {
+public class HoldSpecialEggController {
     private final HoldSpecialEggFindService holdSpecialEggFindService;
 
     @GetMapping("/children/special-eggs")
