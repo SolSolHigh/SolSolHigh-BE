@@ -4,6 +4,7 @@ import com.shinhan.solsolhigh.quiz.domain.SelectedQuizKeyword;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface SelectedQuizKeywordRepository extends JpaRepository<SelectedQui
     @Modifying
     void deleteByChild_IdAndQuizKeyword_Id(Integer childId, Integer quizKeywordId);
 
-    @Query("SELECT sqk FROM SelectedQuizKeyword sqk JOIN FETCH sqk.quizKeyword ")
-    List<SelectedQuizKeyword> findAllByChild_idWithFetch(Integer childId);
+    @Query("SELECT sqk FROM SelectedQuizKeyword sqk JOIN FETCH sqk.quizKeyword WHERE sqk.child.nickname = :nickname" )
+    List<SelectedQuizKeyword> findAllByChild_NicknameWithFetch(@Param("nickname") String nickname);
 }

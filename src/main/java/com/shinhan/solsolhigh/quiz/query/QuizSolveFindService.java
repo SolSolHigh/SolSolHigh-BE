@@ -16,13 +16,13 @@ public class QuizSolveFindService {
     private final FamilyCheckService familyCheckService;
 
     @Transactional(readOnly = true)
-    public Slice<QuizSolveView> findSliceByChildIdAndPageable(Integer sessionId, Integer childId, Pageable pageable) {
-        familyCheckService.familyCheck(childId, sessionId);
-        return findSliceByChildIdAndPageable(childId, pageable);
+    public Slice<QuizSolveView> findSliceByChildNicknameAndPageable(Integer sessionId, String nickname, Pageable pageable) {
+        familyCheckService.familyCheck(nickname, sessionId);
+        return findSliceByChildNicknameAndPageable(nickname, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Slice<QuizSolveView> findSliceByChildIdAndPageable(Integer childId, Pageable pageable) {
-        return quizSolveRepository.queryQuizSolveByChildId(childId, pageable);
+    public Slice<QuizSolveView> findSliceByChildNicknameAndPageable(String nickname, Pageable pageable) {
+        return quizSolveRepository.queryQuizSolveByChild_Nickname(nickname, pageable);
     }
 }

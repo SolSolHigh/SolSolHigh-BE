@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface BetweenOfDayQuizSolveLogRepository extends JpaRepository<BetweenOfDayQuizSolveLog, Integer> {
 
+    Optional<BetweenOfDayQuizSolveLog> findFirstByChild_NicknameOrderByStartDateDesc(String nickname);
     Optional<BetweenOfDayQuizSolveLog> findFirstByChild_IdOrderByStartDateDesc(Integer id);
 }

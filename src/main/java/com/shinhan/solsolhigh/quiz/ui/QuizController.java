@@ -7,11 +7,15 @@ import com.shinhan.solsolhigh.quiz.query.QuizSolveFindService;
 import com.shinhan.solsolhigh.quiz.ui.dto.QuizAnswerView;
 import com.shinhan.solsolhigh.quiz.ui.dto.QuizSolveView;
 import com.shinhan.solsolhigh.quiz.ui.dto.QuizView;
+import com.shinhan.solsolhigh.user.domain.User;
+import com.shinhan.solsolhigh.user.domain.UserPrinciple;
+import com.shinhan.solsolhigh.user.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -40,9 +44,18 @@ public class QuizController {
         return ResponseEntity.ok(quizAnswerView);
     }
 
-    @GetMapping("/children/{childId}/quizzes/solved")
-    public ResponseEntity<?> getSolvedQuizzes(@PathVariable Integer childId, Pageable pageable) {
-        Slice<QuizSolveView> sliceByChildIdAndPageable = quizSolveFindService.findSliceByChildIdAndPageable(childId, pageable);
-        return ResponseEntity.ok(sliceByChildIdAndPageable);
+    @GetMapping("/children/{nickname}/quizzes/solved")
+    public ResponseEntity<?> getSolvedQuizzes(@PathVariable String nickname, Pageable pageable, @AuthenticationPrincipal UserPrinciple userPrinciple) {
+        if(User.Type.PARENT.equals(userPrinciple.getType())) {
+            Slice<QuizSolveView> sliceByChildNicknameAndPageable = quizSolveFindService.findSliceByChildNicknameAndPageable(userPrinciple.getId(), nickname, pageable);
+            return ResponseEntity.ok(sliceByChildNicknameAndPageable);
+        }else if(User.Type.CHILD.equals(userPrinciple.getType())) {
+            Slice<QuizSolveView> sliceByChildNicknameAndPageable = quizSolveFindService.findSliceByChildNicknameAndPageable(nickname, pageable);
+            return ResponseEntity.ok(sliceByChildNicknameAndPageable);
+        }
+
+        throw new UserNotFoundException();
+
+
     }
 }
