@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -22,9 +21,9 @@ public class EggTodayStatusFindService {
     public EggTodayStatusView getTodayEggStatus(Integer childId, LocalDateTime today) {
         EggDestroyLog eggDestroyLog;
         Integer count = eggDestroyLogRepository.countByChild_IdAndCreatedAtBetween(childId, today.with(LocalTime.MIN), today.with(LocalTime.MAX));
-        if(count == 0) {
+        if (count == 0) {
             eggDestroyLog = eggDestroyLogGeneratorService.generate(childId, today);
-        }else {
+        } else {
             eggDestroyLog = getTodayLastEgg(childId, today);
         }
         return EggTodayStatusView.builder().todayDestroyCount(count).needHitCount(eggDestroyLog.getNeedHitCount()).build();
