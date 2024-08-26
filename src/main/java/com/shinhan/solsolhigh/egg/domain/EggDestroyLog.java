@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "egg")
+@Table(name = "egg_destroy_log")
 @Entity
-public class Egg {
+public class EggDestroyLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "egg_id")
+    @Column(name = "egg_destroy_log_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)

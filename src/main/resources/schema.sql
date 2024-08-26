@@ -4,7 +4,9 @@ DROP TABLE IF EXISTS egg_trade_log;
 DROP TABLE IF EXISTS egg_sell_board;
 DROP TABLE IF EXISTS hold_special_egg;
 DROP TABLE IF EXISTS special_egg;
+DROP TABLE IF EXISTS egg_count;
 DROP TABLE IF EXISTS egg;
+DROP TABLE IF EXISTS egg_destroy_log;
 DROP TABLE IF EXISTS selected_quiz_keyword;
 DROP TABLE IF EXISTS between_of_day_quiz_solve_log;
 DROP TABLE IF EXISTS quiz_solve;
@@ -223,11 +225,16 @@ create table selected_quiz_keyword
     FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id)
 );
 
+create table egg_count (
+    egg_count_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    child_id INT NOT NULL,
+    egg_cunt INT NOT NULL,
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
+);
 
-
-create table egg
+create table egg_destroy_log
 (
-    egg_id       INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    egg_destroy_log_id       INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     child_id     INT      NOT NULL,
     created_at   DATETIME NOT NULL,
     destroyed_at DATETIME NOT NULL,
