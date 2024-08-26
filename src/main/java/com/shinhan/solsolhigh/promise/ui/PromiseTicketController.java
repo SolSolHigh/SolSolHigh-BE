@@ -1,9 +1,9 @@
 package com.shinhan.solsolhigh.promise.ui;
 
-import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
 import com.shinhan.solsolhigh.promise.application.PromiseTicketService;
+import com.shinhan.solsolhigh.promise.application.PromiseTicketUnusedCountByChildDto;
 import com.shinhan.solsolhigh.promise.ui.request.PromiseTicketUseRequestRequest;
-import com.shinhan.solsolhigh.user.domain.User;
+import com.shinhan.solsolhigh.promise.ui.response.PromiseTicketUnusedCountResponse;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,5 +23,21 @@ public class PromiseTicketController {
                                                      @Valid @RequestBody PromiseTicketUseRequestRequest request){
         promiseTicketService.useRequestPromiseTicket(request.toDto(userPrinciple));
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<?> countUnusedPromiseTicketById(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        Long count = promiseTicketService.countUnusedPromiseTicketById(userPrinciple.getId());
+        return ResponseEntity.ok(PromiseTicketUnusedCountResponse.builder().count(count).build());
+    }
+
+    @GetMapping("/children/{nickname}/count")
+    public ResponseEntity<?> countUnusedPromiseTicketById(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                                          @PathVariable String nickname){
+        Long count = promiseTicketService.countUnusedPromiseTicketByNickname(PromiseTicketUnusedCountByChildDto.builder()
+                .id(userPrinciple.getId())
+                .nickname(nickname)
+                .build());
+        return ResponseEntity.ok(PromiseTicketUnusedCountResponse.builder().count(count).build());
     }
 }

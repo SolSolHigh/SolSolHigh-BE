@@ -13,4 +13,11 @@ public interface PromiseTicketRepository extends JpaRepository<PromiseTicket, In
            WHERE p.child.id = :id AND p.requestedAt IS NULL
            """)
     Optional<PromiseTicket> findOneUnrequestedTicketByChildId(Integer id);
+
+    @Query("""
+           SELECT count(p)
+           FROM PromiseTicket p
+           WHERE p.child.id = :id AND p.requestedAt IS NULL
+           """)
+    Long countUnusedTicketByChildId(Integer id);
 }
