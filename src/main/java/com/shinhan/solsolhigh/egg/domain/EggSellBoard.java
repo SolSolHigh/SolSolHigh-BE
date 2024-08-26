@@ -29,4 +29,11 @@ public class EggSellBoard {
 
     @Column(name = "wrote_at")
     private LocalDateTime wroteAt;
+
+    @Column(name = "egg_price_per_once")
+    private Integer eggPricePerOnce;
+
+    @Column(name = "sell_count")
+    private Integer sellCount;
+
 }

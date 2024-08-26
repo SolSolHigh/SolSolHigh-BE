@@ -225,20 +225,21 @@ create table selected_quiz_keyword
     FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id)
 );
 
-create table egg_count (
-    egg_count_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-    child_id INT NOT NULL,
-    egg_cunt INT NOT NULL,
+create table egg_count
+(
+    egg_count_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id     INT NOT NULL,
+    egg_cunt     INT NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
 create table egg_destroy_log
 (
-    egg_destroy_log_id       INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    child_id     INT      NOT NULL,
-    created_at   DATETIME NOT NULL,
-    destroyed_at DATETIME NOT NULL,
-    hit_count    SMALLINT NOT NULL,
+    egg_destroy_log_id INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id           INT      NOT NULL,
+    created_at         DATETIME NOT NULL,
+    destroyed_at       DATETIME NOT NULL,
+    hit_count          SMALLINT NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
@@ -268,6 +269,8 @@ create table egg_sell_board
     child_id            INT      NOT NULL,
     hold_special_egg_id INT      NOT NULL,
     wrote_at            DATETIME NOT NULL,
+    egg_price_per_once  INT      NOT NULL,
+    sell_count          INT      NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id),
     FOREIGN KEY (hold_special_egg_id) REFERENCES hold_special_egg (hold_special_egg_id)
 );
@@ -275,12 +278,13 @@ create table egg_sell_board
 
 create table egg_trade_log
 (
-    egg_trade_log_id INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    seller_id        INT      NOT NULL,
-    buyer_id         INT      NOT NULL,
-    traded_at        DATETIME NOT NULL,
-    special_egg_id   INT      NOT NULL,
-    count            INT      NOT NULL,
+    egg_trade_log_id   INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    seller_id          INT      NOT NULL,
+    buyer_id           INT      NOT NULL,
+    traded_at          DATETIME NOT NULL,
+    special_egg_id     INT      NOT NULL,
+    egg_stock_count    INT      NOT NULL,
+    egg_price_per_once INT      NOT NULL,
     FOREIGN KEY (seller_id) REFERENCES child (user_id),
     FOREIGN KEY (buyer_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)

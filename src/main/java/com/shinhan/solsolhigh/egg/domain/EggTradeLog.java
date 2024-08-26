@@ -4,10 +4,12 @@ import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,6 +36,9 @@ public class EggTradeLog {
     @JoinColumn(name = "special_egg_id")
     private SpecialEgg specialEgg;
 
-    @Column(name = "count")
-    private Integer count;
+    @Column(name = "egg_stock_count")
+    private Integer eggStockCount;
+
+    @Column(name = "egg_price_per_once")
+    private Integer eggPricePerOnce;
 }

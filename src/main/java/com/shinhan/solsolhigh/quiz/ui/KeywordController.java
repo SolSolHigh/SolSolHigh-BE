@@ -3,7 +3,7 @@ package com.shinhan.solsolhigh.quiz.ui;
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
 import com.shinhan.solsolhigh.quiz.application.SelectedQuizKeywordRegisterService;
 import com.shinhan.solsolhigh.quiz.application.dto.SelectedQuizKeywordDto;
-import com.shinhan.solsolhigh.quiz.application.dto.SelectedQuizKeywordRemoveService;
+import com.shinhan.solsolhigh.quiz.application.SelectedQuizKeywordRemoveService;
 import com.shinhan.solsolhigh.quiz.query.QuizKeywordFindService;
 import com.shinhan.solsolhigh.quiz.query.SelectedQuizKeywordFindService;
 import com.shinhan.solsolhigh.user.domain.User;
@@ -25,7 +25,6 @@ public class KeywordController {
     private final SelectedQuizKeywordFindService selectedQuizKeywordFindService;
     private final SelectedQuizKeywordRegisterService selectedQuizKeywordRegisterService;
     private final SelectedQuizKeywordRemoveService selectedQuizKeywordRemoveService;
-    private final HttpSession httpSession;
 
     @GetMapping("/quizzes/keywords")
     public ResponseEntity<?> quizKeywordList() {
