@@ -19,10 +19,16 @@ public class SelectedQuizKeywordFindService {
     private final FamilyCheckService familyCheckService;
 
     @Transactional(readOnly = true)
-    public List<KeywordView> selectedKeywordList(Integer childId, Integer parentId) {
-        familyCheckService.familyCheck(childId, parentId);
+    public List<KeywordView> selectedKeywordList(String nickname, Integer parentId) {
+        familyCheckService.familyCheck(nickname, parentId);
 
-        List<SelectedQuizKeyword> allByChildIdWithFetch = selectedQuizKeywordRepository.findAllByChild_idWithFetch(childId);
+        return selectedKeywordList(nickname);
+    }
+
+    @Transactional(readOnly = true)
+    public List<KeywordView> selectedKeywordList(String nickname) {
+
+        List<SelectedQuizKeyword> allByChildIdWithFetch = selectedQuizKeywordRepository.findAllByChild_NicknameWithFetch(nickname);
         return allByChildIdWithFetch.stream().map(selectedQuizKeyword -> KeywordView.toDto(selectedQuizKeyword.getQuizKeyword())).toList();
     }
 

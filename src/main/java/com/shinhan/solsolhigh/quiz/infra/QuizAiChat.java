@@ -23,8 +23,8 @@ public class QuizAiChat {
     public AddQuizDto getAddQuizFromKeyword(QuizKeyword quizKeyword, Child child) {
         PromptTemplate promptTemplate = new PromptTemplate(
                 """
-                        너는 {age}의 나이를 가진 어린이를 대상으로 금융 문제 출제자야.
-                        너는 {keyword}라는 키워드를 가지고 O,X 문제 하나를 만들어줘.
+                        너는 {age}의 나이를 가진 어린이를 대상으로 하는 금융 문제 출제자야.
+                        너는 {keyword} 라는 키워드를 사용해 가지고 O,X 문제 하나를 만들어줘.
                         description, answer, quizExplanation을 가진 json으로 답변해. json 외에 다른 답변은 주지마.
                         'description'은 문제를 알려 주고
                         'answer'는 너가 문제낸 정답이 O 이면 true, 틀리면 false를 주는거야.
@@ -33,7 +33,7 @@ public class QuizAiChat {
                         """
         );
 
-        Prompt prompt = promptTemplate.create(Map.of("age", child.getAge() == null ? "5" : child.getAge(), "keyword", quizKeyword));
+        Prompt prompt = promptTemplate.create(Map.of("age", child.getAge() == null ? "5" : child.getAge(), "keyword", quizKeyword.getKeyword()));
         String response = openAiChatModel.call(prompt).getResult().getOutput().getContent();
         return convertJsonToObject(formatToJson(response), AddQuizDto.class);
     }

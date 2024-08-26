@@ -17,4 +17,11 @@ public class FamilyCheckService {
             throw new FamilyNotExistException();
         }
     }
+
+    @Transactional(readOnly = true)
+    public void familyCheck(String nickname, Integer parentId) {
+        if(!childRepository.existsByNicknameAndParentId(nickname, parentId)){
+            throw new FamilyNotExistException();
+        }
+    }
 }

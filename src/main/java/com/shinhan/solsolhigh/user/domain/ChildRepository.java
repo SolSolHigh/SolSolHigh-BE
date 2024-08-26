@@ -13,6 +13,8 @@ public interface ChildRepository extends JpaRepository<Child, Integer> {
 
     List<Child> findByParentId(Integer id);
 
+    Child getReferenceByNickname(String nickname);
+
     @Modifying
     @Query("""
            UPDATE Child c
@@ -21,5 +23,6 @@ public interface ChildRepository extends JpaRepository<Child, Integer> {
            """)
     void removeParent(@Param("parent") Parent parent);
 
+    Boolean existsByNicknameAndParentId(String nickname, Integer parentId);
     Boolean existsByIdAndParentId(Integer id, Integer parentId);
 }
