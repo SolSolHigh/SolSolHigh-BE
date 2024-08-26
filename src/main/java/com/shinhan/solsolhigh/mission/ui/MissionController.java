@@ -31,7 +31,7 @@ public class MissionController {
     }
 
     @PatchMapping("/children/missions/{missionId}")
-    public ResponseEntity<?> missionUpdate(@PathVariable("missionId") Integer missionId, MissionUpdateRequest request) {
+    public ResponseEntity<?> missionUpdate(@PathVariable("missionId") Integer missionId, @RequestBody MissionUpdateRequest request) {
         missionUpdateService.missionUpdate(request, missionId);
         return ResponseEntity.accepted().build();
     }
