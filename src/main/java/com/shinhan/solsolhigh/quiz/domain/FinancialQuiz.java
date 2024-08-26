@@ -56,6 +56,7 @@ public class FinancialQuiz {
         return FinancialQuiz.builder()
                 .answer(dto.getAnswer())
                 .description(dto.getDescription())
+                .quizExplanation(dto.getQuizExplanation())
                 .quizKeyword(quizKeyword)
                 .createdAt(LocalDate.now())
                 .child(child)

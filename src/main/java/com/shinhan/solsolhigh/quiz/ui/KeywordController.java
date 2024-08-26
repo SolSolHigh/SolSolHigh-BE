@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("")
 public class KeywordController {
     private final QuizKeywordFindService quizKeywordFindService;
     private final SelectedQuizKeywordFindService selectedQuizKeywordFindService;
@@ -34,9 +34,9 @@ public class KeywordController {
 
     @GetMapping("/quizzes/{nickname}/keywords")
     public ResponseEntity<?> selectedKeywords(@PathVariable String nickname, @AuthenticationPrincipal UserPrinciple userPrinciple) {
-        if(User.Type.CHILD.equals(userPrinciple.getType())) {
+        if (User.Type.CHILD.equals(userPrinciple.getType())) {
             return ResponseEntity.ok(selectedQuizKeywordFindService.selectedKeywordList(nickname));
-        }else if (User.Type.PARENT.equals(userPrinciple.getType())) {
+        } else if (User.Type.PARENT.equals(userPrinciple.getType())) {
             return ResponseEntity.ok(selectedQuizKeywordFindService.selectedKeywordList(nickname, userPrinciple.getId()));
         }
 
