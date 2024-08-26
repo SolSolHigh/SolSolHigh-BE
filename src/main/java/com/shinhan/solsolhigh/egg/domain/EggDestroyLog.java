@@ -44,4 +44,16 @@ public class EggDestroyLog {
             return NEED_HIT_COUNT - hitCount;
         }
     }
+
+    public void updateHit(int count) {
+        hitCount += count;
+        if(hitCount >= NEED_HIT_COUNT) {
+            destroyedAt = LocalDateTime.now();
+        }
+    }
+
+    public boolean isDestroyed() {
+        return destroyedAt != null;
+    }
+
 }

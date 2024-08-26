@@ -24,12 +24,15 @@ public class EggTodayStatusFindService {
         if (count == 0) {
             eggDestroyLog = eggDestroyLogGeneratorService.generate(childId, today);
         } else {
-            eggDestroyLog = getTodayLastEgg(childId, today);
+            eggDestroyLog = getTodayLastEgg(childId, today, count);
         }
         return EggTodayStatusView.builder().todayDestroyCount(count).needHitCount(eggDestroyLog.getNeedHitCount()).build();
     }
 
-    private EggDestroyLog getTodayLastEgg(Integer childId, LocalDateTime today) {
-        return eggDestroyLogRepository.findFirstByChild_IdAndCreatedAtBetweenOrderByIdDesc(childId, today.with(LocalTime.MIN), today.with(LocalTime.MAX));
+    private EggDestroyLog getTodayLastEgg(Integer childId, LocalDateTime today, Integer count) {
+        EggDestroyLog lastEggStatus = eggDestroyLogRepository.findFirstByChild_IdAndCreatedAtBetweenOrderByIdDesc(childId, today.with(LocalTime.MIN), today.with(LocalTime.MAX));
+        if(lastEggStatus.isDestroyed() && (count < 10))
+            lastEggStatus = eggDestroyLogGeneratorService.generate(childId, today);
+        return lastEggStatus;
     }
 }
