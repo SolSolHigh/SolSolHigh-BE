@@ -41,5 +41,5 @@ public interface PromiseTicketRepository extends JpaRepository<PromiseTicket, In
            FROM PromiseTicket p
            WHERE p.child.id = :id AND p.requestedAt IS NOT NULL
            """)
-    Long countUnusedTicketById(Integer id);
+    Long countUsedTicketById(Integer id);
 }

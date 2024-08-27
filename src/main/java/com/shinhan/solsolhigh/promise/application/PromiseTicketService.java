@@ -56,9 +56,27 @@ public class PromiseTicketService {
         return promiseTicketRepository.countUnusedTicketByChildId(child.getId());
     }
 
+    @Transactional(readOnly = true)
+    @Authorized(allowed = User.Type.CHILD)
     public Page<PromiseTicketInfo> getPromiseTicketInfosById(PromiseTicketUsedByIdDto dto) {
         List<PromiseTicket> promiseTickets = promiseTicketRepository.findByUsedPromiseTicketByIdUsingPagination(dto.getId(), dto.getPageable());
-        Long count = promiseTicketRepository.countUnusedTicketById(dto.getId());
+        Long count = promiseTicketRepository.countUsedTicketById(dto.getId());
+        return new PageImpl<>(ListUtils.applyFunctionToElements(promiseTickets, PromiseTicketInfo::from), dto.getPageable(), count);
+    }
+
+    @Transactional(readOnly = true)
+    @Authorized(allowed = User.Type.PARENT)
+    public Page<PromiseTicketInfo> getPromiseTicketInfosByNickname(PromiseTicketUsedByNicknameDto dto) {
+        Child child = childRepository.findByNickname(dto.getNickname()).orElseThrow(UserNotFoundException::new);
+        if(child.getIsDeleted())
+            throw new UserWithdrawalException();
+        if(child.getParent() == null)
+            throw new ParentNotFoundException();
+        if(!Objects.equals(child.getParent().getId(),dto.getId()))
+            throw new FamilyNotExistException();
+
+        List<PromiseTicket> promiseTickets = promiseTicketRepository.findByUsedPromiseTicketByIdUsingPagination(child.getId(), dto.getPageable());
+        Long count = promiseTicketRepository.countUsedTicketById(child.getId());
         return new PageImpl<>(ListUtils.applyFunctionToElements(promiseTickets, PromiseTicketInfo::from), dto.getPageable(), count);
     }
 }

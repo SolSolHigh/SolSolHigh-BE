@@ -1,9 +1,6 @@
 package com.shinhan.solsolhigh.promise.ui;
 
-import com.shinhan.solsolhigh.promise.application.PromiseTicketInfo;
-import com.shinhan.solsolhigh.promise.application.PromiseTicketService;
-import com.shinhan.solsolhigh.promise.application.PromiseTicketUnusedCountByChildDto;
-import com.shinhan.solsolhigh.promise.application.PromiseTicketUsedByIdDto;
+import com.shinhan.solsolhigh.promise.application.*;
 import com.shinhan.solsolhigh.promise.ui.request.PromiseTicketUseRequestRequest;
 import com.shinhan.solsolhigh.promise.ui.response.PromiseTicketUnusedCountResponse;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
@@ -50,7 +47,24 @@ public class PromiseTicketController {
     @GetMapping
     public ResponseEntity<?> getUsedPromiseTicketById(@AuthenticationPrincipal UserPrinciple userPrinciple,
                                                       Pageable pageable){
-        Page<PromiseTicketInfo> infos = promiseTicketService.getPromiseTicketInfosById(PromiseTicketUsedByIdDto.builder().id(userPrinciple.getId()).pageable(pageable).build());
+        Page<PromiseTicketInfo> infos = promiseTicketService.getPromiseTicketInfosById(
+                PromiseTicketUsedByIdDto.builder()
+                        .id(userPrinciple.getId())
+                        .pageable(pageable)
+                        .build());
+        return ResponseEntity.ok(infos);
+    }
+
+    @GetMapping("/children/{nickname}")
+    public ResponseEntity<?> getUsedPromiseTicketByNickname(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                                      @PathVariable String nickname,
+                                                      Pageable pageable){
+        Page<PromiseTicketInfo> infos = promiseTicketService.getPromiseTicketInfosByNickname(
+                PromiseTicketUsedByNicknameDto.builder()
+                        .id(userPrinciple.getId())
+                        .pageable(pageable)
+                        .nickname(nickname)
+                        .build());
         return ResponseEntity.ok(infos);
     }
 }
