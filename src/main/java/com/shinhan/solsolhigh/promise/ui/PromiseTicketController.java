@@ -1,15 +1,21 @@
 package com.shinhan.solsolhigh.promise.ui;
 
+import com.shinhan.solsolhigh.promise.application.PromiseTicketInfo;
 import com.shinhan.solsolhigh.promise.application.PromiseTicketService;
 import com.shinhan.solsolhigh.promise.application.PromiseTicketUnusedCountByChildDto;
+import com.shinhan.solsolhigh.promise.application.PromiseTicketUsedByIdDto;
 import com.shinhan.solsolhigh.promise.ui.request.PromiseTicketUseRequestRequest;
 import com.shinhan.solsolhigh.promise.ui.response.PromiseTicketUnusedCountResponse;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/promise-tickets")
@@ -39,5 +45,12 @@ public class PromiseTicketController {
                 .nickname(nickname)
                 .build());
         return ResponseEntity.ok(PromiseTicketUnusedCountResponse.builder().count(count).build());
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getUsedPromiseTicketById(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                                      Pageable pageable){
+        Page<PromiseTicketInfo> infos = promiseTicketService.getPromiseTicketInfosById(PromiseTicketUsedByIdDto.builder().id(userPrinciple.getId()).pageable(pageable).build());
+        return ResponseEntity.ok(infos);
     }
 }

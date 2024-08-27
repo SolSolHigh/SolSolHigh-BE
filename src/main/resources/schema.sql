@@ -304,7 +304,7 @@ VALUES (1, 2, 0, 0, 0);
 INSERT INTO promise_ticket(promise_ticket_id, child_id, published_at, used_at, requested_at, image_url, description)
 VALUES (1, 1, "2024-08-26T00:00:00", NULL, NULL, NULL, NULL);
 
---
+
 -- INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
 -- VALUES (1, 'c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
 --        (2, 'p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);

@@ -1,6 +1,7 @@
 package com.shinhan.solsolhigh.promise.application;
 
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
+import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.promise.domain.PromiseTicket;
 import com.shinhan.solsolhigh.promise.domain.PromiseTicketRepository;
 import com.shinhan.solsolhigh.promise.exception.PromiseTicketNotExistsException;
@@ -13,9 +14,12 @@ import com.shinhan.solsolhigh.user.exception.UserNotFoundException;
 import com.shinhan.solsolhigh.user.exception.UserWithdrawalException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -50,5 +54,11 @@ public class PromiseTicketService {
         if(!Objects.equals(child.getParent().getId(),dto.getId()))
             throw new FamilyNotExistException();
         return promiseTicketRepository.countUnusedTicketByChildId(child.getId());
+    }
+
+    public Page<PromiseTicketInfo> getPromiseTicketInfosById(PromiseTicketUsedByIdDto dto) {
+        List<PromiseTicket> promiseTickets = promiseTicketRepository.findByUsedPromiseTicketByIdUsingPagination(dto.getId(), dto.getPageable());
+        Long count = promiseTicketRepository.countUnusedTicketById(dto.getId());
+        return new PageImpl<>(ListUtils.applyFunctionToElements(promiseTickets, PromiseTicketInfo::from), dto.getPageable(), count);
     }
 }
