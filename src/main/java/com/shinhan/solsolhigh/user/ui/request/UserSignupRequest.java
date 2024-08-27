@@ -18,10 +18,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSignupRequest {
-    @NotNull @Email
-    private String email;
-    @NotNull @Name
-    private String name;
+    @NotNull
+    private String code;
     @NotNull @Nickname
     private String nickname;
     @NotNull @Birthday
@@ -33,8 +31,7 @@ public class UserSignupRequest {
 
     public UserSignupDto toDto() {
         return UserSignupDto.builder()
-                .email(email)
-                .name(name)
+                .code(code)
                 .nickname(nickname)
                 .birthday(birthday)
                 .gender(Gender.of(gender))

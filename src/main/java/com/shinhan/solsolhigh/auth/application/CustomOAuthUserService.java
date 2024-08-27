@@ -1,8 +1,10 @@
 package com.shinhan.solsolhigh.auth.application;
 
+import com.shinhan.solsolhigh.common.util.UUIDGenerator;
 import com.shinhan.solsolhigh.session.config.SessionConstants;
 import com.shinhan.solsolhigh.user.domain.*;
 import com.shinhan.solsolhigh.user.exception.UserSignupNotCompletedException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -21,6 +23,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
     private final TemporaryUserRepository temporaryUserRepository;
     private final HttpSession httpSession;
+    private final HttpServletRequest httpServletRequest;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
@@ -38,12 +41,22 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
         Optional<TemporaryUser> temporaryUserOpt = temporaryUserRepository.findByEmail(response.getEmail());
 
         if(userOpt.isEmpty() && temporaryUserOpt.isEmpty()) {
-            TemporaryUser newTemporaryUser = TemporaryUser.builder().email(response.getEmail()).name(response.getName()).build();
+            TemporaryUser newTemporaryUser = TemporaryUser.builder()
+                    .email(response.getEmail())
+                    .name(response.getName())
+                    .code(UUIDGenerator.getUUID().toString())
+                    .build();
             temporaryUserRepository.save(newTemporaryUser);
-            throw new OAuth2AuthenticationException(new OAuth2Error("User signup not completed"), new UserSignupNotCompletedException());
+            httpServletRequest.setAttribute("code", newTemporaryUser.getCode());
+            throw new OAuth2AuthenticationException(new OAuth2Error("login not completed"), new UserSignupNotCompletedException());
         }
 
-        User user = userOpt.orElseThrow(() -> new OAuth2AuthenticationException(new OAuth2Error("User signup not completed"), new UserSignupNotCompletedException()));
+        if(userOpt.isEmpty()) {
+            httpServletRequest.setAttribute("code", temporaryUserOpt.get().getCode());
+            throw new OAuth2AuthenticationException(new OAuth2Error("login not completed"), new UserSignupNotCompletedException());
+        }
+
+        User user = userOpt.get();
 
         httpSession.setAttribute(SessionConstants.LOGIN_USER.name(), user.getId());
 
