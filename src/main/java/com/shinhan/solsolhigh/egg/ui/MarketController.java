@@ -63,4 +63,10 @@ public class MarketController {
         return ResponseEntity.accepted().body(null);
     }
 
+    @GetMapping("/trades/search")
+    public ResponseEntity<?> getTradeFind(Pageable pageable, @RequestParam(required = false)String name) {
+        Slice<EggSellBoardView> allByQuery = eggSellBoardFindService.findAllByQuery(name, pageable);
+        return ResponseEntity.ok(allByQuery);
+    }
+
 }

@@ -1,19 +1,18 @@
 package com.shinhan.solsolhigh.egg.ui.dto;
 
-import lombok.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Setter
 @Getter
 public class SpecialEggTradeLogView {
     private Integer price;
-    private LocalDate tradeDate;
+    private Object tradeDate;
 
-    public SpecialEggTradeLogView(Double price, LocalDateTime tradeDate) {
+    public SpecialEggTradeLogView(Double price, Object tradeDate) {
         this.price = price.intValue();
-        this.tradeDate = tradeDate.toLocalDate();
+        this.tradeDate = tradeDate;
     }
 }

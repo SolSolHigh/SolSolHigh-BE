@@ -17,4 +17,13 @@ public class EggSellBoardFindService {
     public Slice<EggSellBoardView> findAllByChildId(Integer childId, Pageable pageable) {
         return eggSellBoardRepository.findAllBy(childId, pageable);
     }
+
+    @Transactional(readOnly = true)
+    public Slice<EggSellBoardView> findAllByQuery(String name, Pageable pageable) {
+        if(name == null || name.isEmpty()) {
+            return eggSellBoardRepository.findAllByPageable(pageable);
+        }else {
+            return eggSellBoardRepository.findAllByPageableAndName(pageable, name);
+        }
+    }
 }

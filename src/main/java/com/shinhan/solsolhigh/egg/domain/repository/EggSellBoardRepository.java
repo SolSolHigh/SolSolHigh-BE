@@ -23,6 +23,21 @@ public interface EggSellBoardRepository extends JpaRepository<EggSellBoard, Inte
             " ORDER BY esb.id DESC ")
     Slice<EggSellBoardView> findAllBy(@Param("childId") Integer childId, Pageable pageable);
 
+    @Lock(LockModeType.PESSIMISTIC_READ)
+    @Query("SELECT new com.shinhan.solsolhigh.egg.ui.dto.EggSellBoardView(esb.id, esb.wroteAt, esb.eggPricePerOnce, esb.sellCount, se.id, se.name, se.imageSrc)" +
+            " FROM EggSellBoard esb " +
+            " JOIN SpecialEgg se ON se = esb.specialEgg " +
+            " ORDER BY esb.id DESC ")
+    Slice<EggSellBoardView> findAllByPageable(Pageable pageable);
+
+    @Lock(LockModeType.PESSIMISTIC_READ)
+    @Query("SELECT new com.shinhan.solsolhigh.egg.ui.dto.EggSellBoardView(esb.id, esb.wroteAt, esb.eggPricePerOnce, esb.sellCount, se.id, se.name, se.imageSrc)" +
+            " FROM EggSellBoard esb " +
+            " JOIN SpecialEgg se ON se = esb.specialEgg " +
+            " WHERE se.name like :name " +
+            " ORDER BY esb.id DESC ")
+    Slice<EggSellBoardView> findAllByPageableAndName(Pageable pageable, String name);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT esb FROM EggSellBoard esb JOIN FETCH esb.child WHERE esb.id = :id")
     Optional<EggSellBoard> findByIdByPessimisticWriteLock(@Param("id") Integer id);
