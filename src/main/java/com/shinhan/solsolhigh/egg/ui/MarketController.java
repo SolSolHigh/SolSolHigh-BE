@@ -19,6 +19,10 @@ public class MarketController {
     public ResponseEntity<?> getLastPrice(@PathVariable("specialEggId") Integer specialEggId) {
         EggLastTradePriceAndTradeAtView specialEggLastTradePrice = eggTradeLogFindService.findSpecialEggLastTradePrice(specialEggId);
         return ResponseEntity.ok(specialEggLastTradePrice);
+    }
 
+    @GetMapping("/special-eggs/{specialEggId}")
+    public ResponseEntity<?> getSpecialEggTradeList(@PathVariable("specialEggId")Integer specialEggId) {
+        return ResponseEntity.ok(eggTradeLogFindService.getSpecialEggTradeList(specialEggId));
     }
 }
