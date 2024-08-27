@@ -229,7 +229,7 @@ create table egg_count
 (
     egg_count_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     child_id     INT NOT NULL,
-    egg_cunt     INT NOT NULL,
+    egg_count     INT NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
@@ -238,7 +238,7 @@ create table egg_destroy_log
     egg_destroy_log_id INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     child_id           INT      NOT NULL,
     created_at         DATETIME NOT NULL,
-    destroyed_at       DATETIME NOT NULL,
+    destroyed_at       DATETIME,
     hit_count          SMALLINT NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );

@@ -19,7 +19,10 @@ public class EggDestroyLogGeneratorService {
     @Transactional
     public EggDestroyLog generate(Integer childId, LocalDateTime today) {
         Child child = childRepository.getReferenceById(childId);
+
         EggDestroyLog eggDestroyLog = EggDestroyLog.builder().child(child).createdAt(today).hitCount(0).build();
-        return eggDestroyLogRepository.save(eggDestroyLog);
+        eggDestroyLogRepository.save(eggDestroyLog);
+
+        return eggDestroyLog;
     }
 }

@@ -23,7 +23,7 @@ public class EggCount {
     @JoinColumn(name = "child_id")
     private Child child;
 
-    @Column(name = "egg_cunt")
+    @Column(name = "egg_count")
     private Integer count;
 
     public void cost(Integer count) {
