@@ -13,11 +13,6 @@ import java.util.Optional;
 public interface EggTradeLogRepository extends JpaRepository<EggTradeLog, Integer> {
     Optional<EggTradeLog> findFirstBySpecialEgg_IdOrderById(Integer specialEggId);
 
-    interface SpecialEggTradeLogDto {
-        LocalDate getTradeDate();
-        Integer getPrice();
-    }
-
     @Query(value = "SELECT new com.shinhan.solsolhigh.egg.ui.dto.SpecialEggTradeLogView( AVG(etl.eggPricePerOnce), function('date_format', etl.tradedAt, '%y-%m-%d')) FROM EggTradeLog etl WHERE etl.id = :specialEggId GROUP BY function('date_format', etl.tradedAt, '%Y%m%d') ORDER BY function('date_format', etl.tradedAt, '%Y%m%d') DESC")
     List<SpecialEggTradeLogView> findSpecialEggTradeLogDto(@Param("specialEggId") Integer specialEggId);
 }
