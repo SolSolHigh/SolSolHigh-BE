@@ -34,7 +34,7 @@ public interface EggSellBoardRepository extends JpaRepository<EggSellBoard, Inte
     @Query("SELECT new com.shinhan.solsolhigh.egg.ui.dto.EggSellBoardView(esb.id, esb.wroteAt, esb.eggPricePerOnce, esb.sellCount, se.id, se.name, se.imageSrc)" +
             " FROM EggSellBoard esb " +
             " JOIN SpecialEgg se ON se = esb.specialEgg " +
-            " WHERE se.name like :name " +
+            " WHERE se.name like %:name% " +
             " ORDER BY esb.id DESC ")
     Slice<EggSellBoardView> findAllByPageableAndName(Pageable pageable, String name);
 

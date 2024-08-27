@@ -18,7 +18,7 @@ public class EggTradeLogFindService {
 
     @Transactional(readOnly = true)
     public EggLastTradePriceAndTradeAtView findSpecialEggLastTradePrice(Integer specialEggId) {
-        Optional<EggTradeLog> findLastTrade = eggTradeLogRepository.findFirstBySpecialEgg_IdOrderById(specialEggId);
+        Optional<EggTradeLog> findLastTrade = eggTradeLogRepository.findFirstBySpecialEgg_IdOrderByIdDesc(specialEggId);
         if (findLastTrade.isEmpty()) {
             return EggLastTradePriceAndTradeAtView.builder().build();
         }

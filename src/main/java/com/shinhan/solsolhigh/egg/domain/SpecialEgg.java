@@ -22,7 +22,7 @@ public class SpecialEgg {
     private String name;
 
     @Column
-    private String probability;
+    private Float probability;
 
     @Column(name = "image_src")
     private String imageSrc;
