@@ -17,10 +17,8 @@ import java.time.LocalDate;
 @Getter
 @Builder
 public class UserSignupDto {
-    @NotNull @Email
-    private String email;
-    @NotNull @Name
-    private String name;
+    @NotNull
+    private String code;
     @NotNull @Nickname
     private String nickname;
     @NotNull @Birthday
@@ -30,7 +28,7 @@ public class UserSignupDto {
     @NotNull
     private Type type;
 
-    public Parent toParent(){
+    public Parent toParent(String email, String name){
         return Parent.builder()
                 .email(email)
                 .name(name)
@@ -40,7 +38,7 @@ public class UserSignupDto {
                 .build();
     }
 
-    public Child toChild(){
+    public Child toChild(String email, String name){
         return Child.builder()
                 .email(email)
                 .name(name)

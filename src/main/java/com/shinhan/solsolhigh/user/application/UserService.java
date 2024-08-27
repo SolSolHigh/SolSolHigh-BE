@@ -130,14 +130,15 @@ public class UserService {
 
     @Transactional
     public void signupUser(@Valid UserSignupDto dto) {
-        TemporaryUser temporaryUser = temporaryUserRepository.findByEmail(dto.getEmail()).orElseThrow(TemporaryUserNotFoundException::new);
-        if(userRepository.findByEmail(dto.getEmail()).isPresent())
-            throw new UserAlreadyExistsException();
+        TemporaryUser temporaryUser = temporaryUserRepository.findByCode(dto.getCode()).orElseThrow(TemporaryUserNotFoundException::new);
+
+        String email = temporaryUser.getEmail();
+        String name = temporaryUser.getName();
 
         if(dto.getType() == User.Type.PARENT)
-            parentRepository.save(dto.toParent());
+            parentRepository.save(dto.toParent(email, name));
         else
-            childRepository.save(dto.toChild());
+            childRepository.save(dto.toChild(email, name));
 
         temporaryUserRepository.delete(temporaryUser);
     }

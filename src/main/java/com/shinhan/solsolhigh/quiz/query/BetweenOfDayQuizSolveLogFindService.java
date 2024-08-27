@@ -20,14 +20,14 @@ public class BetweenOfDayQuizSolveLogFindService {
     private final FamilyCheckService familyCheckService;
 
     @Transactional(readOnly = true)
-    public List<SolveStrickView> solveStrickViewList(Integer childId, Integer sessionId) {
-        familyCheckService.familyCheck(childId, sessionId);
-        return solveStrickViewList(childId);
+    public List<SolveStrickView> solveStrickViewList(String nickname, Integer sessionId) {
+        familyCheckService.familyCheck(nickname, sessionId);
+        return solveStrickViewList(nickname);
     }
 
     @Transactional(readOnly = true)
-    public List<SolveStrickView> solveStrickViewList(Integer childId) {
-        Optional<BetweenOfDayQuizSolveLog> firstByChildIdOrderByStartDateDesc = betweenOfDayQuizSolveLogRepository.findFirstByChild_IdOrderByStartDateDesc(childId);
+    public List<SolveStrickView> solveStrickViewList(String nickname) {
+        Optional<BetweenOfDayQuizSolveLog> firstByChildIdOrderByStartDateDesc = betweenOfDayQuizSolveLogRepository.findFirstByChild_NicknameOrderByStartDateDesc(nickname);
         if(firstByChildIdOrderByStartDateDesc.isEmpty()) {
             return Collections.emptyList();
         }

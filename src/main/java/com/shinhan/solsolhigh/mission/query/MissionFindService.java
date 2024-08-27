@@ -20,6 +20,6 @@ public class MissionFindService {
 
     @Transactional(readOnly = true)
     public Slice<MissionView> findListByPageableAndIsFinishedAndChildId(Pageable pageable, Boolean isFinished, Integer childId) {
-        return missionDataRepository.findMissionDataByChild_Parent_IdAndIsFinished(pageable, isFinished, childId);
+        return missionDataRepository.findMissionDataByChild_IdAndIsFinished(pageable, isFinished, childId);
     }
 }
