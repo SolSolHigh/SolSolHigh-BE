@@ -26,4 +26,11 @@ public class EggCount {
     @Column(name = "egg_cunt")
     private Integer count;
 
+    public void cost(Integer count) {
+        this.count -= count;
+    }
+
+    public void earn(Integer count) {
+        this.count += count;
+    }
 }

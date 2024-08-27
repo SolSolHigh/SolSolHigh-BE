@@ -33,4 +33,8 @@ public class HoldSpecialEgg {
     public boolean exists() {
         return count > 0;
     }
+
+    public void minusCount(Integer count) {
+        this.count -= count;
+    }
 }

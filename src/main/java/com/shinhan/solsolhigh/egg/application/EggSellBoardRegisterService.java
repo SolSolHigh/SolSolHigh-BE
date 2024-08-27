@@ -26,18 +26,18 @@ public class EggSellBoardRegisterService {
 
     @Transactional
     public void registerEggSellBoard(EggSellBoardRegisterRequest request, Integer sessionId, LocalDateTime today) {
-        HoldSpecialEgg holdSpecialEgg = holdSpecialEggRepository.findById(request.getHoldSpecialEggId()).orElseThrow(HoldSpecialEggNotFoundException::new);
-        validCheck(request, sessionId, holdSpecialEgg);
-
+        HoldSpecialEgg holdSpecialEgg = holdSpecialEggRepository.findByChild_IdAndSpecialEgg_Id(sessionId, request.getSpecialEggId()).orElseThrow(HoldSpecialEggNotFoundException::new);
+        validCheck(sessionId, holdSpecialEgg, request.getSpecialEggId());
         Child referenceById = childRepository.getReferenceById(sessionId);
-        EggSellBoard eggSellBoard = EggSellBoard.create(referenceById, request, holdSpecialEgg, today);
+        holdSpecialEgg.minusCount(request.getSellCount());
+        EggSellBoard eggSellBoard = EggSellBoard.create(referenceById, request, holdSpecialEgg.getSpecialEgg(), today);
         eggSellBoardRepository.save(eggSellBoard);
     }
 
-    private void validCheck(EggSellBoardRegisterRequest request, Integer sessionId, HoldSpecialEgg holdSpecialEgg) {
-        holdSpecialEggValidCheckService.validCheck(request.getHoldSpecialEggId(), sessionId);
+    private void validCheck(Integer sessionId, HoldSpecialEgg holdSpecialEgg, Integer specialEggId) {
+        holdSpecialEggValidCheckService.validCheck(specialEggId, sessionId);
 
-        if(eggSellBoardRepository.existsByHoldSpecialEgg_Id(request.getHoldSpecialEggId())) {
+        if(eggSellBoardRepository.existsBySpecialEgg_IdAndChild_Id(specialEggId, sessionId)) {
             throw new HoldSpecialEggExistException();
         }
 

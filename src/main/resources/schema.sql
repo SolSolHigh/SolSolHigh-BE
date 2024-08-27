@@ -265,14 +265,14 @@ create table hold_special_egg
 
 create table egg_sell_board
 (
-    egg_sell_board_id   INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    child_id            INT      NOT NULL,
-    hold_special_egg_id INT      NOT NULL,
-    wrote_at            DATETIME NOT NULL,
-    egg_price_per_once  INT      NOT NULL,
-    sell_count          INT      NOT NULL,
+    egg_sell_board_id  INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id           INT      NOT NULL,
+    special_egg_id     INT      NOT NULL,
+    wrote_at           DATETIME NOT NULL,
+    egg_price_per_once INT      NOT NULL,
+    sell_count         INT      NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id),
-    FOREIGN KEY (hold_special_egg_id) REFERENCES hold_special_egg (hold_special_egg_id)
+    FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
 
 

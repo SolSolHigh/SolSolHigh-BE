@@ -1,7 +1,5 @@
 package com.shinhan.solsolhigh.egg.query;
 
-import com.shinhan.solsolhigh.egg.application.dto.EggSellBoardRegisterRequest;
-import com.shinhan.solsolhigh.egg.domain.repository.EggSellBoardRepository;
 import com.shinhan.solsolhigh.egg.domain.repository.HoldSpecialEggRepository;
 import com.shinhan.solsolhigh.egg.exception.HoldSpecialEggNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,7 @@ public class HoldSpecialEggValidCheckService {
 
     @Transactional(readOnly = true)
     public void validCheck(Integer holdSpecialEggId, Integer sessionId) {
-        if(holdSpecialEggRepository.existsByChild_IdAndId(sessionId, holdSpecialEggId)) {
+        if (holdSpecialEggRepository.existsByChild_IdAndSpecialEgg_Id(sessionId, holdSpecialEggId)) {
             throw new HoldSpecialEggNotFoundException();
         }
     }

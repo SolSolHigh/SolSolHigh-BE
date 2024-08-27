@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.Hibernate;
 
 import java.util.Objects;
 
@@ -35,6 +36,14 @@ public class Child extends User {
         if(Objects.equals(this.parent, parent))
             throw new ChildParentSameException();
         this.parent = parent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Child child = (Child) o;
+        return Objects.equals(this.getId(), child.getId());
     }
 
     @Override

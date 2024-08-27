@@ -10,5 +10,5 @@ import lombok.*;
 public class EggSellBoardRegisterRequest {
     private Integer pricePerOnce;
     private Integer sellCount;
-    private Integer holdSpecialEggId;
+    private Integer specialEggId;
 }
