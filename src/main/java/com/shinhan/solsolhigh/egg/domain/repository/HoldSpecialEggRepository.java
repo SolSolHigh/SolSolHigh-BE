@@ -11,4 +11,7 @@ public interface HoldSpecialEggRepository extends JpaRepository<HoldSpecialEgg, 
 
     @Query("SELECT hse FROM HoldSpecialEgg hse JOIN FETCH hse.specialEgg WHERE hse.child.id = :childId")
     List<HoldSpecialEgg> findAllByChild_Id(@Param("childId")Integer childId);
+
+    Boolean existsByChild_IdAndId(Integer childId, Integer id);
+
 }

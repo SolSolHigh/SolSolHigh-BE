@@ -16,4 +16,6 @@ public interface EggSellBoardRepository extends JpaRepository<EggSellBoard, Inte
             " WHERE esb.child.id = :childId " +
             " ORDER BY esb.id DESC ")
     Slice<EggSellBoardView> findAllBy(@Param("childId") Integer childId, Pageable pageable);
+
+    Boolean existsByHoldSpecialEgg_Id(Integer id);
 }

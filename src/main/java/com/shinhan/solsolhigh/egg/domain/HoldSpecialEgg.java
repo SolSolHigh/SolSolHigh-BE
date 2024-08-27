@@ -29,4 +29,8 @@ public class HoldSpecialEgg {
 
     @Column(name = "egg_count")
     private Integer count;
+
+    public boolean exists() {
+        return count > 0;
+    }
 }
