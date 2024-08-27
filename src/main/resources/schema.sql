@@ -38,7 +38,8 @@ create table temporary_user
 (
     temporary_user_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     email             VARCHAR(40) NOT NULL,
-    name              VARCHAR(52) NOT NULL
+    name              VARCHAR(52) NOT NULL,
+    code              CHAR(36)    NOT NULL
 );
 
 create table user
@@ -297,28 +298,28 @@ create table child_register_alarm
     FOREIGN KEY (alarm_id) REFERENCES alarm (alarm_id)
 );
 
-
-INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
-VALUES (1, 'c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
-       (2, 'p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
-
-INSERT INTO parent(user_id)
-VALUES (2);
-
-INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
-VALUES (1, 2, 0, 0, 0);
-
-
-INSERT INTO quiz_keyword(keyword)
-VALUES ('은행 대출 연체'),
-       ('펀드'),
-       ('신용카드'),
-       ('대포 통장'),
-       ('핀테크'),
-       ('환율'),
-       ('지폐'),
-       ('찢어진 돈'),
-       ('폐기된 돈');
-
-INSERT INTO selected_quiz_keyword(child_id, quiz_keyword_id)
-VALUES (1, 1);
+--
+-- INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
+-- VALUES (1, 'c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
+--        (2, 'p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
+--
+-- INSERT INTO parent(user_id)
+-- VALUES (2);
+--
+-- INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
+-- VALUES (1, 2, 0, 0, 0);
+--
+--
+-- INSERT INTO quiz_keyword(keyword)
+-- VALUES ('은행 대출 연체'),
+--        ('펀드'),
+--        ('신용카드'),
+--        ('대포 통장'),
+--        ('핀테크'),
+--        ('환율'),
+--        ('지폐'),
+--        ('찢어진 돈'),
+--        ('폐기된 돈');
+--
+-- INSERT INTO selected_quiz_keyword(child_id, quiz_keyword_id)
+-- VALUES (1, 1);
