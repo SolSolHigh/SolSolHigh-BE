@@ -66,4 +66,7 @@ public class PromiseTicket {
         this.description = description;
     }
 
+    public void changeImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

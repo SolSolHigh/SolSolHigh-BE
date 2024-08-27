@@ -1,8 +1,10 @@
 package com.shinhan.solsolhigh.promise.ui;
 
+import com.shinhan.solsolhigh.common.validation.annotation.NotNull;
 import com.shinhan.solsolhigh.promise.application.*;
 import com.shinhan.solsolhigh.promise.ui.request.PromiseTicketUseRequestRequest;
 import com.shinhan.solsolhigh.promise.ui.response.PromiseTicketUnusedCountResponse;
+import com.shinhan.solsolhigh.promise.validation.annotation.PromiseTicketImage;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -67,4 +70,17 @@ public class PromiseTicketController {
                         .build());
         return ResponseEntity.ok(infos);
     }
+
+    @PostMapping("{promiseTicketId}/use")
+    public ResponseEntity<?> usePromiseTicket(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                              @PathVariable Integer promiseTicketId,
+                                              @RequestParam @NotNull @PromiseTicketImage MultipartFile image){
+        promiseTicketService.usePromiseTicket(PromiseTicketUseDto.builder()
+                .id(userPrinciple.getId())
+                .promiseTicketId(promiseTicketId)
+                .image(image)
+                .build());
+        return ResponseEntity.created(null).build();
+    }
+
 }

@@ -12,7 +12,9 @@ public enum PromiseTicketErrorConstants implements ErrorConstantDefinition {
     PROMISE_TICKET_ALREADY_REQUESTED("이미 사용 요청된 약속권", "P002", HttpStatus.BAD_REQUEST),
     PROMISE_TICKET_ALREADY_USED("이미 사용된 약속권", "P003", HttpStatus.BAD_REQUEST),
     PROMISE_TICKET_NOT_REQUESTED("사용 요청되지 않은 약속권", "P004", HttpStatus.BAD_REQUEST),
-    PROMISE_TICKET_DESCRIPTION_MISMATCH("약속권 본문 형식 불일치", "P005", HttpStatus.BAD_REQUEST);
+    PROMISE_TICKET_DESCRIPTION_MISMATCH("약속권 본문 형식 불일치", "P005", HttpStatus.BAD_REQUEST),
+    PROMISE_TICKET_NOT_FOUND("존재하지 않는 약속권", "P006", HttpStatus.NOT_FOUND),
+    PROMISE_TICKET_IMAGE_MISMATCH("약속권 이미지 형식 불일치", "P007", HttpStatus.BAD_REQUEST);
     private final String message;
     private final String statusCode;
     private final HttpStatus httpStatus;

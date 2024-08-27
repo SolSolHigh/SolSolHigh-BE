@@ -24,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-class S3Uploader {
+public class S3Uploader {
 
     private final S3Client amazonS3Client;
 
@@ -38,7 +38,7 @@ class S3Uploader {
     }
 
     private String upload(File uploadFile, String dirName) throws UnsupportedEncodingException {
-        String fileName = dirName + "/" + UUIDGenerator.getUUID().toString() + URLEncoder.encode(uploadFile.getName(), StandardCharsets.UTF_8); // UUID + fileName으로 작성
+        String fileName = dirName + "/" + UUIDGenerator.getUUID().toString() + uploadFile.getName().substring(uploadFile.getName().lastIndexOf(".") + 1);; // UUID으로 작성
         String uploadImageUrl = putS3(uploadFile, fileName);
 
         removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
@@ -54,7 +54,7 @@ class S3Uploader {
     }
 
     private String getUrl(String fileName) {
-        return "https://" + bucket + "/" + fileName;
+        return "https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/" + URLEncoder.encode(fileName, StandardCharsets.UTF_8);
     }
 
     public void deleteFile(String uri, String dirPath) {

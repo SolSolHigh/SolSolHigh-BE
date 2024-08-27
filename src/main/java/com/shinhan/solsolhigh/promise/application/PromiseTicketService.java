@@ -4,7 +4,11 @@ import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
 import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.promise.domain.PromiseTicket;
 import com.shinhan.solsolhigh.promise.domain.PromiseTicketRepository;
+import com.shinhan.solsolhigh.promise.exception.PromiseTicketAlreadyUsedException;
 import com.shinhan.solsolhigh.promise.exception.PromiseTicketNotExistsException;
+import com.shinhan.solsolhigh.promise.exception.PromiseTicketNotFoundException;
+import com.shinhan.solsolhigh.s3.exception.ImageUploadFailException;
+import com.shinhan.solsolhigh.s3.upload.S3Uploader;
 import com.shinhan.solsolhigh.user.domain.Child;
 import com.shinhan.solsolhigh.user.domain.ChildRepository;
 import com.shinhan.solsolhigh.user.domain.User;
@@ -19,6 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +32,7 @@ import java.util.Objects;
 public class PromiseTicketService {
     private final PromiseTicketRepository promiseTicketRepository;
     private final ChildRepository childRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     @Authorized(allowed = User.Type.CHILD)
@@ -78,5 +84,27 @@ public class PromiseTicketService {
         List<PromiseTicket> promiseTickets = promiseTicketRepository.findByUsedPromiseTicketByIdUsingPagination(child.getId(), dto.getPageable());
         Long count = promiseTicketRepository.countUsedTicketById(child.getId());
         return new PageImpl<>(ListUtils.applyFunctionToElements(promiseTickets, PromiseTicketInfo::from), dto.getPageable(), count);
+    }
+
+    @Transactional
+    @Authorized(allowed = User.Type.PARENT)
+    public void usePromiseTicket(@Valid PromiseTicketUseDto dto) {
+        PromiseTicket promiseTicket = promiseTicketRepository.findById(dto.getPromiseTicketId()).orElseThrow(PromiseTicketNotFoundException::new);
+        Child child = promiseTicket.getChild();
+
+        if(child.getIsDeleted())
+            throw new UserWithdrawalException();
+        if(child.getParent() == null)
+            throw new ParentNotFoundException();
+        if(!Objects.equals(child.getParent().getId(),dto.getId()))
+            throw new FamilyNotExistException();
+
+        promiseTicket.initUsedAt();
+        try {
+            String url = s3Uploader.upload(dto.getImage(), "promiseTicket/1");
+            promiseTicket.changeImageUrl(url);
+        } catch (IOException e) {
+            throw new ImageUploadFailException();
+        }
     }
 }
