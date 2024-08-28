@@ -2,9 +2,11 @@ package com.shinhan.solsolhigh.experience.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+@Getter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,5 +20,5 @@ public class PrefixSumExp {
     private Integer level;
 
     @Column(name = "prefix_sum_exp")
-    private Integer SumExp;
+    private Integer sumExp;
 }

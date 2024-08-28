@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS experience_log;
 DROP TABLE IF EXISTS child_register_alarm;
 DROP TABLE IF EXISTS alarm;
 DROP TABLE IF EXISTS egg_trade_log;
@@ -73,7 +74,14 @@ create table child
     FOREIGN KEY (parent_id) REFERENCES parent (user_id)
 );
 
-
+create table experience_log
+(
+    experience_log_id INT AUTO_INCREMENT PRIMARY KEY,
+    child_id          INT          NOT NULL,
+    type              CHAR(10)     NOT NULL,
+    description       VARCHAR(100) NOT NULL,
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
+);
 
 create table fcm
 (
@@ -158,13 +166,13 @@ create table child_savings_status_by_period
 -- 약속권
 create table promise_ticket
 (
-    promise_ticket_id    INT            NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    child_id             INT            NOT NULL,
-    published_at        DATETIME        NOT NULL,
-    used_at             DATETIME        NULL,
-    requested_at        DATETIME        NULL,
-    image_url           VARCHAR(255)    NULL,
-    description         VARCHAR(255)    NULL,
+    promise_ticket_id INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id          INT          NOT NULL,
+    published_at      DATETIME     NOT NULL,
+    used_at           DATETIME     NULL,
+    requested_at      DATETIME     NULL,
+    image_url         VARCHAR(255) NULL,
+    description       VARCHAR(255) NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
@@ -326,6 +334,8 @@ VALUES ('은행 대출 연체'),
        ('찢어진 돈'),
        ('폐기된 돈');
 
+INSERT INTO mission(child_id, mission_description, is_finished, mission_start_at, mission_end_at, mission_finished_at,
+                    mission_level) VALUE (1, 'test', false, '2024-08-24', '2024-08-25', null, 1);
 
 -- INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
 -- VALUES (1, 'c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
@@ -363,3 +373,4 @@ VALUES ('다이아몬드 계란', 0.01, 'https://solsolhighasset.s3.ap-northeast
        ('오팔 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/opal-egg.png'),
        ('선물 계란', 0.2, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/present-egg.png'),
        ('토끼 계란', 0.2, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/rabbit-egg.png');
+

@@ -1,5 +1,8 @@
 package com.shinhan.solsolhigh.quiz.domain;
 
+import com.shinhan.solsolhigh.common.event.Events;
+import com.shinhan.solsolhigh.experience.domain.ExperienceLogType;
+import com.shinhan.solsolhigh.experience.infra.ExperienceUpdatedEvent;
 import com.shinhan.solsolhigh.quiz.infra.AddQuizDto;
 import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
@@ -49,6 +52,9 @@ public class FinancialQuiz {
     }
 
     public QuizSolve solve(Boolean chosenAnswer, LocalDateTime today, Child child) {
+        if(chosenAnswer.equals(answer)) {
+            Events.raise(new ExperienceUpdatedEvent(this.child.getId(), ExperienceLogType.QUIZ));
+        }
         return QuizSolve.builder().financialQuiz(this).child(child).correctedAt(today).isCorrect(chosenAnswer.equals(answer)).build();
     }
 

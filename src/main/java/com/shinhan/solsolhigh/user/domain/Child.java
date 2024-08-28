@@ -59,4 +59,23 @@ public class Child extends User {
         currentExp = 0;
         goalMoney = 0;
     }
+
+    public boolean plusExperience(Integer experience, Integer nextLevelExperience){
+        this.currentExp += experience;
+        if(this.currentExp > maxExp) {
+            maxExp = this.currentExp;
+            return nextLevelExperience <= this.currentExp;
+        }
+        return false;
+    }
+
+    public void minusExperience(Integer experience, Integer minimumExp){
+        this.currentExp -= experience;
+        if(this.currentExp < minimumExp) {
+            this.currentExp = minimumExp;
+        }
+        if(this.currentExp > 0) {
+            this.currentExp = 0;
+        }
+    }
 }
