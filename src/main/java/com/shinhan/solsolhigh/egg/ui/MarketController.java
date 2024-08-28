@@ -3,6 +3,7 @@ package com.shinhan.solsolhigh.egg.ui;
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
 import com.shinhan.solsolhigh.egg.application.EggSellBoardBuyService;
 import com.shinhan.solsolhigh.egg.application.EggSellBoardRegisterService;
+import com.shinhan.solsolhigh.egg.application.EggSellBoardRemoveService;
 import com.shinhan.solsolhigh.egg.application.dto.EggSellBoardBuyRequest;
 import com.shinhan.solsolhigh.egg.application.dto.EggSellBoardRegisterRequest;
 import com.shinhan.solsolhigh.egg.query.EggSellBoardFindService;
@@ -30,6 +31,7 @@ public class MarketController {
     private final EggSellBoardFindService eggSellBoardFindService;
     private final EggSellBoardRegisterService eggSellBoardRegisterService;
     private final EggSellBoardBuyService eggSellBoardBuyService;
+    private final EggSellBoardRemoveService eggSellBoardRemoveService;
 
     @GetMapping("/special-eggs/{specialEggId}/price")
     public ResponseEntity<?> getLastPrice(@PathVariable("specialEggId") Integer specialEggId) {
@@ -59,7 +61,7 @@ public class MarketController {
     @PostMapping("/trades/buy-request")
     @Authorized(allowed = User.Type.CHILD)
     public ResponseEntity<?> tradeRequest(@AuthenticationPrincipal UserPrinciple userPrinciple, @RequestBody EggSellBoardBuyRequest request) {
-        eggSellBoardBuyService.buyEggSellBoard(request, userPrinciple.getId());
+        eggSellBoardBuyService.buyEggSellBoard(request, userPrinciple.getId(), LocalDateTime.now());
         return ResponseEntity.accepted().body(null);
     }
 
@@ -69,4 +71,9 @@ public class MarketController {
         return ResponseEntity.ok(allByQuery);
     }
 
+    @DeleteMapping("/trades/{sellBoardId")
+    public ResponseEntity<?> deleteTrade(@PathVariable("sellBoardId") Integer sellBoardId, @AuthenticationPrincipal UserPrinciple userPrinciple) {
+        eggSellBoardRemoveService.removeSellBoard(sellBoardId, userPrinciple.getId());
+        return ResponseEntity.noContent().build();
+    }
 }

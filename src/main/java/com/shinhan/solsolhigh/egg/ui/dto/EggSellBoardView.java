@@ -1,7 +1,10 @@
 package com.shinhan.solsolhigh.egg.ui.dto;
 
-import com.shinhan.solsolhigh.egg.domain.EggSellBoard;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +14,8 @@ import java.time.LocalDateTime;
 @Getter
 public class EggSellBoardView {
     private Integer sellBoardId;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime writtenAt;
     private Integer pricePerOnce;
     private Integer sellCount;

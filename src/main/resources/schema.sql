@@ -319,7 +319,8 @@ INSERT INTO parent(user_id)
 VALUES (2);
 
 INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
-VALUES (1, 2, 0, 0, 0), (3,2,0,0,0);
+VALUES (1, 2, 0, 0, 0),
+       (3, 2, 0, 0, 0);
 
 
 INSERT INTO quiz_keyword(keyword)
@@ -348,13 +349,18 @@ VALUES ('다이아몬드 계란', 0.01, 'https://solsolhighasset.s3.ap-northeast
        ('선물 계란', 0.2, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/present-egg.png'),
        ('토끼 계란', 0.2, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/rabbit-egg.png');
 
-INSERT INTO hold_special_egg(child_id, special_egg_id, egg_count) VALUES (1,1,1);
+INSERT INTO hold_special_egg(child_id, special_egg_id, egg_count)
+VALUES (1, 1, 1);
 
-INSERT INTO egg_trade_log(seller_id, buyer_id, traded_at, special_egg_id, egg_stock_count, egg_price_per_once) VALUES (1, 3, '2023-05-05', 1, 0, 1);
-INSERT INTO egg_trade_log(seller_id, buyer_id, traded_at, special_egg_id, egg_stock_count, egg_price_per_once) VALUES (1, 3, '2023-05-08', 1, 0, 2);
+INSERT INTO egg_trade_log(seller_id, buyer_id, traded_at, special_egg_id, egg_stock_count, egg_price_per_once)
+VALUES (1, 3, '2023-05-05', 1, 0, 1);
+INSERT INTO egg_trade_log(seller_id, buyer_id, traded_at, special_egg_id, egg_stock_count, egg_price_per_once)
+VALUES (1, 3, '2023-05-08', 1, 0, 2);
 
-INSERT INTO egg_sell_board(child_id, special_egg_id, wrote_at, egg_price_per_once, sell_count) VALUES (1,1,'2024-05-05', 1, 1);
-INSERT INTO egg_sell_board(child_id, special_egg_id, wrote_at, egg_price_per_once, sell_count) VALUES (3,2,'2024-05-06', 1, 3);
-INSERT INTO egg_sell_board(child_id, special_egg_id, wrote_at, egg_price_per_once, sell_count) VALUES (3,2,'2024-05-07', 1, 2);
+INSERT INTO egg_sell_board(child_id, special_egg_id, wrote_at, egg_price_per_once, sell_count)
+VALUES (3, 2, '2024-05-06', 1, 3);
+INSERT INTO egg_sell_board(child_id, special_egg_id, wrote_at, egg_price_per_once, sell_count)
+VALUES (3, 2, '2024-05-07', 1, 2);
 
-INSERT INTO egg_count(child_id, egg_count) VALUES (1, 1000);
+INSERT INTO egg_count(child_id, egg_count)
+VALUES (1, 1000);

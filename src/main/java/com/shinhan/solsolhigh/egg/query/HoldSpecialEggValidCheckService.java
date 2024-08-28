@@ -12,8 +12,8 @@ public class HoldSpecialEggValidCheckService {
     private final HoldSpecialEggRepository holdSpecialEggRepository;
 
     @Transactional(readOnly = true)
-    public void validCheck(Integer holdSpecialEggId, Integer sessionId) {
-        if (holdSpecialEggRepository.existsByChild_IdAndSpecialEgg_Id(sessionId, holdSpecialEggId)) {
+    public void validCheck(Integer specialEggId, Integer sessionId) {
+        if (!holdSpecialEggRepository.existsByChild_IdAndSpecialEgg_Id(sessionId, specialEggId)) {
             throw new HoldSpecialEggNotFoundException();
         }
     }

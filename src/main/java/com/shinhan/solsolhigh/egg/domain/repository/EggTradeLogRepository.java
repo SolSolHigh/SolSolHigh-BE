@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface EggTradeLogRepository extends JpaRepository<EggTradeLog, Integer> {
     Optional<EggTradeLog> findFirstBySpecialEgg_IdOrderByIdDesc(Integer specialEggId);
 
-    @Query(value = "SELECT new com.shinhan.solsolhigh.egg.ui.dto.SpecialEggTradeLogView( AVG(etl.eggPricePerOnce), function('DATE_FORMAT', etl.tradedAt, '%Y-%m-%d') ) FROM EggTradeLog etl WHERE etl.specialEgg.id = :specialEggId GROUP BY function('DATE_FORMAT', etl.tradedAt, '%Y%m%d') ORDER BY etl.tradedAt DESC")
+    @Query(value = "SELECT new com.shinhan.solsolhigh.egg.ui.dto.SpecialEggTradeLogView( AVG(eggPricePerOnce), function('DATE_FORMAT', tradedAt, '%Y-%m-%d') ) FROM EggTradeLog  WHERE specialEgg.id = :specialEggId  GROUP BY function('DATE_FORMAT', tradedAt, '%Y-%m-%d') ORDER BY function('DATE_FORMAT', tradedAt, '%Y-%m-%d') DESC")
     List<SpecialEggTradeLogView> findSpecialEggTradeLogDto(@Param("specialEggId") Integer specialEggId);
 }

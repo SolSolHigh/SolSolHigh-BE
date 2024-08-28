@@ -37,4 +37,8 @@ public class HoldSpecialEgg {
     public void minusCount(Integer count) {
         this.count -= count;
     }
+
+    public void plusCount(Integer count) {
+        this.count += count;
+    }
 }

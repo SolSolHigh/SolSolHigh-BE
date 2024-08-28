@@ -50,9 +50,10 @@ public class EggSellBoard {
                 .build();
     }
 
-    public boolean canBuy(EggSellBoardBuyRequest request) {
+    public boolean canBuyAll(EggSellBoardBuyRequest request) {
         return request.getEggCount() <= sellCount;
     }
+
 
     public void sell(Integer count ){
         sellCount -= count;

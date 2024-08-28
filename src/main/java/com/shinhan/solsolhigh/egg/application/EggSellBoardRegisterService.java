@@ -35,11 +35,11 @@ public class EggSellBoardRegisterService {
     }
 
     private void validCheck(Integer sessionId, HoldSpecialEgg holdSpecialEgg, Integer specialEggId) {
-        holdSpecialEggValidCheckService.validCheck(specialEggId, sessionId);
-
         if(eggSellBoardRepository.existsBySpecialEgg_IdAndChild_Id(specialEggId, sessionId)) {
             throw new HoldSpecialEggExistException();
         }
+
+        holdSpecialEggValidCheckService.validCheck(specialEggId, sessionId);
 
         if(!holdSpecialEgg.exists()) {
             throw new HoldSpecialEggNotFoundException();
