@@ -4,10 +4,7 @@ import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.user.application.*;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
 import com.shinhan.solsolhigh.user.ui.request.*;
-import com.shinhan.solsolhigh.user.ui.response.ChildSearchResponse;
-import com.shinhan.solsolhigh.user.ui.response.SessionChildInfoResponse;
-import com.shinhan.solsolhigh.user.ui.response.SessionParentInfoResponse;
-import com.shinhan.solsolhigh.user.ui.response.SessionUserInfoResponse;
+import com.shinhan.solsolhigh.user.ui.response.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -105,6 +102,12 @@ public class UserController {
                 .requestId(requestId)
                 .build());
         return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/parents/children/requests")
+    public ResponseEntity<?> getRegisterChildFromParentByParent(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        List<ChildRegisterRequestInfoAndChildInfo> infos = userService.getRegisterChildFromParentByParent(userPrinciple.getId());
+        return ResponseEntity.ok(ListUtils.applyFunctionToElements(infos, ChildRegisterRequestFromParentGetByParent::from));
     }
 
 }

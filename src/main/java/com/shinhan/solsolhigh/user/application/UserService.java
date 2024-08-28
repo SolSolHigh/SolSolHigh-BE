@@ -161,6 +161,15 @@ public class UserService {
         request.changeState(ChildRegisterRequest.State.CANCELED);
     }
 
+    @Transactional(readOnly = true)
+    @Authorized(allowed = User.Type.PARENT)
+    public List<ChildRegisterRequestInfoAndChildInfo> getRegisterChildFromParentByParent(Integer id){
+        List<ChildRegisterRequest> requests = ListUtils.removeIf(childRegisterRequestRepository
+                .findByParentIdAndStateUsingFetchChild(id, ChildRegisterRequest.State.REQUESTED),
+                request -> request.getChild().getIsDeleted());
+        return ListUtils.applyFunctionToElements(requests, (element) -> ChildRegisterRequestInfoAndChildInfo.of(element, element.getChild()));
+    }
+
 
     private void checkDeletedUser(User user){
         if(user.getIsDeleted())
