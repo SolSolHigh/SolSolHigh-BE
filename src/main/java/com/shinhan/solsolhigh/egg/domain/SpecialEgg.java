@@ -3,8 +3,10 @@ package com.shinhan.solsolhigh.egg.domain;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +22,7 @@ public class SpecialEgg {
     private String name;
 
     @Column
-    private String probability;
+    private Float probability;
 
     @Column(name = "image_src")
     private String imageSrc;

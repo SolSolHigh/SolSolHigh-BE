@@ -1,5 +1,6 @@
-package com.shinhan.solsolhigh.quiz.application.dto;
+package com.shinhan.solsolhigh.quiz.application;
 
+import com.shinhan.solsolhigh.quiz.application.dto.SelectedQuizKeywordDto;
 import com.shinhan.solsolhigh.quiz.domain.repository.SelectedQuizKeywordRepository;
 import com.shinhan.solsolhigh.user.query.FamilyCheckService;
 import lombok.RequiredArgsConstructor;

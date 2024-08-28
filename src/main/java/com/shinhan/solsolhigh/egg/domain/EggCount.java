@@ -11,34 +11,26 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "hold_special_egg")
+@Table(name = "egg_count")
 @Entity
-public class HoldSpecialEgg {
+public class EggCount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hold_special_egg_id")
+    @Column(name = "egg_count_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id")
     private Child child;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "special_egg_id")
-    private SpecialEgg specialEgg;
-
     @Column(name = "egg_count")
     private Integer count;
 
-    public boolean exists() {
-        return count > 0;
-    }
-
-    public void minusCount(Integer count) {
+    public void cost(Integer count) {
         this.count -= count;
     }
 
-    public void plusCount(Integer count) {
+    public void earn(Integer count) {
         this.count += count;
     }
 }

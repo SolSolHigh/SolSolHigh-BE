@@ -1,7 +1,7 @@
 package com.shinhan.solsolhigh.mission.application;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -14,10 +14,10 @@ public class MissionUpdateRequest {
     private String description;
     private Boolean isFinished;
 
-    @DateTimeFormat(style = "yyyy-MM-dd HH:mm:SS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime missionStartAt;
 
-    @DateTimeFormat(style = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime missionEndAt;
 
     private Character missionLevel;
