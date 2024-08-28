@@ -17,9 +17,10 @@ import org.springframework.security.web.savedrequest.NullRequestCache;
 public class SecurityConfig {
 
     private final CustomOAuthUserService customOAuthUserService;
-    private final CustomOAuthLoginFailureExceptionHandler customOAuthLoginFailureExceptionHandler;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -36,8 +37,10 @@ public class SecurityConfig {
         http.oauth2Login(httpSecurityOAuth2LoginConfigurer ->
                 httpSecurityOAuth2LoginConfigurer
                         .loginPage("/oauth2/login")
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
                         .userInfoEndpoint(userInfoEndpointConfig ->
-                                userInfoEndpointConfig.userService(customOAuthUserService)).failureHandler(customOAuthLoginFailureExceptionHandler));
+                                userInfoEndpointConfig.userService(customOAuthUserService)));
         http.logout(httpSecurityLogoutConfigurer ->
                 httpSecurityLogoutConfigurer
                         .logoutUrl("/auth/logout")
