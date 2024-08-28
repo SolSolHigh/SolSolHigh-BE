@@ -1,5 +1,8 @@
 package com.shinhan.solsolhigh.user.domain;
 
+import com.shinhan.solsolhigh.common.event.Events;
+import com.shinhan.solsolhigh.promise.domain.PromiseTicket;
+import com.shinhan.solsolhigh.promise.infra.PromiseGenertedEvent;
 import com.shinhan.solsolhigh.user.exception.ChildParentSameException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -58,5 +61,25 @@ public class Child extends User {
         maxExp = 0;
         currentExp = 0;
         goalMoney = 0;
+    }
+
+    public void plusExperience(Integer experience, Integer nextLevelExperience){
+        this.currentExp += experience;
+        if(this.currentExp > maxExp) {
+            maxExp = this.currentExp;
+            if(nextLevelExperience <= this.currentExp) {
+                Events.raise(PromiseGenertedEvent.builder().childId(this.getId()).build());
+            }
+        }
+    }
+
+    public void minusExperience(Integer experience, Integer minimumExp){
+        this.currentExp -= experience;
+        if(this.currentExp < minimumExp) {
+            this.currentExp = minimumExp;
+        }
+        if(this.currentExp > 0) {
+            this.currentExp = 0;
+        }
     }
 }

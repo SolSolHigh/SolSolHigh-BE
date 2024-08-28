@@ -2,23 +2,21 @@ package com.shinhan.solsolhigh.experience.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
+@Builder
 @Getter
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table
+@Table(name = "level_assets")
 @Entity
-public class PrefixSumExp {
-
+public class LevelAssets {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "level")
     private Integer level;
 
-    @Column(name = "prefix_sum_exp")
-    private Integer sumExp;
+    @Column(name = "asset_url")
+    private String assetUrl;
 }

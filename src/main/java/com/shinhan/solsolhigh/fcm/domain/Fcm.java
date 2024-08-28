@@ -14,12 +14,12 @@ import lombok.experimental.SuperBuilder;
 public class Fcm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "fcm_token_id")
+    @Column(name = "fcm_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     @Column(name = "token")
     private String token;
