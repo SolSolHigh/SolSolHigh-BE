@@ -2,12 +2,14 @@ package com.shinhan.solsolhigh.user.ui;
 
 import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.user.application.ChildInfo;
+import com.shinhan.solsolhigh.user.application.ParentInfo;
 import com.shinhan.solsolhigh.user.application.UserService;
 import com.shinhan.solsolhigh.user.application.UserInfo;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
 import com.shinhan.solsolhigh.user.ui.request.*;
 import com.shinhan.solsolhigh.user.ui.response.ChildSearchResponse;
 import com.shinhan.solsolhigh.user.ui.response.SessionChildInfoResponse;
+import com.shinhan.solsolhigh.user.ui.response.SessionParentInfoResponse;
 import com.shinhan.solsolhigh.user.ui.response.SessionUserInfoResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -32,7 +34,7 @@ public class UserController {
     @GetMapping("/users/info")
     public ResponseEntity<?> getSessionUserInfo(@AuthenticationPrincipal UserPrinciple userPrinciple) {
         UserInfo userInfo = userService.getUserInfo(userPrinciple.getId());
-        return ResponseEntity.ok(SessionUserInfoResponse.of(userInfo));
+        return ResponseEntity.ok(SessionUserInfoResponse.from(userInfo));
     }
 
     @PatchMapping("/users/info")
@@ -89,6 +91,12 @@ public class UserController {
     public ResponseEntity<?> signupUser(@RequestBody @Valid UserSignupRequest request){
         userService.signupUser(request.toDto());
         return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/parents")
+    public ResponseEntity<?> getSessionParentInfo(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        ParentInfo info = userService.getParentInfo(userPrinciple.getId());
+        return ResponseEntity.ok(SessionParentInfoResponse.from(info));
     }
 
 }

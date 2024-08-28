@@ -25,4 +25,12 @@ public interface ChildRepository extends JpaRepository<Child, Integer> {
 
     Boolean existsByNicknameAndParentId(String nickname, Integer parentId);
     Boolean existsByIdAndParentId(Integer id, Integer parentId);
+
+    @Query("""
+           SELECT c
+           FROM Child c
+           LEFT JOIN FETCH c.parent p
+           WHERE c.id = :id
+           """)
+    Optional<Child> findByIdUsingFetchParent(Integer id);
 }

@@ -143,6 +143,15 @@ public class UserService {
         temporaryUserRepository.delete(temporaryUser);
     }
 
+    @Transactional(readOnly = true)
+    @Authorized(allowed = User.Type.CHILD)
+    public ParentInfo getParentInfo(Integer id) {
+        Child child = childRepository.findByIdUsingFetchParent(id).orElseThrow(UserNotFoundException::new);
+        if(child.getParent() == null)
+            throw new ParentNotFoundException();
+        return ParentInfo.from(child.getParent());
+    }
+
     private void checkDeletedUser(User user){
         if(user.getIsDeleted())
             throw new UserWithdrawalException();
