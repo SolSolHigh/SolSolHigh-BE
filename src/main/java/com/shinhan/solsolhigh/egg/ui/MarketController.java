@@ -71,7 +71,7 @@ public class MarketController {
         return ResponseEntity.ok(allByQuery);
     }
 
-    @DeleteMapping("/trades/{sellBoardId")
+    @DeleteMapping("/trades/{sellBoardId}")
     public ResponseEntity<?> deleteTrade(@PathVariable("sellBoardId") Integer sellBoardId, @AuthenticationPrincipal UserPrinciple userPrinciple) {
         eggSellBoardRemoveService.removeSellBoard(sellBoardId, userPrinciple.getId());
         return ResponseEntity.noContent().build();
