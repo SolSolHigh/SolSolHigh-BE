@@ -203,6 +203,8 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/intellij,macos,windows,java
 
 src/main/resources/application-dev.yml
+src/main/resources/application-oauth.yml
+src/main/resources/application-secret.yml
 src/main/resources/solsolhigh-firebase-adminsdk-h6pxn-52d949def1.json
 .idea
 .gradle

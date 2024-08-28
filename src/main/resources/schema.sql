@@ -10,7 +10,6 @@ DROP TABLE IF EXISTS between_of_day_quiz_solve_log;
 DROP TABLE IF EXISTS quiz_solve;
 DROP TABLE IF EXISTS financial_quiz;
 DROP TABLE IF EXISTS quiz_keyword;
-DROP TABLE IF EXISTS promise_ticket_used_log;
 DROP TABLE IF EXISTS promise_ticket;
 DROP TABLE IF EXISTS child_savings_status_by_period;
 DROP TABLE IF EXISTS mission;
@@ -157,23 +156,15 @@ create table child_savings_status_by_period
 -- 약속권
 create table promise_ticket
 (
-    promise_ticket_id    INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    child_id             INT      NOT NULL,
-    promise_published_at DATETIME NOT NULL,
+    promise_ticket_id    INT            NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id             INT            NOT NULL,
+    published_at        DATETIME        NOT NULL,
+    used_at             DATETIME        NULL,
+    requested_at        DATETIME        NULL,
+    image_url           VARCHAR(255)    NULL,
+    description         VARCHAR(255)    NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
-
-create table promise_ticket_used_log
-(
-    promise_ticket_used_log_id INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    promise_ticket_id          INT          NOT NULL,
-    image_url                  TEXT,
-    description                VARCHAR(255) NOT NULL,
-    promise_used_at            DATETIME     NOT NULL,
-    FOREIGN KEY (promise_ticket_id) REFERENCES promise_ticket (promise_ticket_id)
-);
-
-
 
 create table quiz_keyword
 (
@@ -298,7 +289,22 @@ create table child_register_alarm
     FOREIGN KEY (alarm_id) REFERENCES alarm (alarm_id)
 );
 
---
+
+INSERT INTO user(type, email, name, nickname, birthday, user_gender, is_deleted)
+VALUES ('c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
+       ('p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
+
+INSERT INTO parent(user_id)
+VALUES (2);
+
+INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
+VALUES (1, 2, 0, 0, 0);
+
+
+INSERT INTO promise_ticket(promise_ticket_id, child_id, published_at, used_at, requested_at, image_url, description)
+VALUES (1, 1, "2024-08-26T00:00:00", NULL, NULL, NULL, NULL);
+
+
 -- INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
 -- VALUES (1, 'c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
 --        (2, 'p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
