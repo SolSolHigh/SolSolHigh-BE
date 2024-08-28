@@ -9,7 +9,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.RedisHt
 import java.time.Duration;
 
 @Configuration
-@EnableRedisHttpSession
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 931279)
 public class SessionConfig {
 
     @Value("${server.servlet.session.timeout}")

@@ -1,5 +1,6 @@
 package com.shinhan.solsolhigh.mission.ui.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -17,7 +18,9 @@ public class MissionView {
     private Integer missionId;
     private String description;
     private Boolean isFinished;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime missionStartAt;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime missionEndAt;
     private Character missionLevel;
 

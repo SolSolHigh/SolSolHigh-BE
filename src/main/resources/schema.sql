@@ -3,7 +3,9 @@ DROP TABLE IF EXISTS egg_trade_log;
 DROP TABLE IF EXISTS egg_sell_board;
 DROP TABLE IF EXISTS hold_special_egg;
 DROP TABLE IF EXISTS special_egg;
+DROP TABLE IF EXISTS egg_count;
 DROP TABLE IF EXISTS egg;
+DROP TABLE IF EXISTS egg_destroy_log;
 DROP TABLE IF EXISTS selected_quiz_keyword;
 DROP TABLE IF EXISTS between_of_day_quiz_solve_log;
 DROP TABLE IF EXISTS quiz_solve;
@@ -214,15 +216,21 @@ create table selected_quiz_keyword
     FOREIGN KEY (quiz_keyword_id) REFERENCES quiz_keyword (quiz_keyword_id)
 );
 
-
-
-create table egg
+create table egg_count
 (
-    egg_id       INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    child_id     INT      NOT NULL,
-    created_at   DATETIME NOT NULL,
-    destroyed_at DATETIME NOT NULL,
-    hit_count    SMALLINT NOT NULL,
+    egg_count_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id     INT NOT NULL,
+    egg_count    INT NOT NULL,
+    FOREIGN KEY (child_id) REFERENCES child (user_id)
+);
+
+create table egg_destroy_log
+(
+    egg_destroy_log_id INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id           INT      NOT NULL,
+    created_at         DATETIME NOT NULL,
+    destroyed_at       DATETIME,
+    hit_count          SMALLINT NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
@@ -248,23 +256,26 @@ create table hold_special_egg
 
 create table egg_sell_board
 (
-    egg_sell_board_id   INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    child_id            INT      NOT NULL,
-    hold_special_egg_id INT      NOT NULL,
-    wrote_at            DATETIME NOT NULL,
+    egg_sell_board_id  INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id           INT      NOT NULL,
+    special_egg_id     INT      NOT NULL,
+    wrote_at           DATETIME NOT NULL,
+    egg_price_per_once INT      NOT NULL,
+    sell_count         INT      NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id),
-    FOREIGN KEY (hold_special_egg_id) REFERENCES hold_special_egg (hold_special_egg_id)
+    FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
 
 
 create table egg_trade_log
 (
-    egg_trade_log_id INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    seller_id        INT      NOT NULL,
-    buyer_id         INT      NOT NULL,
-    traded_at        DATETIME NOT NULL,
-    special_egg_id   INT      NOT NULL,
-    count            INT      NOT NULL,
+    egg_trade_log_id   INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    seller_id          INT      NOT NULL,
+    buyer_id           INT      NOT NULL,
+    traded_at          DATETIME NOT NULL,
+    special_egg_id     INT      NOT NULL,
+    egg_stock_count    INT      NOT NULL,
+    egg_price_per_once INT      NOT NULL,
     FOREIGN KEY (seller_id) REFERENCES child (user_id),
     FOREIGN KEY (buyer_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
@@ -293,9 +304,19 @@ VALUES (2);
 INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
 VALUES (1, 2, 0, 0, 0);
 
-
 INSERT INTO promise_ticket(promise_ticket_id, child_id, published_at, used_at, requested_at, image_url, description)
 VALUES (1, 1, "2024-08-26T00:00:00", NULL, NULL, NULL, NULL);
+
+INSERT INTO quiz_keyword(keyword)
+VALUES ('은행 대출 연체'),
+       ('펀드'),
+       ('신용카드'),
+       ('대포 통장'),
+       ('핀테크'),
+       ('환율'),
+       ('지폐'),
+       ('찢어진 돈'),
+       ('폐기된 돈');
 
 
 -- INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
@@ -322,3 +343,15 @@ VALUES (1, 1, "2024-08-26T00:00:00", NULL, NULL, NULL, NULL);
 --
 -- INSERT INTO selected_quiz_keyword(child_id, quiz_keyword_id)
 -- VALUES (1, 1);
+
+
+INSERT INTO special_egg(name, probability, image_src)
+VALUES ('다이아몬드 계란', 0.01, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/diamond-egg.png'),
+       ('특별한 다이아몬드 계란', 0.03, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/diamond-egg2.png'),
+       ('점박이 계란', 0.3, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/dotted-egg.png'),
+       ('불타는 계란', 0.09, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/fire-egg.png'),
+       ('투명 유리 계란', 0.07, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/glass-egg.png'),
+       ('황금 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/gold-egg.png'),
+       ('오팔 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/opal-egg.png'),
+       ('선물 계란', 0.2, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/present-egg.png'),
+       ('토끼 계란', 0.2, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/rabbit-egg.png');

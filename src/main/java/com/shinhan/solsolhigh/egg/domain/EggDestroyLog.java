@@ -4,19 +4,21 @@ import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "egg")
+@Table(name = "egg_destroy_log")
 @Entity
-public class Egg {
+public class EggDestroyLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "egg_id")
+    @Column(name = "egg_destroy_log_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,4 +33,27 @@ public class Egg {
 
     @Column(name = "hit_count")
     private Integer hitCount;
+
+    @Transient
+    private static final Integer NEED_HIT_COUNT = 100;
+
+    public Integer getNeedHitCount() {
+        if(hitCount == null || hitCount == 0) {
+            return NEED_HIT_COUNT;
+        }else {
+            return NEED_HIT_COUNT - hitCount;
+        }
+    }
+
+    public void updateHit(int count) {
+        hitCount += count;
+        if(hitCount >= NEED_HIT_COUNT) {
+            destroyedAt = LocalDateTime.now();
+        }
+    }
+
+    public boolean isDestroyed() {
+        return destroyedAt != null;
+    }
+
 }
