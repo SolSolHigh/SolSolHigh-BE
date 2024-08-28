@@ -276,7 +276,6 @@ create table child_register_request
     child_id   INT      NOT NULL,
     parent_id INT      NOT NULL,
     created_at  DATETIME NOT NULL,
-    is_deleted  BOOL     NOT NULL,
     state    CHAR(10) NOT NULL,
 
     FOREIGN KEY (child_id) REFERENCES child (user_id),

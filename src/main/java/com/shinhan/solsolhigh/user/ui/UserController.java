@@ -1,10 +1,7 @@
 package com.shinhan.solsolhigh.user.ui;
 
 import com.shinhan.solsolhigh.common.util.ListUtils;
-import com.shinhan.solsolhigh.user.application.ChildInfo;
-import com.shinhan.solsolhigh.user.application.ParentInfo;
-import com.shinhan.solsolhigh.user.application.UserService;
-import com.shinhan.solsolhigh.user.application.UserInfo;
+import com.shinhan.solsolhigh.user.application.*;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
 import com.shinhan.solsolhigh.user.ui.request.*;
 import com.shinhan.solsolhigh.user.ui.response.ChildSearchResponse;
@@ -98,6 +95,16 @@ public class UserController {
     public ResponseEntity<?> getSessionParentInfo(@AuthenticationPrincipal UserPrinciple userPrinciple){
         ParentInfo info = userService.getParentInfo(userPrinciple.getId());
         return ResponseEntity.ok(SessionParentInfoResponse.from(info));
+    }
+
+    @DeleteMapping("/parents/children/requests/{requestId}")
+    public ResponseEntity<?> removeRegisterChildFromParent(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                                           @PathVariable Integer requestId){
+        userService.removeRegisterChildFromParent(ChildRegisterRequestRemoveFromParentDto.builder()
+                .id(userPrinciple.getId())
+                .requestId(requestId)
+                .build());
+        return ResponseEntity.accepted().build();
     }
 
 }

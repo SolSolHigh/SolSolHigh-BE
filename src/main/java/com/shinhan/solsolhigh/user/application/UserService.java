@@ -152,6 +152,16 @@ public class UserService {
         return ParentInfo.from(child.getParent());
     }
 
+    @Transactional
+    @Authorized(allowed = User.Type.PARENT)
+    public void removeRegisterChildFromParent(ChildRegisterRequestRemoveFromParentDto dto){
+        ChildRegisterRequest request = childRegisterRequestRepository.findById(dto.getRequestId()).orElseThrow(ChildRegisterRequestNotFoundException::new);
+        if(!Objects.equals(dto.getId(), request.getParent().getId()))
+            throw new ChildRegisterRequestMisMatchException();
+        request.changeState(ChildRegisterRequest.State.CANCELED);
+    }
+
+
     private void checkDeletedUser(User user){
         if(user.getIsDeleted())
             throw new UserWithdrawalException();

@@ -32,16 +32,12 @@ public class ChildRegisterRequest{
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
-
     @Enumerated(EnumType.STRING)
     private State state;
 
     @PrePersist
     protected void prePersist() {
         createdAt = LocalDateTime.now();
-        isDeleted = false;
         state = State.REQUESTED;
     }
 
