@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class ChildRegisterResponseFromParentDto {
     private Integer id;
-    private Integer alarmId;
+    private Integer requestId;
     private Boolean isAccept;
 }

@@ -64,8 +64,9 @@ public class UserController {
     }
 
     @PostMapping("/parents/children/request")
-    public ResponseEntity<?> requestRegisterChildFromParent(@RequestBody ChildRegisterRequestFromParentRequest request){
-        userService.requestRegisterChildFromParent(request.toDto());
+    public ResponseEntity<?> requestRegisterChildFromParent(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                                            @RequestBody ChildRegisterRequestFromParentRequest request){
+        userService.requestRegisterChildFromParent(request.toDto(userPrinciple.getId()));
         return ResponseEntity.accepted().build();
     }
 
@@ -82,7 +83,7 @@ public class UserController {
 
     @PostMapping("/children/parent")
     public ResponseEntity<?> responseRegisterChildFromParent(@AuthenticationPrincipal UserPrinciple userPrinciple,
-            @RequestBody ChildRegisterResponseFromParentRequest request){
+                                                             @RequestBody ChildRegisterResponseFromParentRequest request){
         userService.responseRegisterChildFromParent(request.toDto(userPrinciple.getId()));
         return ResponseEntity.accepted().build();
     }

@@ -6,5 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ChildRegisterRequestFromParentDto {
+    private Integer id;
     private String nickname;
 }

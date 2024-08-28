@@ -33,4 +33,12 @@ public interface ChildRepository extends JpaRepository<Child, Integer> {
            WHERE c.id = :id
            """)
     Optional<Child> findByIdUsingFetchParent(Integer id);
+
+    @Query("""
+           SELECT c
+           FROM Child c
+           LEFT JOIN FETCH c.parent
+           WHERE c.nickname = :nickname
+           """)
+    Optional<Child> findByNicknameUsingFetchParent(String nickname);
 }

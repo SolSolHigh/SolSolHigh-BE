@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChildRegisterResponseFromParentRequest {
-    private Integer alarmId;
+    private Integer requestId;
     private Boolean isAccept;
 
     public ChildRegisterResponseFromParentDto toDto(Integer id) {
         return ChildRegisterResponseFromParentDto.builder()
                 .id(id)
-                .alarmId(this.alarmId)
+                .requestId(this.requestId)
                 .isAccept(this.isAccept)
                 .build();
     }

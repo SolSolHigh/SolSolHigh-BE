@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 public class ChildRegisterRequestFromParentRequest {
     private String nickname;
 
-    public ChildRegisterRequestFromParentDto toDto(){
+    public ChildRegisterRequestFromParentDto toDto(Integer id){
         return ChildRegisterRequestFromParentDto.builder()
+                .id(id)
                 .nickname(this.nickname)
                 .build();
     }

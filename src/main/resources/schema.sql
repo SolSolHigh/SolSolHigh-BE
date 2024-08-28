@@ -1,5 +1,4 @@
-DROP TABLE IF EXISTS child_register_alarm;
-DROP TABLE IF EXISTS alarm;
+DROP TABLE IF EXISTS child_register_request;
 DROP TABLE IF EXISTS egg_trade_log;
 DROP TABLE IF EXISTS egg_sell_board;
 DROP TABLE IF EXISTS hold_special_egg;
@@ -270,23 +269,18 @@ create table egg_trade_log
     FOREIGN KEY (buyer_id) REFERENCES child (user_id),
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
-create table alarm
+
+create table child_register_request
 (
-    alarm_id    INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    sender_id   INT      NOT NULL,
-    receiver_id INT      NOT NULL,
+    child_register_request_id    INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id   INT      NOT NULL,
+    parent_id INT      NOT NULL,
     created_at  DATETIME NOT NULL,
     is_deleted  BOOL     NOT NULL,
-    type        CHAR(1)  NULL,
-    FOREIGN KEY (sender_id) REFERENCES user (user_id),
-    FOREIGN KEY (receiver_id) REFERENCES user (user_id)
-);
-
-create table child_register_alarm
-(
-    alarm_id INT      NOT NULL PRIMARY KEY,
     state    CHAR(10) NOT NULL,
-    FOREIGN KEY (alarm_id) REFERENCES alarm (alarm_id)
+
+    FOREIGN KEY (child_id) REFERENCES child (user_id),
+    FOREIGN KEY (parent_id) REFERENCES parent (user_id)
 );
 
 

@@ -1,11 +1,6 @@
 package com.shinhan.solsolhigh.user.application;
 
-import com.shinhan.solsolhigh.alarm.domain.ChildRegisterAlarm;
-import com.shinhan.solsolhigh.alarm.domain.ChildRegisterAlarmRepository;
-import com.shinhan.solsolhigh.alarm.exception.AlarmMisMatchException;
-import com.shinhan.solsolhigh.alarm.exception.AlarmNotFoundException;
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
-import com.shinhan.solsolhigh.common.util.JPAUtils;
 import com.shinhan.solsolhigh.common.util.ListUtils;
 import com.shinhan.solsolhigh.user.domain.*;
 import com.shinhan.solsolhigh.user.exception.*;
@@ -24,7 +19,7 @@ public class UserService {
     private final HttpSession session;
     private final UserRepository userRepository;
     private final ChildRepository childRepository;
-    private final ChildRegisterAlarmRepository childRegisterAlarmRepository;
+    private final ChildRegisterRequestRepository childRegisterRequestRepository;
     private final TemporaryUserRepository temporaryUserRepository;
     private final ParentRepository parentRepository;
 
@@ -85,6 +80,13 @@ public class UserService {
         Child child = childRepository.findByNickname(dto.getNickname()).orElseThrow(UserNotFoundException::new);
         checkDeletedUser(child);
         checkExistsParent(child);
+        Parent parent = parentRepository.findById(dto.getId()).orElseThrow(UserNotFoundException::new);
+        ChildRegisterRequest request = ChildRegisterRequest.builder()
+                .child(child)
+                .parent(parent)
+                .build();
+
+        childRegisterRequestRepository.save(request);
         //TODO. 알림 서비스 호출
     }
 
@@ -102,28 +104,26 @@ public class UserService {
     @Transactional
     @Authorized(allowed = User.Type.CHILD)
     public void responseRegisterChildFromParent(ChildRegisterResponseFromParentDto dto) {
-        Child child = childRepository.findById(dto.getId()).orElseThrow(UserNotFoundException::new);
+        Child child = childRepository.findByIdUsingFetchParent(dto.getId()).orElseThrow(UserNotFoundException::new);
         checkDeletedUser(child);
         checkExistsParent(child);
 
-        ChildRegisterAlarm alarm = childRegisterAlarmRepository.findById(dto.getAlarmId()).orElseThrow(AlarmNotFoundException::new);
+        ChildRegisterRequest request = childRegisterRequestRepository.findById(dto.getRequestId()).orElseThrow(ChildRegisterRequestNotFoundException::new);
 
-        if(!alarm.getReceiver().equals(child))
-            throw new AlarmMisMatchException();
+        if(!request.getChild().equals(child))
+            throw new ChildRegisterRequestMisMatchException();
 
-        User user = alarm.getSender();
-        if(user.getType() != User.Type.PARENT)
-            throw new UserTypeMismatchException();
-
-        Parent parent = JPAUtils.typeCast(Parent.class, user);
+        Parent parent = request.getParent();
+        if (parent == null)
+            throw new ChildRegisterRequestMisMatchException();
         checkDeletedUser(parent);
 
         if(dto.getIsAccept()){
-            alarm.changeState(ChildRegisterAlarm.State.ACCEPTED);
+            request.changeState(ChildRegisterRequest.State.ACCEPTED);
             child.changeParent(parent);
             //TODO. 수락 알림 서비스 호출
         } else {
-            alarm.changeState(ChildRegisterAlarm.State.REJECTED);
+            request.changeState(ChildRegisterRequest.State.REJECTED);
             //TODO. 거절 알림 서비스 호출
         }
     }
