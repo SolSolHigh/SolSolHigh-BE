@@ -26,4 +26,7 @@ public interface ChildRegisterRequestRepository extends JpaRepository<ChildRegis
            ORDER BY crr.createdAt DESC
            """)
     List<ChildRegisterRequest> findByChildIdAndStateUsingFetchParent(Integer id, ChildRegisterRequest.State state);
+
+    Boolean existsByChildIdAndParentIdAndState(Integer childId, Integer parentId, ChildRegisterRequest.State state);
 }
+

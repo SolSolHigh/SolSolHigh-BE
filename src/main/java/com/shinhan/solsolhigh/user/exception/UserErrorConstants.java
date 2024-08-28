@@ -28,7 +28,8 @@ public enum UserErrorConstants implements ErrorConstantDefinition {
     FAMILY_NOT_EXIST("자식과 연관관계가 없습니다.", "U018", HttpStatus.NOT_FOUND),
     CHILDREGISTERREQUEST_NOT_FOUND("존재하지 않는 자식 등록 요청", "U019", HttpStatus.NOT_FOUND),
     CHILDREGISTERREQUEST_STATE_UNCHANGEABLE("상태를 변경할 수 없는 자식 등록 요청", "U020", HttpStatus.BAD_REQUEST),
-    CHILDREGISTERREQUEST_MISMATCH("자식 등록 요청 정보가 올바르지 않음", "U021", HttpStatus.BAD_REQUEST);;
+    CHILDREGISTERREQUEST_MISMATCH("자식 등록 요청 정보가 올바르지 않음", "U021", HttpStatus.BAD_REQUEST),
+    CHILDREGISTERREQUEST_ALREADY_REQUESTED("이미 요청된 자식 등록 정보", "U022", HttpStatus.CONFLICT);
     private final String message;
     private final String statusCode;
     private final HttpStatus httpStatus;

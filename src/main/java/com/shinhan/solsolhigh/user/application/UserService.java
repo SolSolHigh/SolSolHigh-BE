@@ -81,6 +81,9 @@ public class UserService {
         checkDeletedUser(child);
         checkExistsParent(child);
         Parent parent = parentRepository.findById(dto.getId()).orElseThrow(UserNotFoundException::new);
+        if(childRegisterRequestRepository.existsByChildIdAndParentIdAndState(child.getId(), parent.getId(), ChildRegisterRequest.State.REQUESTED))
+            throw new ChildRegisterRequestAlreadyRequestedException();
+
         ChildRegisterRequest request = ChildRegisterRequest.builder()
                 .child(child)
                 .parent(parent)
