@@ -7,6 +7,7 @@ import com.shinhan.solsolhigh.egg.query.EggCountFindService;
 import com.shinhan.solsolhigh.egg.query.EggTodayStatusFindService;
 import com.shinhan.solsolhigh.egg.ui.dto.EggCountView;
 import com.shinhan.solsolhigh.egg.ui.dto.EggTodayStatusView;
+import com.shinhan.solsolhigh.egg.ui.dto.SpecialEggView;
 import com.shinhan.solsolhigh.user.domain.User;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +42,8 @@ public class EggController {
     @PatchMapping("/now")
     @Authorized(allowed = User.Type.CHILD)
     public ResponseEntity<?> eggStatusUpdate(@AuthenticationPrincipal UserPrinciple userPrinciple, @RequestBody EggHitCountUpdateRequest request) {
-        eggHitCountUpdateService.eggHitCountUpdate(request, userPrinciple.getId(), LocalDateTime.now());
-        return ResponseEntity.accepted().build();
+        SpecialEggView specialEggView = eggHitCountUpdateService.eggHitCountUpdate(request, userPrinciple.getId(), LocalDateTime.now());
+        return ResponseEntity.accepted().body(specialEggView);
     }
 
 }

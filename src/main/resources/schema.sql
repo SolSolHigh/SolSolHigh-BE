@@ -329,7 +329,7 @@ INSERT INTO parent(user_id)
 VALUES (2);
 
 INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
-VALUES (1, 2, 150, 0, 0);
+VALUES (1, 2, 0, 0, 0);
 
 INSERT INTO promise_ticket(promise_ticket_id, child_id, published_at, used_at, requested_at, image_url, description)
 VALUES (1, 1, "2024-08-26T00:00:00", NULL, NULL, NULL, NULL);
