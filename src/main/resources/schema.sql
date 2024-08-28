@@ -1,5 +1,4 @@
-DROP TABLE IF EXISTS child_register_alarm;
-DROP TABLE IF EXISTS alarm;
+DROP TABLE IF EXISTS child_register_request;
 DROP TABLE IF EXISTS egg_trade_log;
 DROP TABLE IF EXISTS egg_sell_board;
 DROP TABLE IF EXISTS hold_special_egg;
@@ -282,29 +281,22 @@ create table egg_trade_log
     FOREIGN KEY (special_egg_id) REFERENCES special_egg (special_egg_id)
 );
 
-create table alarm
+create table child_register_request
 (
-    alarm_id    INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    sender_id   INT      NOT NULL,
-    receiver_id INT      NOT NULL,
+    child_register_request_id    INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id   INT      NOT NULL,
+    parent_id INT      NOT NULL,
     created_at  DATETIME NOT NULL,
-    is_deleted  BOOL     NOT NULL,
-    type        CHAR(1)  NULL,
-    FOREIGN KEY (sender_id) REFERENCES user (user_id),
-    FOREIGN KEY (receiver_id) REFERENCES user (user_id)
-);
-
-create table child_register_alarm
-(
-    alarm_id INT      NOT NULL PRIMARY KEY,
     state    CHAR(10) NOT NULL,
-    FOREIGN KEY (alarm_id) REFERENCES alarm (alarm_id)
+
+    FOREIGN KEY (child_id) REFERENCES child (user_id),
+    FOREIGN KEY (parent_id) REFERENCES parent (user_id)
 );
 
 
-INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
-VALUES (1, 'c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
-       (2, 'p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
+INSERT INTO user(type, email, name, nickname, birthday, user_gender, is_deleted)
+VALUES ('c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
+       ('p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
 
 INSERT INTO parent(user_id)
 VALUES (2);

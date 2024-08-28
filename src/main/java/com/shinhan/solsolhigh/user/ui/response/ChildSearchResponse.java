@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class ChildSearchResponse {
     private String name;
     private String nickname;
+    private String gender;
     private LocalDate birthday;
 
     public static ChildSearchResponse from(ChildInfo childInfo) {
@@ -18,6 +19,7 @@ public class ChildSearchResponse {
                 .name(childInfo.getName())
                 .nickname(childInfo.getNickname())
                 .birthday(childInfo.getBirthday())
+                .gender(childInfo.getGender().getType().name())
                 .build();
     }
 }

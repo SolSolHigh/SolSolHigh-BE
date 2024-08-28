@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ChildRegisterRequestFromParentDto {
+public class ChildRegisterRequestRemoveFromParentDto {
     private Integer id;
-    private String nickname;
+    private Integer requestId;
 }

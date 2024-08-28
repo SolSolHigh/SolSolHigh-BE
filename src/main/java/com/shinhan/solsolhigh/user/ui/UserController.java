@@ -1,14 +1,10 @@
 package com.shinhan.solsolhigh.user.ui;
 
 import com.shinhan.solsolhigh.common.util.ListUtils;
-import com.shinhan.solsolhigh.user.application.ChildInfo;
-import com.shinhan.solsolhigh.user.application.UserService;
-import com.shinhan.solsolhigh.user.application.UserInfo;
+import com.shinhan.solsolhigh.user.application.*;
 import com.shinhan.solsolhigh.user.domain.UserPrinciple;
 import com.shinhan.solsolhigh.user.ui.request.*;
-import com.shinhan.solsolhigh.user.ui.response.ChildSearchResponse;
-import com.shinhan.solsolhigh.user.ui.response.SessionChildInfoResponse;
-import com.shinhan.solsolhigh.user.ui.response.SessionUserInfoResponse;
+import com.shinhan.solsolhigh.user.ui.response.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +28,7 @@ public class UserController {
     @GetMapping("/users/info")
     public ResponseEntity<?> getSessionUserInfo(@AuthenticationPrincipal UserPrinciple userPrinciple) {
         UserInfo userInfo = userService.getUserInfo(userPrinciple.getId());
-        return ResponseEntity.ok(SessionUserInfoResponse.of(userInfo));
+        return ResponseEntity.ok(SessionUserInfoResponse.from(userInfo));
     }
 
     @PatchMapping("/users/info")
@@ -62,8 +58,9 @@ public class UserController {
     }
 
     @PostMapping("/parents/children/request")
-    public ResponseEntity<?> requestRegisterChildFromParent(@RequestBody ChildRegisterRequestFromParentRequest request){
-        userService.requestRegisterChildFromParent(request.toDto());
+    public ResponseEntity<?> requestRegisterChildFromParent(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                                            @RequestBody ChildRegisterRequestFromParentRequest request){
+        userService.requestRegisterChildFromParent(request.toDto(userPrinciple.getId()));
         return ResponseEntity.accepted().build();
     }
 
@@ -80,7 +77,7 @@ public class UserController {
 
     @PostMapping("/children/parent")
     public ResponseEntity<?> responseRegisterChildFromParent(@AuthenticationPrincipal UserPrinciple userPrinciple,
-            @RequestBody ChildRegisterResponseFromParentRequest request){
+                                                             @RequestBody ChildRegisterResponseFromParentRequest request){
         userService.responseRegisterChildFromParent(request.toDto(userPrinciple.getId()));
         return ResponseEntity.accepted().build();
     }
@@ -89,6 +86,34 @@ public class UserController {
     public ResponseEntity<?> signupUser(@RequestBody @Valid UserSignupRequest request){
         userService.signupUser(request.toDto());
         return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/parents")
+    public ResponseEntity<?> getSessionParentInfo(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        ParentInfo info = userService.getParentInfo(userPrinciple.getId());
+        return ResponseEntity.ok(SessionParentInfoResponse.from(info));
+    }
+
+    @DeleteMapping("/parents/children/requests/{requestId}")
+    public ResponseEntity<?> removeRegisterChildFromParent(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                                           @PathVariable Integer requestId){
+        userService.removeRegisterChildFromParent(ChildRegisterRequestRemoveFromParentDto.builder()
+                .id(userPrinciple.getId())
+                .requestId(requestId)
+                .build());
+        return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/parents/children/requests")
+    public ResponseEntity<?> getRegisterChildFromParentByParent(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        List<ChildRegisterRequestInfoAndChildInfo> infos = userService.getRegisterChildFromParentByParent(userPrinciple.getId());
+        return ResponseEntity.ok(ListUtils.applyFunctionToElements(infos, ChildRegisterRequestFromParentGetByParent::from));
+    }
+
+    @GetMapping("/children/parents/requests")
+    public ResponseEntity<?> getRegisterChildFromParentByChild(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        List<ChildRegisterRequestInfoAndParentInfo> infos = userService.getRegisterChildFromParentByChild(userPrinciple.getId());
+        return ResponseEntity.ok(ListUtils.applyFunctionToElements(infos, ChildRegisterRequestFromParentGetByChild::from));
     }
 
 }
