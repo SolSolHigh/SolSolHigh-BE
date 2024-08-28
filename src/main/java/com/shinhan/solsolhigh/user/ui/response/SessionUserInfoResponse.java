@@ -17,7 +17,7 @@ public class SessionUserInfoResponse {
     private LocalDate birthday;
     private Type type;
 
-    public static SessionUserInfoResponse of(UserInfo userInfo){
+    public static SessionUserInfoResponse from(UserInfo userInfo){
         return SessionUserInfoResponse.builder()
                 .nickname(userInfo.getNickname())
                 .email(userInfo.getEmail())
