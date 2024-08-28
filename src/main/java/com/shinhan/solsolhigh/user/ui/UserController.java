@@ -110,4 +110,10 @@ public class UserController {
         return ResponseEntity.ok(ListUtils.applyFunctionToElements(infos, ChildRegisterRequestFromParentGetByParent::from));
     }
 
+    @GetMapping("/children/parents/requests")
+    public ResponseEntity<?> getRegisterChildFromParentByChild(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        List<ChildRegisterRequestInfoAndParentInfo> infos = userService.getRegisterChildFromParentByChild(userPrinciple.getId());
+        return ResponseEntity.ok(ListUtils.applyFunctionToElements(infos, ChildRegisterRequestFromParentGetByChild::from));
+    }
+
 }

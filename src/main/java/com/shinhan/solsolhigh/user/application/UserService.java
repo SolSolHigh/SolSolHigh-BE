@@ -170,6 +170,15 @@ public class UserService {
         return ListUtils.applyFunctionToElements(requests, (element) -> ChildRegisterRequestInfoAndChildInfo.of(element, element.getChild()));
     }
 
+    @Transactional(readOnly = true)
+    @Authorized(allowed = User.Type.CHILD)
+    public List<ChildRegisterRequestInfoAndParentInfo> getRegisterChildFromParentByChild(Integer id) {
+        List<ChildRegisterRequest> requests = ListUtils.removeIf(childRegisterRequestRepository
+                        .findByChildIdAndStateUsingFetchParent(id, ChildRegisterRequest.State.REQUESTED),
+                request -> request.getParent().getIsDeleted());
+        return ListUtils.applyFunctionToElements(requests, (element) -> ChildRegisterRequestInfoAndParentInfo.of(element, element.getParent()));
+    }
+
 
     private void checkDeletedUser(User user){
         if(user.getIsDeleted())
@@ -189,4 +198,6 @@ public class UserService {
         Parent parent = (Parent) user;
         childRepository.removeParent(parent);
     }
+
+
 }

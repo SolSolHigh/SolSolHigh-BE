@@ -18,4 +18,12 @@ public interface ChildRegisterRequestRepository extends JpaRepository<ChildRegis
            """)
     List<ChildRegisterRequest> findByParentIdAndStateUsingFetchChild(Integer id, ChildRegisterRequest.State state);
 
+    @Query("""
+           SELECT crr
+           FROM ChildRegisterRequest crr
+           LEFT JOIN FETCH crr.parent
+           WHERE crr.child.id = :id AND crr.state = :state
+           ORDER BY crr.createdAt DESC
+           """)
+    List<ChildRegisterRequest> findByChildIdAndStateUsingFetchParent(Integer id, ChildRegisterRequest.State state);
 }
