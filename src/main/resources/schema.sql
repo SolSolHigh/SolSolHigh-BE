@@ -80,6 +80,7 @@ create table experience_log
     child_id          INT          NOT NULL,
     type              CHAR(10)     NOT NULL,
     description       VARCHAR(100) NOT NULL,
+    created_at      DATETIME NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
