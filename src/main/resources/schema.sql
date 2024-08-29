@@ -108,7 +108,7 @@ create table notification_log(
     notification_title VARCHAR(40) NOT NULL,
     notification_body VARCHAR(80) NOT NULL,
     notification_type VARCHAR(30) NOT NULL,
-    notification_target_id VARCHAR(30) NOT NULL, -- 닉네임도 적용됨. 바디에 저장되어 전송될 예정.
+    notification_target_id VARCHAR(30), -- 닉네임도 적용됨. 바디에 저장되어 전송될 예정.
     published_at DATETIME NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
