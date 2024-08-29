@@ -3,9 +3,11 @@ package com.shinhan.solsolhigh.fcm.domain;
 import com.shinhan.solsolhigh.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+@Getter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

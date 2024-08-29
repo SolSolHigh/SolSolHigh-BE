@@ -56,6 +56,6 @@ public class EggSellBoardBuyService {
         if (getBoard.soldOut()) {
             eggSellBoardRepository.delete(getBoard);
         }
-        // TODO : 판매되었다/구매되었다는 알림 두 사람 다 전송.
+
     }
 }

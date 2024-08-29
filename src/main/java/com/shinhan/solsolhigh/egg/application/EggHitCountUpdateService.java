@@ -57,7 +57,9 @@ public class EggHitCountUpdateService {
                     holdSpecialEggRepository.save(HoldSpecialEgg.builder().count(1).child(childRepository.getReferenceById(childId)).specialEgg(generate).build());
                 }
 
-                return SpecialEggView.builder().specialEggId(generate.getId()).specialEggName(generate.getName()).imageUrl(generate.getImageSrc()).build();
+                return SpecialEggView.builder().specialEggId(generate.getId()).specialEggName(generate.getName()).imageUrl(generate.getImageSrc()).isFail(false).build();
+            }else {
+                return SpecialEggView.builder().isFail(true).build();
             }
         }
         return null;

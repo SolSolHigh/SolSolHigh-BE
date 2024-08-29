@@ -43,7 +43,12 @@ public class EggController {
     @Authorized(allowed = User.Type.CHILD)
     public ResponseEntity<?> eggStatusUpdate(@AuthenticationPrincipal UserPrinciple userPrinciple, @RequestBody EggHitCountUpdateRequest request) {
         SpecialEggView specialEggView = eggHitCountUpdateService.eggHitCountUpdate(request, userPrinciple.getId(), LocalDateTime.now());
-        return ResponseEntity.accepted().body(specialEggView);
+        if(specialEggView == null) {
+            return ResponseEntity.accepted().build();
+        }else {
+            return ResponseEntity.accepted().body(specialEggView);
+        }
+
     }
 
 }
