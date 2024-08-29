@@ -38,8 +38,9 @@ create table prefix_sum_exp
     prefix_sum_exp INT      NOT NULL
 );
 
-create table level_assets (
-    level SMALLINT PRIMARY KEY,
+create table level_assets
+(
+    level     SMALLINT PRIMARY KEY,
     asset_url TEXT NOT NULL,
     FOREIGN KEY (level) REFERENCES prefix_sum_exp (level)
 );
@@ -88,7 +89,7 @@ create table experience_log
     child_id          INT          NOT NULL,
     type              CHAR(10)     NOT NULL,
     description       VARCHAR(100) NOT NULL,
-    created_at      DATETIME NOT NULL,
+    created_at        DATETIME     NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
@@ -102,14 +103,15 @@ create table fcm
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 
-create table notification_log(
-    notification_log_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    notification_title VARCHAR(40) NOT NULL,
-    notification_body VARCHAR(80) NOT NULL,
-    notification_type VARCHAR(30) NOT NULL,
+create table notification_log
+(
+    notification_log_id    INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id                INT         NOT NULL,
+    notification_title     VARCHAR(40) NOT NULL,
+    notification_body      VARCHAR(80) NOT NULL,
+    notification_type      VARCHAR(30) NOT NULL,
     notification_target_id VARCHAR(30), -- 닉네임도 적용됨. 바디에 저장되어 전송될 예정.
-    published_at DATETIME NOT NULL,
+    published_at           DATETIME    NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 
@@ -188,13 +190,13 @@ create table child_savings_status_by_period
 -- 약속권
 create table promise_ticket
 (
-    promise_ticket_id    INT            NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    child_id             INT            NOT NULL,
-    published_at        DATETIME        NOT NULL,
-    used_at             DATETIME        NULL,
-    requested_at        DATETIME        NULL,
-    image_url           VARCHAR(255)    NULL,
-    description         VARCHAR(255)    NULL,
+    promise_ticket_id INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id          INT          NOT NULL,
+    published_at      DATETIME     NOT NULL,
+    used_at           DATETIME     NULL,
+    requested_at      DATETIME     NULL,
+    image_url         VARCHAR(255) NULL,
+    description       VARCHAR(255) NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
@@ -314,11 +316,11 @@ create table egg_trade_log
 
 create table child_register_request
 (
-    child_register_request_id    INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    child_id   INT      NOT NULL,
-    parent_id INT      NOT NULL,
-    created_at  DATETIME NOT NULL,
-    state    CHAR(10) NOT NULL,
+    child_register_request_id INT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    child_id                  INT      NOT NULL,
+    parent_id                 INT      NOT NULL,
+    created_at                DATETIME NOT NULL,
+    state                     CHAR(10) NOT NULL,
 
     FOREIGN KEY (child_id) REFERENCES child (user_id),
     FOREIGN KEY (parent_id) REFERENCES parent (user_id)
@@ -388,6 +390,6 @@ VALUES ('다이아몬드 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-
        ('오팔 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/opal-egg.png'),
        ('선물 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/present-egg.png'),
        ('토끼 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/rabbit-egg.png'),
-       ('쏠쏠하이 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/solsolhigh-egg.png'),
+       ('쏠쏠하이 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/solsolhigh-egg.png');
 
 
