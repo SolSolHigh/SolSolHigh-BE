@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS notification_log;
 DROP TABLE IF EXISTS child_register_request;
 DROP TABLE IF EXISTS experience_log;
 DROP TABLE IF EXISTS egg_trade_log;
@@ -98,6 +99,17 @@ create table fcm
     fcm_id  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id INT          NOT NULL,
     token   VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (user_id)
+);
+
+create table notification_log(
+    notification_log_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    notification_title VARCHAR(40) NOT NULL,
+    notification_body VARCHAR(80) NOT NULL,
+    notification_type VARCHAR(30) NOT NULL,
+    notification_target_id VARCHAR(30) NOT NULL, -- 닉네임도 적용됨. 바디에 저장되어 전송될 예정.
+    published_at DATETIME NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 

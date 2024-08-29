@@ -1,4 +1,4 @@
-package com.shinhan.solsolhigh.fcm.application;
+package com.shinhan.solsolhigh.fcm.infra;
 
 import com.google.firebase.messaging.*;
 import lombok.extern.slf4j.Slf4j;
@@ -11,15 +11,17 @@ import java.time.LocalDateTime;
 public class FirebaseCloudMessageService {
 
 
-    public String sendDataMessageTo(Long notificationId, String targetToken, String title, String body) throws FirebaseMessagingException {
+    public String sendDataMessageTo(Integer notificationId, String targetToken, String title, String body, String type, String target) throws FirebaseMessagingException {
 
         Message msg = Message.builder()
                 .putData("time", LocalDateTime.now().toString())
                 .putData("notification_id", notificationId != null ? notificationId.toString() : "null")
                 .putData("title", title)
                 .putData("body", body)
+                .putData("type", type)
+                .putData("target", target)
                 .setToken(targetToken)
-                .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("apns-priority","10").build())
+                .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("apns-priority", "10").build())
 //                .setNotification(Notification.builder()
 //                        .setBody(body).setTitle(title)
 //                        .build())
