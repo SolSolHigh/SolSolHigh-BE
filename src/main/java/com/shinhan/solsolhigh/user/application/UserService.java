@@ -1,7 +1,10 @@
 package com.shinhan.solsolhigh.user.application;
 
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
+import com.shinhan.solsolhigh.common.event.Events;
 import com.shinhan.solsolhigh.common.util.ListUtils;
+import com.shinhan.solsolhigh.notification.domain.NotificationType;
+import com.shinhan.solsolhigh.notification.infra.NotificationRequestedEvent;
 import com.shinhan.solsolhigh.user.domain.*;
 import com.shinhan.solsolhigh.user.exception.*;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -89,8 +93,9 @@ public class UserService {
                 .parent(parent)
                 .build();
 
-        childRegisterRequestRepository.save(request);
+        ChildRegisterRequest save = childRegisterRequestRepository.save(request);
         //TODO. 알림 서비스 호출
+        Events.raise(NotificationRequestedEvent.builder().userId(child.getId()).notificationType(NotificationType.CHILD_ENROLL_REQUEST).bodyValue(parent.getNickname()).targetId(save.getId().toString()).timestamp(LocalDateTime.now()).build());
     }
 
     @Transactional
@@ -125,9 +130,11 @@ public class UserService {
             request.changeState(ChildRegisterRequest.State.ACCEPTED);
             child.changeParent(parent);
             //TODO. 수락 알림 서비스 호출
+            Events.raise(NotificationRequestedEvent.builder().userId(parent.getId()).notificationType(NotificationType.CHILD_ENROLL_ACCESS).bodyValue(child.getNickname()).targetId(request.getId().toString()).timestamp(LocalDateTime.now()).build());
         } else {
             request.changeState(ChildRegisterRequest.State.REJECTED);
             //TODO. 거절 알림 서비스 호출
+            Events.raise(NotificationRequestedEvent.builder().userId(parent.getId()).notificationType(NotificationType.CHILD_ENROLL_DENY).bodyValue(child.getNickname()).targetId(request.getId().toString()).timestamp(LocalDateTime.now()).build());
         }
     }
 
