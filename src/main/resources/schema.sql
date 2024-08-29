@@ -377,13 +377,17 @@ VALUES ('은행 대출 연체'),
 
 
 INSERT INTO special_egg(name, probability, image_src)
-VALUES ('다이아몬드 계란', 0.01, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/diamond-egg.png'),
-       ('특별한 다이아몬드 계란', 0.03, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/diamond-egg2.png'),
-       ('점박이 계란', 0.3, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/dotted-egg.png'),
-       ('불타는 계란', 0.09, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/fire-egg.png'),
-       ('투명 유리 계란', 0.07, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/glass-egg.png'),
-       ('황금 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/gold-egg.png'),
+VALUES ('다이아몬드 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/diamond-egg.png'),
+       ('우주 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/universe-egg.png'),
+       ('바다 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/sea-egg.png'),
+       ('반짝이는 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/diamond-egg2.png'),
+       ('점박이 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/dotted-egg.png'),
+       ('불타는 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/fire-egg.png'),
+       ('투명 유리 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/glass-egg.png'),
+       ('황금 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/gold-egg.png'),
        ('오팔 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/opal-egg.png'),
-       ('선물 계란', 0.2, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/present-egg.png'),
-       ('토끼 계란', 0.2, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/rabbit-egg.png');
+       ('선물 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/present-egg.png'),
+       ('토끼 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/rabbit-egg.png'),
+       ('쏠쏠하이 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/solsolhigh-egg.png'),
+
 
