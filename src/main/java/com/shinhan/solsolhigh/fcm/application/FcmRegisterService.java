@@ -17,6 +17,9 @@ public class FcmRegisterService {
 
     @Transactional
     public void registerFcmToken(FcmTokenRegisterRequest fcmTokenRegisterRequest, UserPrinciple userPrinciple) {
+        if(fcmRepository.existsByUser_IdAndToken(userPrinciple.getId(), fcmTokenRegisterRequest.getFcmToken())) {
+            return;
+        }
         User user;
         if(User.Type.CHILD.equals(userPrinciple.getType())) {
             user = childRepository.getReferenceById(userPrinciple.getId());
