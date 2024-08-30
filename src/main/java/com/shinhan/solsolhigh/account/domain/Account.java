@@ -3,15 +3,18 @@ package com.shinhan.solsolhigh.account.domain;
 import com.shinhan.solsolhigh.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-@Builder
+import lombok.experimental.SuperBuilder;
+@Entity
+@Getter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "account")
-@Entity
-public class Account {
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type")
+public abstract class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
@@ -21,16 +24,12 @@ public class Account {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bank_code_id")
-    private BankCode bankCode;
+    @Column(name = "account_no")
+    private String accountNo;
 
-    @Column(name = "account_type")
-    private Character accountType;
+    public enum Type{
+        DEMAND_DEPOSIT, DEPOSIT, SAVING
+    }
 
-    @Column(name = "account_number")
-    private String accountNumber;
-
-    @Column(name = "account_name")
-    private String accountName;
+    public abstract Type getType();
 }

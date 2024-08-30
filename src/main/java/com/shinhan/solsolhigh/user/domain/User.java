@@ -1,5 +1,6 @@
 package com.shinhan.solsolhigh.user.domain;
 
+import com.shinhan.solsolhigh.account.domain.MasterBankMember;
 import com.shinhan.solsolhigh.user.exception.UserNicknameSameException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDate;
@@ -46,6 +48,10 @@ public abstract class User {
 
     @Column
     private Boolean isDeleted;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private MasterBankMember masterBankMember;
 
     public Integer getAge() {
         if (birthday == null)

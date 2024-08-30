@@ -1,22 +1,22 @@
 package com.shinhan.solsolhigh.account.domain;
 
-
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+@Getter
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-@Table
+@Table(name = "demand_deposit")
 @Entity
-@DiscriminatorValue("w")
-public class WeekAutoTransferRule extends AutoTransferRule {
-    @Column
-    private int day;
+@DiscriminatorValue("a")
+@NoArgsConstructor
+public class DemandDeposit extends Account{
+
+    @Override
+    public Type getType() {
+        return Type.DEMAND_DEPOSIT;
+    }
 }
