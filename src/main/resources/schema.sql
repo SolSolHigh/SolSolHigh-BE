@@ -454,7 +454,7 @@ FROM financial_quiz WHERE child_id = 3;
 -- 규현이의 6일간 퀴즈 풀이 로그 (스트릭)
 INSERT INTO between_of_day_quiz_solve_log (child_id, started_at, end_at, count)
 VALUES
-    (4, CURDATE() - INTERVAL 6 DAY, CURDATE() - INTERVAL 1 DAY, 6);
+    (4, CURDATE() - INTERVAL 6 DAY, CURDATE() + INTERVAL 1 DAY, 6);
 
 # -- Financial Quiz
 # INSERT INTO financial_quiz(description, answer, quiz_keyword_id, child_id, created_at, quiz_explanation)
