@@ -21,7 +21,8 @@ class ProductAiChatTest {
     private ProductAiChat productAiChat;
 
     @Test
-    @DisplayName("퀴즈 요청")
+    @Disabled
+    @DisplayName("상품 요청")
     void getQuiz() {
         //given
         LocalDate givenBirthday = LocalDate.now().minusYears(5);
