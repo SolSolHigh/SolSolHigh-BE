@@ -1,7 +1,12 @@
 package com.shinhan.solsolhigh.mission.domain;
 
+import com.shinhan.solsolhigh.common.event.Events;
+import com.shinhan.solsolhigh.experience.domain.ExperienceLogType;
+import com.shinhan.solsolhigh.experience.infra.ExperienceUpdatedEvent;
 import com.shinhan.solsolhigh.mission.application.MissionRegisterRequest;
 import com.shinhan.solsolhigh.mission.application.MissionUpdateRequest;
+import com.shinhan.solsolhigh.notification.domain.NotificationType;
+import com.shinhan.solsolhigh.notification.infra.NotificationRequestedEvent;
 import com.shinhan.solsolhigh.user.domain.Child;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -77,9 +82,24 @@ public class Mission {
             throw new IllegalArgumentException("Mission is finished");
         }
 
-        if (updateRequest.getIsFinished() != null)
-            //TODO : 미션이 완료되었을 때 부모에게 알리는 로직 필요.
-            this.isFinished = updateRequest.getIsFinished();
+        if (Boolean.TRUE.equals(updateRequest.getIsFinished())){
+            this.isFinished = Boolean.TRUE;
+            Events.raise(NotificationRequestedEvent.builder().userId(child.getId()).notificationType(NotificationType.MISSION_SUCCESS).bodyValue(description).targetId(id.toString()).timestamp(LocalDateTime.now()).build());
+            switch(this.level) {
+                case '1':
+                    Events.raise(new ExperienceUpdatedEvent(this.child.getId(), ExperienceLogType.MISSION_1));
+                    break;
+                case '2':
+                    Events.raise(new ExperienceUpdatedEvent(this.child.getId(), ExperienceLogType.MISSION_2));
+                    break;
+                case '3':
+                    Events.raise(new ExperienceUpdatedEvent(this.child.getId(), ExperienceLogType.MISSION_3));
+                    break;
+                default:
+            }
+        }
+
+
 
         if (updateRequest.getMissionStartAt() != null)
             this.startAt = updateRequest.getMissionStartAt();

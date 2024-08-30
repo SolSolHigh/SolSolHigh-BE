@@ -27,6 +27,6 @@ public class EggSellBoardView {
         this.writtenAt = writtenAt;
         this.pricePerOnce = pricePerOnce;
         this.sellCount = sellCount;
-        specialEggInfo = new SpecialEggView(specialEggId, specialEggName, imageUrl);
+        specialEggInfo = new SpecialEggView(specialEggId, specialEggName, imageUrl, null);
     }
 }

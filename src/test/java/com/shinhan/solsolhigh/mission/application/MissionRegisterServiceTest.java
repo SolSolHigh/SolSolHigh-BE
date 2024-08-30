@@ -155,7 +155,7 @@ class MissionRegisterServiceTest {
 
             MissionRegisterRequest request = MissionRegisterRequest
                     .builder()
-                    .childId(1)
+
                     .missionLevel('4')
                     .missionStartAt(LocalDateTime.now())
                     .missionEndAt(LocalDateTime.now().plusDays(1))
@@ -200,7 +200,7 @@ class MissionRegisterServiceTest {
         @Test
         void fail4() {
             //given
-            when(missionRepository.countByChildIdAndIsFinished(1, false)).thenReturn(6);
+            when(missionRepository.countByChild_NicknameAndIsFinished(null, false)).thenReturn(6);
 
             Child child = Child.builder()
                     .currentExp(0)

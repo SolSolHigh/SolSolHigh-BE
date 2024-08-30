@@ -15,7 +15,7 @@ public class HoldSpecialEggView {
 
     public HoldSpecialEggView(Integer holdSpecialEggId, Integer specialEggId, String specialEggName, String imageUrl, Integer eggCount ) {
         this.holdSpecialEggId = holdSpecialEggId;
-        specialEggInfo = new SpecialEggView(specialEggId, specialEggName, imageUrl);
+        specialEggInfo = new SpecialEggView(specialEggId, specialEggName, imageUrl, null);
         this.eggCount = eggCount;
     }
 }

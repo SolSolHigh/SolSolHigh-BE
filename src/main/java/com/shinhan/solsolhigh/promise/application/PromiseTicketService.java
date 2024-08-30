@@ -1,7 +1,10 @@
 package com.shinhan.solsolhigh.promise.application;
 
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
+import com.shinhan.solsolhigh.common.event.Events;
 import com.shinhan.solsolhigh.common.util.ListUtils;
+import com.shinhan.solsolhigh.notification.domain.NotificationType;
+import com.shinhan.solsolhigh.notification.infra.NotificationRequestedEvent;
 import com.shinhan.solsolhigh.promise.domain.PromiseTicket;
 import com.shinhan.solsolhigh.promise.domain.PromiseTicketRepository;
 import com.shinhan.solsolhigh.promise.exception.PromiseTicketAlreadyUsedException;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,6 +45,7 @@ public class PromiseTicketService {
         ticket.initRequestAt();
         ticket.changeDescription(dto.getDescription());
         //TODO. 부모에게 알림 전송
+        Events.raise(NotificationRequestedEvent.builder().userId(ticket.getChild().getParent().getId()).notificationType(NotificationType.PROMISE_TICKET_USE_REQUEST).bodyValue(ticket.getChild().getNickname()).targetId(ticket.getId().toString()).timestamp(LocalDateTime.now()));
     }
 
     @Transactional(readOnly = true)
