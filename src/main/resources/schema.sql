@@ -306,12 +306,12 @@ VALUES ('c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm',
        ('p', 'he12569@naver.com', '조성우', '요하빠', '1996-04-21', 'm', false);
 
 INSERT INTO parent(user_id)
-VALUES (2), (5);
-
+VALUES (1),
+       (2),
+       (5);
 
 INSERT INTO child(user_id, parent_id, current_exp, max_exp, deposit_goal_money, deposit_reward_money, saving_reward_money)
-VALUES (1, 2, 0, 0, 0, 0, 0),
-       (3, 5, 132, 132, 0, 0, 0),
+VALUES (3, 5, 132, 132, 0, 0, 0),
        (4, 5, 345, 345, 0, 0, 0);
 
 INSERT INTO master_bank_member(user_id, user_key)
@@ -321,6 +321,14 @@ VALUES
     (3, 'b027eff3-1192-44bb-a025-6ee462608577'),
     (4, 'ad218099-f7ae-4d42-95e0-ddb31f66254a'),
     (5, 'c800771b-71f6-41ad-9a24-5a610834e2ad');
+
+INSERT INTO promise_ticket(child_id, published_at, used_at, requested_at, image_url, description)
+VALUES (4, '2024-08-26T00:00:00', '2024-08-28T00:00:00', NULL, NULL, '가족들과 함께 에버랜드 여행 가기'),
+       (4, '2024-08-27T00:00:00', '2024-08-29T00:00:00', NULL, NULL, '가족들과 함께 에버랜드 여행 가기2'),
+       (4, '2024-08-28T00:00:00', '2024-08-30T00:00:00', NULL, NULL, '가족들과 함께 에버랜드 여행 가기3'),
+       (4, '2024-08-29T00:00:00', null, '2024-08-29T06:00:00', NULL, '가족들과 함께 에버랜드 여행 가기로 했잖아!'),
+       (3, '2024-08-29T00:00:00', '2024-08-30T00:00:00', '2024-08-30T06:00:00', NULL, '가족들과 함께 요하땽이랑 에버랜드 논러 가기로 했잖아!');
+
 
 INSERT INTO quiz_keyword(keyword)
 VALUES ('은행 대출 연체'),
@@ -349,103 +357,193 @@ VALUES ('다이아몬드 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-
 
 
 -- Experience Log
-INSERT INTO experience_log(child_id, type, description, created_at) VALUES
-                                                                        (1, 'MISSION1', '미션(하)을 수행했습니다!', '2024-08-29 14:22:00'),
-                                                                        (3, 'QUIZ', '퀴즈를 풀었습니다!', '2024-08-29 11:10:20'),
-                                                                        (4, 'MISSION2', '미션(중)을 수행했습니다!', '2024-08-29 09:15:45'),
-                                                                        (1, 'QUIZ', '퀴즈를 풀었습니다!', '2024-08-29 10:45:12'),
-                                                                        (3, 'MISSION3', '미션(상)을 수행했습니다!', '2024-08-29 16:30:00'),
-                                                                        (4, 'QUIZ', '퀴즈를 풀었습니다!', '2024-08-29 18:20:00'),
-                                                                        (1, 'MISSION3', '미션(상)을 수행했습니다!', '2024-08-29 08:00:00'),
-                                                                        (3, 'QUIZ', '퀴즈를 풀었습니다!', '2024-08-29 14:45:00'),
-                                                                        (4, 'MISSION2', '미션(중)을 수행했습니다!', '2024-08-29 12:30:00'),
-                                                                        (1, 'MISSION3', '미션(상)을 수행했습니다!', '2024-08-29 13:50:00');
-
+INSERT INTO experience_log(child_id, type, description, created_at)
+VALUES (3, 'MISSION1', '미션(하)을 수행했습니다!', '2024-08-29 14:22:00'),
+       (4, 'QUIZ', '퀴즈를 풀었습니다!', '2024-08-29 11:10:20'),
+       (3, 'MISSION2', '미션(중)을 수행했습니다!', '2024-08-29 09:15:45'),
+       (4, 'QUIZ', '퀴즈를 풀었습니다!', '2024-08-29 10:45:12'),
+       (3, 'MISSION3', '미션(상)을 수행했습니다!', '2024-08-29 16:30:00'),
+       (4, 'QUIZ', '퀴즈를 풀었습니다!', '2024-08-29 18:20:00'),
+       (3, 'MISSION3', '미션(상)을 수행했습니다!', '2024-08-29 08:00:00'),
+       (4, 'QUIZ', '퀴즈를 풀었습니다!', '2024-08-29 14:45:00'),
+       (3, 'MISSION2', '미션(중)을 수행했습니다!', '2024-08-29 12:30:00'),
+       (4, 'MISSION3', '미션(상)을 수행했습니다!', '2024-08-29 13:50:00');
 
 
 -- Mission
-INSERT INTO mission(child_id, mission_description, is_finished, mission_start_at, mission_end_at, mission_level) VALUES
-                                                                                                                     (1, '수학 숙제 완료하기', false, '2024-07-01 09:00:00', '2024-09-09 23:59:59', '1'),
-                                                                                                                     (1, '방 청소하기', false, '2024-07-08 09:00:00', '2024-09-09 23:59:59', '2'),
-                                                                                                                     (1, '책 읽기', false, '2024-07-15 09:00:00', '2024-09-09 23:59:59', '3'),
-                                                                                                                     (3, '일기 쓰기', false, '2024-07-02 09:00:00', '2024-09-09 23:59:59', '3'),
-                                                                                                                     (3, '체력 운동하기', false, '2024-07-09 09:00:00', '2024-09-19 23:59:59', '2'),
-                                                                                                                     (3, '나무 심기', false, '2024-07-16 09:00:00', '2024-09-22 23:59:59', '1'),
-                                                                                                                     (4, '노래 배우기', false, '2024-07-03 09:00:00', '2024-09-09 23:59:59', '1'),
-                                                                                                                     (4, '설거지하기', false, '2024-07-10 09:00:00', '2024-09-16 23:59:59', '2'),
-                                                                                                                     (4, '일기 쓰기', false, '2024-07-17 09:00:00', '2024-09-23 23:59:59', '3'),
-                                                                                                                     (1, '부모님과 함께 놀러가기', false, '2024-07-04 09:00:00', '2024-09-10 23:59:59', '3');
+INSERT INTO mission(child_id, mission_description, is_finished, mission_start_at, mission_end_at, mission_level)
+VALUES (4, '수학 숙제 완료하기', true, '2024-07-01 09:00:00', '2024-09-09 23:59:59', '1'),
+       (4, '방 청소하기', true, '2024-07-08 09:00:00', '2024-09-09 23:59:59', '2'),
+       (4, '책 읽기', true, '2024-07-15 09:00:00', '2024-09-09 23:59:59', '3'),
+       (4, '일기 쓰기', true, '2024-07-02 09:00:00', '2024-09-09 23:59:59', '3'),
+       (4, '체력 운동하기', true, '2024-07-09 09:00:00', '2024-09-19 23:59:59', '2'),
+       (4, '나무 심기', true, '2024-07-16 09:00:00', '2024-09-22 23:59:59', '1'),
+       (4, '노래 배우기', false, '2024-07-03 09:00:00', '2024-09-09 23:59:59', '1');
+#        (4, '설거지하기', false, '2024-07-10 09:00:00', '2024-09-16 23:59:59', '2'),
+#        (4, '일기 쓰기', false, '2024-07-17 09:00:00', '2024-09-23 23:59:59', '3'),
+#        (1, '부모님과 함께 놀러가기', false, '2024-07-04 09:00:00', '2024-09-10 23:59:59', '3');
 
--- Financial Quiz
-INSERT INTO financial_quiz(description, answer, quiz_keyword_id, child_id, created_at, quiz_explanation) VALUES
-                                                                                                             ('이자가 무엇일까요?', true, 1, 1, '2024-07-01', 'A number representing a person\'s creditworthiness.'),
-                                                                                                             ('이 문제는 무엇일까요?', true, 2, 1, '2024-07-02', 'Annual Percentage Rate.'),
-                                                                                                             ('이자가 무엇일까요?', true, 3, 1, '2024-07-03', 'Interest on interest.'),
-                                                                                                             ('이자가 무엇일까요?', false, 4, 3, '2024-07-04', 'Exchange-Traded Fund.'),
-                                                                                                             ('이자가 무엇일까요?', true, 5, 3, '2024-07-05', 'A loan for buying a house.'),
-                                                                                                             ('이자가 무엇일까요?', true, 6, 3, '2024-07-06', 'Increase in prices over time.'),
-                                                                                                             ('이자가 무엇일까요?', false, 7, 4, '2024-07-07', 'A plan for income and expenses.'),
-                                                                                                             ('이자가 무엇일까요?', true, 8, 4, '2024-07-08', 'Account for saving money.'),
-                                                                                                             ('이자가 무엇일까요?', true, 9, 4, '2024-07-09', 'A fixed income instrument.'),
-                                                                                                             ('이자가 무엇일까요?', true, 1, 1, '2024-07-10', 'Ownership in a company.');
+-- 규현이에게 할당된 키워드
+INSERT INTO selected_quiz_keyword (child_id, quiz_keyword_id)
+SELECT 4, quiz_keyword_id FROM quiz_keyword ORDER BY RAND() LIMIT 3;
 
--- Quiz Solve
-INSERT INTO quiz_solve(financial_quiz_id, child_id, is_correct, corrected_at) VALUES
-                                                                                  (1, 1, true, '2024-07-01'),
-                                                                                  (2, 1, false, '2024-07-02'),
-                                                                                  (3, 1, true, '2024-07-03'),
-                                                                                  (4, 3, false, '2024-07-04'),
-                                                                                  (5, 3, true, '2024-07-05'),
-                                                                                  (6, 3, false, '2024-07-06'),
-                                                                                  (7, 4, true, '2024-07-07'),
-                                                                                  (8, 4, false, '2024-07-08'),
-                                                                                  (9, 4, true, '2024-07-09'),
-                                                                                  (10, 1, true, '2024-07-10');
+-- 요하에게 할당된 키워드
+INSERT INTO selected_quiz_keyword (child_id, quiz_keyword_id)
+SELECT 3, quiz_keyword_id FROM quiz_keyword ORDER BY RAND() LIMIT 3;
 
--- Between of Day Quiz Solve Log
-INSERT INTO between_of_day_quiz_solve_log(child_id, started_at, end_at, count) VALUES
-                                                                                   (1, '2024-08-25', '2024-08-30', 6),
-                                                                                   (3, '2024-08-25', '2024-08-30', 6),
-                                                                                   (4, '2024-08-25', '2024-08-30', 6);
+-- 규현이(7세)용 퀴즈 20개 생성
+INSERT INTO financial_quiz (description, answer, quiz_keyword_id, child_id, created_at, quiz_explanation)
+VALUES
+    ('은행 대출을 받으면 이자를 꼭 갚아야 할까요?', true, 1, 4, CURDATE() - INTERVAL 20 DAY, '이자는 빌린 돈에 대한 대가로 반드시 갚아야 합니다.'),
+    ('신용카드로 물건을 사면, 돈을 나중에 갚아야 할까요?', true, 3, 4, CURDATE() - INTERVAL 19 DAY, '신용카드는 돈을 빌려 쓰는 것이므로 나중에 갚아야 합니다.'),
+    ('핀테크는 전자 금융 서비스와 관련이 있을까요?', true, 5, 4, CURDATE() - INTERVAL 18 DAY, '핀테크는 금융(Finance)과 기술(Technology)을 결합한 서비스입니다.'),
+    ('환율은 외국 돈과 관련이 있을까요?', true, 6, 4, CURDATE() - INTERVAL 17 DAY, '환율은 한 나라의 돈과 다른 나라의 돈을 교환할 때 사용하는 비율입니다.'),
+    ('대포 통장은 범죄에 사용될 수 있을까요?', true, 4, 4, CURDATE() - INTERVAL 16 DAY, '대포 통장은 보통 불법적인 목적에 사용됩니다.'),
+    ('펀드는 다양한 사람들의 돈을 모아 투자하는 방법일까요?', true, 2, 4, CURDATE() - INTERVAL 15 DAY, '펀드는 많은 사람들의 돈을 모아 다양한 자산에 투자하는 방법입니다.'),
+    ('은행에서 돈을 빌리면 어떻게 될까요?', true, 1, 4, CURDATE() - INTERVAL 14 DAY, '은행에서 돈을 빌리면 이자를 갚아야 합니다.'),
+    ('신용카드는 돈을 바로 내지 않아도 될까요?', true, 3, 4, CURDATE() - INTERVAL 13 DAY, '신용카드는 사용 후 일정 기간 후에 갚는 방식입니다.'),
+    ('펀드는 위험이 있을까요?', true, 2, 4, CURDATE() - INTERVAL 12 DAY, '펀드는 투자이므로 손실의 위험이 있습니다.'),
+    ('은행 대출을 받을 때 이자율은 왜 중요할까요?', true, 1, 4, CURDATE() - INTERVAL 11 DAY, '이자율이 높을수록 갚아야 할 돈이 많아집니다.'),
+    ('대포 통장을 만들면 법에 저촉될까요?', true, 4, 4, CURDATE() - INTERVAL 10 DAY, '대포 통장은 불법으로 법에 저촉됩니다.'),
+    ('핀테크는 미래의 은행 역할을 할 수 있을까요?', true, 5, 4, CURDATE() - INTERVAL 9 DAY, '핀테크는 빠르고 편리한 금융 서비스를 제공하여 미래의 은행 역할을 할 수 있습니다.'),
+    ('환율은 매일 바뀔까요?', true, 6, 4, CURDATE() - INTERVAL 8 DAY, '환율은 경제 상황에 따라 매일 변동할 수 있습니다.'),
+    ('은행에 돈을 맡기면 안전할까요?', true, 1, 4, CURDATE() - INTERVAL 7 DAY, '은행은 돈을 안전하게 보관할 수 있는 장소입니다.'),
+    ('대출을 받을 때 상환 기간은 왜 중요할까요?', true, 1, 4, CURDATE() - INTERVAL 6 DAY, '상환 기간이 길면 이자가 많이 쌓일 수 있습니다.'),
+    ('펀드를 관리하는 사람은 누구일까요?', true, 2, 4, CURDATE() - INTERVAL 5 DAY, '펀드는 전문 투자자가 관리합니다.'),
+    ('신용카드를 잃어버리면 어떻게 될까요?', true, 3, 4, CURDATE() - INTERVAL 4 DAY, '신용카드를 잃어버리면 즉시 신고해야 합니다.'),
+    ('대포 통장은 왜 위험할까요?', true, 4, 4, CURDATE() - INTERVAL 3 DAY, '대포 통장은 범죄에 사용될 수 있어 위험합니다.'),
+    ('핀테크를 사용하면 편리할까요?', true, 5, 4, CURDATE() - INTERVAL 2 DAY, '핀테크는 온라인에서 편리하게 금융 서비스를 사용할 수 있습니다.'),
+    ('환율이 오르면 수입품 가격이 어떻게 될까요?', true, 6, 4, CURDATE() - INTERVAL 1 DAY, '환율이 오르면 수입품 가격이 상승할 수 있습니다.');
 
--- Selected Quiz Keyword
-INSERT INTO selected_quiz_keyword(child_id, quiz_keyword_id) VALUES
-                                                                 (1, 1), (1, 2), (1, 3), (3, 1), (3, 4), (3, 5),
-                                                                 (4, 1), (4, 6), (4, 7), (1, 8);
+-- 요하(4세)용 퀴즈 13개 생성
+INSERT INTO financial_quiz (description, answer, quiz_keyword_id, child_id, created_at, quiz_explanation)
+VALUES
+    ('돈은 어디서 나올까요? 집에서 찍어낼 수 있을까요?', false, 7, 3, CURDATE() - INTERVAL 13 DAY, '돈은 은행에서 만들어지는 것이며, 집에서 만들 수 없습니다.'),
+    ('찢어진 돈은 사용할 수 있을까요?', false, 8, 3, CURDATE() - INTERVAL 12 DAY, '찢어진 돈은 은행에서 교환해야 사용할 수 있습니다.'),
+    ('폐기된 돈은 다시 사용할 수 있을까요?', false, 9, 3, CURDATE() - INTERVAL 11 DAY, '폐기된 돈은 더 이상 사용할 수 없습니다.'),
+    ('핀테크는 어린이도 사용할 수 있을까요?', true, 5, 3, CURDATE() - INTERVAL 10 DAY, '핀테크 서비스는 어린이도 사용할 수 있는 서비스가 있습니다.'),
+    ('신용카드는 어린이도 사용할 수 있을까요?', false, 3, 3, CURDATE() - INTERVAL 9 DAY, '신용카드는 보통 성인만 사용할 수 있습니다.'),
+    ('은행에서 돈을 맡기면 이자를 받을 수 있을까요?', true, 1, 3, CURDATE() - INTERVAL 8 DAY, '은행에 돈을 맡기면 이자를 받을 수 있습니다.'),
+    ('돈은 무엇으로 만들어질까요?', true, 7, 3, CURDATE() - INTERVAL 7 DAY, '돈은 종이나 금속으로 만들어집니다.'),
+    ('폐기된 돈은 왜 사용할 수 없을까요?', true, 9, 3, CURDATE() - INTERVAL 6 DAY, '폐기된 돈은 가치가 없어졌기 때문에 사용할 수 없습니다.'),
+    ('은행 대출은 누구나 받을 수 있을까요?', false, 1, 3, CURDATE() - INTERVAL 5 DAY, '은행 대출은 신용이 있는 사람만 받을 수 있습니다.'),
+    ('찢어진 돈은 어디에서 교환할 수 있을까요?', true, 8, 3, CURDATE() - INTERVAL 4 DAY, '찢어진 돈은 은행에서 교환할 수 있습니다.'),
+    ('핀테크는 무엇일까요?', true, 5, 3, CURDATE() - INTERVAL 3 DAY, '핀테크는 금융과 기술을 결합한 서비스입니다.'),
+    ('신용카드를 사용할 때 조심해야 할 것은 무엇일까요?', true, 3, 3, CURDATE() - INTERVAL 2 DAY, '신용카드를 사용할 때는 과도한 지출을 조심해야 합니다.'),
+    ('은행은 돈을 어디에 보관할까요?', true, 7, 3, CURDATE() - INTERVAL 1 DAY, '은행은 돈을 안전한 금고에 보관합니다.');
+
+INSERT INTO quiz_solve (financial_quiz_id, child_id, is_correct, corrected_at)
+VALUES
+    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 6 DAY), 4, true, CURDATE() - INTERVAL 6 DAY),
+    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 5 DAY), 4, false, CURDATE() - INTERVAL 5 DAY),
+    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 4 DAY), 4, true, CURDATE() - INTERVAL 4 DAY),
+    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 3 DAY), 4, true, CURDATE() - INTERVAL 3 DAY),
+    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 2 DAY), 4, false, CURDATE() - INTERVAL 2 DAY),
+    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 1 DAY), 4, true, CURDATE() - INTERVAL 1 DAY);
+
+-- 규현이 20일치 퀴즈 풀이 내역
+INSERT INTO quiz_solve (financial_quiz_id, child_id, is_correct, corrected_at)
+SELECT financial_quiz_id, 4, (RAND() > 0.5), created_at
+FROM financial_quiz WHERE child_id = 4;
+
+-- 요하 13일치 퀴즈 풀이 내역
+INSERT INTO quiz_solve (financial_quiz_id, child_id, is_correct, corrected_at)
+SELECT financial_quiz_id, 3, (RAND() > 0.5), created_at
+FROM financial_quiz WHERE child_id = 3;
+
+-- 규현이의 6일간 퀴즈 풀이 로그 (스트릭)
+INSERT INTO between_of_day_quiz_solve_log (child_id, started_at, end_at, count)
+VALUES
+    (4, CURDATE() - INTERVAL 6 DAY, CURDATE() - INTERVAL 1 DAY, 6);
+
+# -- Financial Quiz
+# INSERT INTO financial_quiz(description, answer, quiz_keyword_id, child_id, created_at, quiz_explanation)
+# VALUES ('이자가 무엇일까요?', true, 1, 1, '2024-07-01', 'A number representing a person\'s creditworthiness.'),
+#        ('이 문제는 무엇일까요?', true, 2, 1, '2024-07-02', 'Annual Percentage Rate.'),
+#        ('이자가 무엇일까요2?', true, 3, 1, '2024-07-03', 'Interest on interest.'),
+#        ('해커톤 우승은 누구죠?', false, 4, 3, '2024-07-04', '해커톤 우승은 구황작물입니다.'),
+#        ('이자가 무엇일까요4?', true, 5, 3, '2024-07-05', 'A loan for buying a house.'),
+#        ('이자가 무엇일까요5?', true, 6, 3, '2024-07-06', 'Increase in prices over time.'),
+#        ('이자가 무엇일까요6?', false, 7, 4, '2024-07-07', 'A plan for income and expenses.'),
+#        ('이자가 무엇일까요7?', true, 8, 4, '2024-07-08', 'Account for saving money.'),
+#        ('이자가 무엇일까요8?', true, 9, 4, '2024-07-09', 'A fixed income instrument.'),
+#        ('이자가 무엇일까요9?', true, 1, 1, '2024-07-10', 'Ownership in a company.');
+#
+# -- Quiz Solve
+# INSERT INTO quiz_solve(financial_quiz_id, child_id, is_correct, corrected_at)
+# VALUES (1, 1, true, '2024-07-01'),
+#        (2, 1, false, '2024-07-02'),
+#        (3, 1, true, '2024-07-03'),
+#        (4, 3, false, '2024-07-04'),
+#        (5, 3, true, '2024-07-05'),
+#        (6, 3, false, '2024-07-06'),
+#        (7, 4, true, '2024-07-07'),
+#        (8, 4, false, '2024-07-08'),
+#        (9, 4, true, '2024-07-09'),
+#        (10, 1, true, '2024-07-10');
+#
+# -- Between of Day Quiz Solve Log
+# INSERT INTO between_of_day_quiz_solve_log(child_id, started_at, end_at, count)
+# VALUES (3, '2024-08-25', '2024-08-31', 6),
+#        (4, '2024-08-25', '2024-08-31', 6);
+#
+# -- Selected Quiz Keyword
+# INSERT INTO selected_quiz_keyword(child_id, quiz_keyword_id)
+# VALUES (3, 1),
+#        (3, 4),
+#        (3, 5),
+#        (4, 1),
+#        (4, 6),
+#        (4, 7);
 
 -- Egg Count
-INSERT INTO egg_count(child_id, egg_count) VALUES
-                                               (1, 10), (3, 20), (4, 15);
+INSERT INTO egg_count(child_id, egg_count)
+VALUES (4,10);
 
+INSERT INTO egg_destroy_log(child_id, created_at, destroyed_at, hit_count)
+VALUES (4, CURDATE(), CURDATE(), 100),
+       (4, CURDATE(), CURDATE(), 100),
+       (4, CURDATE(), CURDATE(), 100),
+       (4, CURDATE(), CURDATE(), 100),
+       (4, CURDATE(), CURDATE(), 100),
+       (4, CURDATE(), CURDATE(), 100),
+       (4, CURDATE(), CURDATE(), 100),
+       (4, CURDATE(), CURDATE(), 100),
+       (4, CURDATE(), CURDATE(), 100);
 
 -- Hold Special Egg
-INSERT INTO hold_special_egg(child_id, special_egg_id, egg_count) VALUES
-                                                                      (1, 1, 5), (1, 2, 3), (1, 3, 2), (3, 1, 1),
-                                                                      (3, 4, 6), (3, 5, 4), (4, 1, 3), (4, 6, 7),
-                                                                      (4, 7, 2), (1, 8, 9);
+INSERT INTO hold_special_egg(child_id, special_egg_id, egg_count)
+VALUES (4,1,1),
+       (4,2,1),
+       (4,3,1),
+       (4,6,1),
+       (4,7,1),
+       (4,8,1),
+       (4,10,1),
+       (4,11,1),
+       (4,12,1);
 
 -- Egg Sell Board
-INSERT INTO egg_sell_board(child_id, special_egg_id, wrote_at, egg_price_per_once, sell_count) VALUES
-                                                                                                   (1, 1, '2024-07-01 08:00:00', 1, 10),
-                                                                                                   (3, 2, '2024-07-02 09:00:00', 3, 5),
-                                                                                                   (4, 3, '2024-07-03 10:00:00', 2, 7),
-                                                                                                   (1, 4, '2024-07-04 11:00:00', 2, 6),
-                                                                                                   (3, 5, '2024-07-05 12:00:00', 4, 4),
-                                                                                                   (4, 6, '2024-07-06 13:00:00', 6, 8),
-                                                                                                   (1, 7, '2024-07-07 14:00:00', 2, 3),
-                                                                                                   (3, 8, '2024-07-08 15:00:00', 3, 9),
-                                                                                                   (4, 9, '2024-07-09 16:00:00', 5, 2),
-                                                                                                   (1, 10, '2024-07-10 17:00:00', 1, 1);
+INSERT INTO egg_sell_board(child_id, special_egg_id, wrote_at, egg_price_per_once, sell_count)
+VALUES (3, 1, '2024-07-01 08:00:00', 1, 5),
+       (3, 2, '2024-07-02 09:00:00', 1, 5),
+       (3, 4, '2024-07-03 10:00:00', 1, 5),
+       (3, 9, '2024-07-04 11:00:00', 1, 3),
+       (3, 3, '2024-07-05 12:00:00', 1, 3),
+       (3, 12, '2024-07-06 13:00:00', 1, 3),
+       (3, 7, '2024-07-07 14:00:00', 1, 3),
+       (3, 5, '2024-07-08 15:00:00', 1, 2),
+       (3, 11, '2024-07-09 16:00:00', 1, 2),
+       (3, 10, '2024-07-10 17:00:00', 1, 2);
 
--- Egg Trade Log
-INSERT INTO egg_trade_log(seller_id, buyer_id, traded_at, special_egg_id, egg_stock_count, egg_price_per_once) VALUES
-                                                                                                                   (1, 3, '2024-07-01 08:00:00', 1, 10, 2),
-                                                                                                                   (3, 4, '2024-07-02 09:00:00', 2, 5, 3),
-                                                                                                                   (4, 1, '2024-07-03 10:00:00', 3, 7, 7),
-                                                                                                                   (1, 3, '2024-07-04 11:00:00', 4, 6, 2),
-                                                                                                                   (3, 4, '2024-07-05 12:00:00', 5, 4, 5),
-                                                                                                                   (4, 1, '2024-07-06 13:00:00', 6, 8, 3),
-                                                                                                                   (1, 3, '2024-07-07 14:00:00', 7, 3, 6),
-                                                                                                                   (3, 4, '2024-07-08 15:00:00', 8, 9, 3),
-                                                                                                                   (4, 1, '2024-07-09 16:00:00', 9, 2, 6),
-                                                                                                                   (1, 3, '2024-07-10 17:00:00', 2, 1, 9);
+INSERT INTO egg_trade_log(seller_id, buyer_id, traded_at, special_egg_id, egg_stock_count, egg_price_per_once)
+VALUES (4,3,'2024-08-29 08:00:00', 1,1,5),
+       (4,3,'2024-08-29 08:00:00', 2,1,5),
+       (4,3,'2024-08-29 08:00:00', 4,1,5),
+       (4,3,'2024-08-29 08:00:00', 9,1,3),
+       (4,3,'2024-08-29 08:00:00', 3,1,3),
+       (4,3,'2024-08-29 08:00:00', 12,1,3),
+       (4,3,'2024-08-29 08:00:00', 7,1,3),
+       (4,3,'2024-08-29 08:00:00', 5,1,2),
+       (4,3,'2024-08-29 08:00:00', 11,1,2),
+       (4,3,'2024-08-29 08:00:00', 10,1,2);
