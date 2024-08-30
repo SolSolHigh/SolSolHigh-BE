@@ -1,5 +1,6 @@
 package com.shinhan.solsolhigh.user.application;
 
+import com.shinhan.solsolhigh.account.application.AccountService;
 import com.shinhan.solsolhigh.common.aop.annotation.Authorized;
 import com.shinhan.solsolhigh.common.event.Events;
 import com.shinhan.solsolhigh.common.util.ListUtils;
@@ -26,6 +27,7 @@ public class UserService {
     private final ChildRegisterRequestRepository childRegisterRequestRepository;
     private final TemporaryUserRepository temporaryUserRepository;
     private final ParentRepository parentRepository;
+    private final AccountService accountService;
 
     @Transactional(readOnly = true)
     public boolean checkDuplicatedNickname(String nickname) {
@@ -142,11 +144,14 @@ public class UserService {
         String email = temporaryUser.getEmail();
         String name = temporaryUser.getName();
 
-        if(dto.getType() == User.Type.PARENT)
-            parentRepository.save(dto.toParent(email, name));
-        else
-            childRepository.save(dto.toChild(email, name));
+        User user;
 
+        if(dto.getType() == User.Type.PARENT)
+            user = parentRepository.save(dto.toParent(email, name));
+        else
+            user = childRepository.save(dto.toChild(email, name));
+
+        accountService.initBankMember(user.getId(), email);
         temporaryUserRepository.delete(temporaryUser);
     }
 
@@ -186,6 +191,88 @@ public class UserService {
         return ListUtils.applyFunctionToElements(requests, (element) -> ChildRegisterRequestInfoAndParentInfo.of(element, element.getParent()));
     }
 
+    @Transactional(readOnly = true)
+    @Authorized(allowed = User.Type.PARENT)
+    public Integer getChildDepositRewardMoney(Integer id, String nickname) {
+        Child child = childRepository.findByNicknameUsingFetchParent(nickname).orElseThrow(UserNotFoundException::new);
+        checkDeletedUser(child);
+        if(child.getParent()==null)
+            throw new ParentNotFoundException();
+
+        if(!Objects.equals(child.getParent().getId(), id))
+            throw new FamilyNotExistException();
+
+        return child.getDepositRewardMoney();
+    }
+
+    @Transactional
+    @Authorized(allowed = User.Type.PARENT)
+    public void changeChildDepositRewardMoney(Integer id, String nickname, Integer depositRewardMoney) {
+        Child child = childRepository.findByNicknameUsingFetchParent(nickname).orElseThrow(UserNotFoundException::new);
+        checkDeletedUser(child);
+        if(child.getParent()==null)
+            throw new ParentNotFoundException();
+
+        if(!Objects.equals(child.getParent().getId(), id))
+            throw new FamilyNotExistException();
+
+        child.changeDepositRewardMoney(depositRewardMoney);
+    }
+
+    @Transactional
+    public void deleteChildDepositRewardMoney(Integer id, String nickname) {
+        Child child = childRepository.findByNicknameUsingFetchParent(nickname).orElseThrow(UserNotFoundException::new);
+        checkDeletedUser(child);
+        if(child.getParent()==null)
+            throw new ParentNotFoundException();
+
+        if(!Objects.equals(child.getParent().getId(), id))
+            throw new FamilyNotExistException();
+
+        child.changeDepositRewardMoney(0);
+    }
+
+    @Transactional(readOnly = true)
+    @Authorized(allowed = User.Type.PARENT)
+    public Integer getChildSavingRewardMoney(Integer id, String nickname) {
+        Child child = childRepository.findByNicknameUsingFetchParent(nickname).orElseThrow(UserNotFoundException::new);
+        checkDeletedUser(child);
+        if(child.getParent()==null)
+            throw new ParentNotFoundException();
+
+        if(!Objects.equals(child.getParent().getId(), id))
+            throw new FamilyNotExistException();
+
+        return child.getSavingRewardMoney();
+    }
+
+    @Transactional
+    @Authorized(allowed = User.Type.PARENT)
+    public void changeChildSavingRewardMoney(Integer id, String nickname, Integer savingRewardMoney) {
+        Child child = childRepository.findByNicknameUsingFetchParent(nickname).orElseThrow(UserNotFoundException::new);
+        checkDeletedUser(child);
+        if(child.getParent()==null)
+            throw new ParentNotFoundException();
+
+        if(!Objects.equals(child.getParent().getId(), id))
+            throw new FamilyNotExistException();
+
+        child.changeSavingRewardMoney(savingRewardMoney);
+    }
+
+    @Transactional
+    public void deleteChildSavingRewardMoney(Integer id, String nickname) {
+        Child child = childRepository.findByNicknameUsingFetchParent(nickname).orElseThrow(UserNotFoundException::new);
+        checkDeletedUser(child);
+        if(child.getParent()==null)
+            throw new ParentNotFoundException();
+
+        if(!Objects.equals(child.getParent().getId(), id))
+            throw new FamilyNotExistException();
+
+        child.changeSavingRewardMoney(0);
+    }
+
 
     private void checkDeletedUser(User user){
         if(user.getIsDeleted())
@@ -205,6 +292,5 @@ public class UserService {
         Parent parent = (Parent) user;
         childRepository.removeParent(parent);
     }
-
 
 }

@@ -31,7 +31,7 @@ public class ProductAiChat {
                         """
         );
 
-        Prompt prompt = promptTemplate.create(Map.of("age", child.getAge() == null ? "5" : child.getAge(), "gender", child.getGender().getType().name(), "goalMoney", child.getGoalMoney()));
+        Prompt prompt = promptTemplate.create(Map.of("age", child.getAge() == null ? "5" : child.getAge(), "gender", child.getGender().getType().name(), "goalMoney", child.getDepositGoalMoney()));
         String response = openAiChatModel.call(prompt).getResult().getOutput().getContent();
         return convertJsonToObject(formatToJson(response), ProductRecommendDto.class);
     }
