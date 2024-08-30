@@ -121,11 +121,6 @@ create table notification_log
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 
-create table bank_code
-(
-    bank_code_id CHAR(3)     NOT NULL PRIMARY KEY,
-    bank_name    VARCHAR(20) NOT NULL
-);
 create table account(
     account_id     INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id        INT         NOT NULL,
@@ -315,11 +310,9 @@ VALUES (2), (5);
 
 
 INSERT INTO child(user_id, parent_id, current_exp, max_exp, deposit_goal_money, deposit_reward_money, saving_reward_money)
-VALUES (1, 2, 0, 0, 0, 0, 0)
+VALUES (1, 2, 0, 0, 0, 0, 0),
        (3, 5, 132, 132, 0, 0, 0),
        (4, 5, 345, 345, 0, 0, 0);
-
-VALUES (1, 2, 0, 0, 0, 0, 0);
 
 INSERT INTO master_bank_member(user_id, user_key)
 VALUES
@@ -337,8 +330,6 @@ VALUES ('은행 대출 연체'),
        ('찢어진 돈'),
        ('폐기된 돈');
 
-
-
 INSERT INTO special_egg(name, probability, image_src)
 VALUES ('다이아몬드 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/diamond-egg.png'),
        ('우주 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/universe-egg.png'),
@@ -352,8 +343,6 @@ VALUES ('다이아몬드 계란', 0.1, 'https://solsolhighasset.s3.ap-northeast-
        ('선물 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/present-egg.png'),
        ('토끼 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/rabbit-egg.png'),
        ('쏠쏠하이 계란', 0.05, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/solsolhigh-egg.png');
-
-
 
 
 -- Experience Log
