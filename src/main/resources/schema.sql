@@ -310,11 +310,6 @@ VALUES (1),
        (2),
        (5);
 
-INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
-VALUES (3, 5, 9980, 9980, 0),
-       (4, 5, 9980, 9980, 0);
-
-
 INSERT INTO child(user_id, parent_id, current_exp, max_exp, deposit_goal_money, deposit_reward_money, saving_reward_money)
 VALUES (3, 5, 132, 132, 0, 0, 0),
        (4, 5, 345, 345, 0, 0, 0);
