@@ -317,7 +317,10 @@ VALUES (1, 2, 0, 0, 0, 0, 0),
 INSERT INTO master_bank_member(user_id, user_key)
 VALUES
     (1, 'd7201dd7-6acb-4e09-9084-92c8a1e153f3'),
-    (2, '0f096f78-c0aa-4f61-9e5b-99a3a7e463b6');
+    (2, '0f096f78-c0aa-4f61-9e5b-99a3a7e463b6'),
+    (3, 'b027eff3-1192-44bb-a025-6ee462608577'),
+    (4, 'ad218099-f7ae-4d42-95e0-ddb31f66254a'),
+    (5, 'c800771b-71f6-41ad-9a24-5a610834e2ad');
 
 INSERT INTO quiz_keyword(keyword)
 VALUES ('은행 대출 연체'),
