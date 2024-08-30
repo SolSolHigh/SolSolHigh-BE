@@ -25,6 +25,7 @@ public class FirebaseCloudMessageService {
 //                .setNotification(Notification.builder()
 //                        .setBody(body).setTitle(title)
 //                        .build())
+                .setWebpushConfig(WebpushConfig.builder().setNotification(WebpushNotification.builder().setBody(body).setTitle(title).build()).build())
                 .setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.HIGH).build())
                 .build();
 
