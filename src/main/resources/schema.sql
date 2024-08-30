@@ -12,18 +12,17 @@ DROP TABLE IF EXISTS quiz_solve;
 DROP TABLE IF EXISTS financial_quiz;
 DROP TABLE IF EXISTS quiz_keyword;
 DROP TABLE IF EXISTS promise_ticket;
-DROP TABLE IF EXISTS child_savings_status_by_period;
 DROP TABLE IF EXISTS mission;
-DROP TABLE IF EXISTS month_auto_transfer_rule;
-DROP TABLE IF EXISTS week_auto_transfer_rule;
-DROP TABLE IF EXISTS auto_transfer_rule;
+DROP TABLE IF EXISTS demand_deposit;
+DROP TABLE IF EXISTS deposit;
+DROP TABLE IF EXISTS saving;
 DROP TABLE IF EXISTS account;
-DROP TABLE IF EXISTS bank_code;
 DROP TABLE IF EXISTS fcm;
 DROP TABLE IF EXISTS promise;
 DROP TABLE IF EXISTS child;
 DROP TABLE IF EXISTS parent;
 DROP TABLE IF EXISTS temporary_user;
+DROP TABLE IF EXISTS master_bank_member;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS prefix_sum_exp;
 
@@ -67,12 +66,19 @@ create table child
     parent_id   INT NULL,
     current_exp INT NOT NULL,
     max_exp     INT NOT NULL,
-    goal_money  INT NOT NULL,
+    deposit_goal_money  INT NOT NULL,
+    deposit_reward_money  INT NOT NULL,
+    saving_reward_money  INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (user_id),
     FOREIGN KEY (parent_id) REFERENCES parent (user_id)
 );
 
-
+create table master_bank_member
+(
+    user_id    INT NOT NULL PRIMARY KEY,
+    user_key   varchar(60) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (user_id)
+);
 
 create table fcm
 (
@@ -82,51 +88,27 @@ create table fcm
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 
-create table bank_code
-(
-    bank_code_id CHAR(3)     NOT NULL PRIMARY KEY,
-    bank_name    VARCHAR(20) NOT NULL
-);
-
-create table account
-(
+create table account(
     account_id     INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id        INT         NOT NULL,
-    bank_code_id   CHAR(3)     NOT NULL,
-    account_type   CHAR(1)     NOT NULL,
-    account_number VARCHAR(20) NOT NULL,
-    account_name   VARCHAR(28) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user (user_id),
-    FOREIGN KEY (bank_code_id) REFERENCES bank_code (bank_code_id)
+    type   CHAR(1)     NOT NULL,
+    account_no VARCHAR(20) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 
-create table auto_transfer_rule
-(
-    auto_transfer_rule_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    receive_account_id    INT NOT NULL,
-    send_account_id       INT NOT NULL,
-    balance               INT NOT NULL,
-    sender_id             INT NOT NULL,
-    receiver_id           INT NOT NULL,
-    FOREIGN KEY (receive_account_id) REFERENCES account (account_id),
-    FOREIGN KEY (send_account_id) REFERENCES account (account_id),
-    FOREIGN KEY (sender_id) REFERENCES user (user_id),
-    FOREIGN KEY (receiver_id) REFERENCES user (user_id)
+create table deposit(
+    account_id     INT         NOT NULL  PRIMARY KEY,
+    FOREIGN KEY (account_id) REFERENCES account (account_id)
 );
 
-create table week_auto_transfer_rule
-(
-    auto_transfer_rule_id INT     NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    day                   TINYINT NOT NULL,
-    FOREIGN KEY (auto_transfer_rule_id) REFERENCES auto_transfer_rule (auto_transfer_rule_id)
+create table saving(
+    account_id     INT         NOT NULL  PRIMARY KEY,
+    FOREIGN KEY (account_id) REFERENCES account (account_id)
 );
 
-create table month_auto_transfer_rule
-(
-    auto_transfer_rule_id INT     NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    day                   TINYINT NOT NULL,
-    week                  TINYINT NOT NULL,
-    FOREIGN KEY (auto_transfer_rule_id) REFERENCES auto_transfer_rule (auto_transfer_rule_id)
+create table demand_deposit(
+    account_id     INT         NOT NULL  PRIMARY KEY,
+    FOREIGN KEY (account_id) REFERENCES account (account_id)
 );
 
 create table mission
@@ -139,17 +121,6 @@ create table mission
     mission_end_at      DATETIME     NOT NULL,
     mission_finished_at DATETIME     NULL,
     mission_level       CHAR(1)      NULL,
-    FOREIGN KEY (child_id) REFERENCES child (user_id)
-);
-
-create table child_savings_status_by_period
-(
-    period_id       INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    child_id        INT                NOT NULL,
-    recursion_money INT                NOT NULL,
-    goal_money      INT                NOT NULL,
-    start_date      DATE               NOT NULL,
-    end_date        DATE               NOT NULL,
     FOREIGN KEY (child_id) REFERENCES child (user_id)
 );
 
@@ -293,19 +264,19 @@ create table child_register_request
     FOREIGN KEY (parent_id) REFERENCES parent (user_id)
 );
 
-
-INSERT INTO user(type, email, name, nickname, birthday, user_gender, is_deleted)
-VALUES ('c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
-       ('p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
-
-INSERT INTO parent(user_id)
-VALUES (2);
-
-INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
-VALUES (1, 2, 0, 0, 0);
-
-INSERT INTO promise_ticket(promise_ticket_id, child_id, published_at, used_at, requested_at, image_url, description)
-VALUES (1, 1, "2024-08-26T00:00:00", NULL, NULL, NULL, NULL);
+--
+-- INSERT INTO user(type, email, name, nickname, birthday, user_gender, is_deleted)
+-- VALUES ('c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
+--        ('p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
+--
+-- INSERT INTO parent(user_id)
+-- VALUES (2);
+--
+-- INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
+-- VALUES (1, 2, 0, 0, 0);
+--
+-- INSERT INTO promise_ticket(promise_ticket_id, child_id, published_at, used_at, requested_at, image_url, description)
+-- VALUES (1, 1, "2024-08-26T00:00:00", NULL, NULL, NULL, NULL);
 
 INSERT INTO quiz_keyword(keyword)
 VALUES ('은행 대출 연체'),
@@ -319,31 +290,34 @@ VALUES ('은행 대출 연체'),
        ('폐기된 돈');
 
 
--- INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
--- VALUES (1, 'c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
---        (2, 'p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
---
--- INSERT INTO parent(user_id)
--- VALUES (2);
---
--- INSERT INTO child(user_id, parent_id, current_exp, max_exp, goal_money)
--- VALUES (1, 2, 0, 0, 0);
---
---
--- INSERT INTO quiz_keyword(keyword)
--- VALUES ('은행 대출 연체'),
---        ('펀드'),
---        ('신용카드'),
---        ('대포 통장'),
---        ('핀테크'),
---        ('환율'),
---        ('지폐'),
---        ('찢어진 돈'),
---        ('폐기된 돈');
---
--- INSERT INTO selected_quiz_keyword(child_id, quiz_keyword_id)
--- VALUES (1, 1);
+INSERT INTO user(user_id, type, email, name, nickname, birthday, user_gender, is_deleted)
+VALUES (1, 'c', 'khj745700@naver.com', '김현진', '흑염룡', '2020-05-05', 'm', false),
+       (2, 'p', 'yuseung0429@naver.com', '이유승', '현진맘', '1998-04-29', 'f', false);
 
+INSERT INTO parent(user_id)
+VALUES (2);
+
+INSERT INTO child(user_id, parent_id, current_exp, max_exp, deposit_goal_money, deposit_reward_money, saving_reward_money)
+VALUES (1, 2, 0, 0, 0, 0, 0);
+
+INSERT INTO master_bank_member(user_id, user_key)
+VALUES
+    (1, 'd7201dd7-6acb-4e09-9084-92c8a1e153f3'),
+    (2, '0f096f78-c0aa-4f61-9e5b-99a3a7e463b6');
+
+INSERT INTO quiz_keyword(keyword)
+VALUES ('은행 대출 연체'),
+       ('펀드'),
+       ('신용카드'),
+       ('대포 통장'),
+       ('핀테크'),
+       ('환율'),
+       ('지폐'),
+       ('찢어진 돈'),
+       ('폐기된 돈');
+
+INSERT INTO selected_quiz_keyword(child_id, quiz_keyword_id)
+VALUES (1, 1);
 
 INSERT INTO special_egg(name, probability, image_src)
 VALUES ('다이아몬드 계란', 0.01, 'https://solsolhighasset.s3.ap-northeast-2.amazonaws.com/images/eggs/diamond-egg.png'),

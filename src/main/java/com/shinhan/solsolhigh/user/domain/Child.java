@@ -29,8 +29,14 @@ public class Child extends User {
     @Column(name = "current_exp")
     private Integer currentExp;
 
-    @Column(name = "goal_money")
-    private Integer goalMoney;
+    @Column(name = "deposit_goal_money")
+    private Integer depositGoalMoney;
+
+    @Column(name = "deposit_reward_money")
+    private Integer depositRewardMoney;
+
+    @Column(name = "saving_reward_money")
+    private Integer savingRewardMoney;
 
     public void changeParent(Parent parent){
         if(Objects.equals(this.parent, parent))
@@ -57,6 +63,20 @@ public class Child extends User {
         parent = null;
         maxExp = 0;
         currentExp = 0;
-        goalMoney = 0;
+        depositGoalMoney = 0;
+        depositRewardMoney = 0;
+        savingRewardMoney = 0;
+    }
+
+    public void changeDepositGoalMoney(Integer depositGoalMoney) {
+        this.depositGoalMoney = depositGoalMoney;
+    }
+
+    public void changeDepositRewardMoney(Integer depositRewardMoney) {
+        this.depositRewardMoney = depositRewardMoney;
+    }
+
+    public void changeSavingRewardMoney(Integer savingRewardMoney) {
+        this.savingRewardMoney = savingRewardMoney;
     }
 }

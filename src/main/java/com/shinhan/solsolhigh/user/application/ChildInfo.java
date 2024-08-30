@@ -18,7 +18,9 @@ public class ChildInfo {
     private Integer parentId;
     private Integer maxExp;
     private Integer currentExp;
-    private Integer goalMoney;
+    private Integer depositGoalMoney;
+    private Integer depositRewardMoney;
+    private Integer savingRewardMoney;
 
     public static ChildInfo from(Child child) {
         return ChildInfo.builder()
@@ -30,7 +32,9 @@ public class ChildInfo {
                 .parentId(child.getParent() != null ? child.getParent().getId() : null)
                 .maxExp(child.getMaxExp())
                 .currentExp(child.getCurrentExp())
-                .goalMoney(child.getGoalMoney())
+                .depositGoalMoney(child.getDepositGoalMoney())
+                .depositRewardMoney(child.getDepositRewardMoney())
+                .savingRewardMoney(child.getSavingRewardMoney())
                 .build();
     }
 }

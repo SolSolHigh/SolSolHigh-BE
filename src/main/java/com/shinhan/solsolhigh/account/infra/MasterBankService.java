@@ -1,5 +1,8 @@
 package com.shinhan.solsolhigh.account.infra;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shinhan.solsolhigh.account.application.*;
 import com.shinhan.solsolhigh.account.config.MasterBankConfig;
 import lombok.AllArgsConstructor;
 import org.springframework.http.RequestEntity;
@@ -11,38 +14,43 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @AllArgsConstructor
 public class MasterBankService {
+
+    private final ObjectMapper objectMapper;
     private final MasterBankConfig masterBankConfig;
     private final AtomicInteger counter;
     private final RestTemplate restTemplate = new RestTemplate();
     private final String bankCode = "088";
 
     @Transactional
-    public Object createBankMember(String email){
+    public String createBankMember(String email){
         String url = "/member";
         Map<String, Object> body = new HashMap<>();
         body.put("userId", email);
         body.put("apiKey", masterBankConfig.getApiKey());
-        return postRequest(url, body);
+        ResponseEntity<Map> response = postRequest(url, body);
+        return (String) response.getBody().get("userKey");
     }
 
     @Transactional
-    public Object getBankMember(String email){
+    public String getBankMember(String email){
         String url = "/member/search";
         Map<String, Object> body = new HashMap<>();
         body.put("userId", email);
         body.put("apiKey", masterBankConfig.getApiKey());
-        return postRequest(url, body);
+        ResponseEntity<Map> response = postRequest(url, body);
+        return (String) response.getBody().get("userKey");
     }
 
     @Transactional
     public Object createDemandDepositProduct(String accountName, String accountDescription){
-        String url = "/demandDeposit/createDemandDeposit";
+        String url = "/edu/demandDeposit/createDemandDeposit";
         Map<String, Object> body = generatorBodyWithHeader(url, null);
         body.put("accountName", accountName);
         body.put("accountDescription", accountDescription);
@@ -51,34 +59,50 @@ public class MasterBankService {
     }
 
     @Transactional
-    public Object getDemandDepositProducts(){
-        String url = "/demandDeposit/inquireDemandDepositList";
+    public List<DemandDepositProductDto> getDemandDepositProducts(){
+        String url = "/edu/demandDeposit/inquireDemandDepositList";
         Map<String, Object> body = generatorBodyWithHeader(url, null);
-        return postRequest(url, body);
+        ResponseEntity<Map> response = postRequest(url, body);
+        List<DemandDepositProductDto> result = objectMapper.convertValue(
+                response.getBody().get("REC"),
+                new TypeReference<>() {});
+        return result;
     }
 
     @Transactional
-    public Object createDepositAccount(String userKey, String accountTypeUniqueNo){
-        String url = "/demandDeposit/createDemandDepositAccount";
+    public String createDepositAccount(String userKey, String accountTypeUniqueNo){
+        String url = "/edu/demandDeposit/createDemandDepositAccount";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("accountTypeUniqueNo", accountTypeUniqueNo);
-        return postRequest(url, body);
+        ResponseEntity<Map> response = postRequest(url, body);
+        Map<String, Object> sub = (Map<String, Object>)(response.getBody().get("REC"));
+        return sub.get("accountNo").toString();
     }
 
     @Transactional
-    public Object getDemandDepositAccounts(String userKey){
-        String url = "/demandDeposit/inquireDemandDepositAccountList";
-        Map<String, Object> body = generatorBodyWithHeader(url, userKey);
-        return postRequest(url, body);
-    }
-
-    @Transactional
-    public Object getDemandDepositAccount(String userKey, String accountNo){
-        String url = "/demandDeposit/inquireDemandDepositAccount";
+    public DemandDepositDetail getDemandDepositAccount(String userKey, String accountNo){
+        String url = "/edu/demandDeposit/inquireDemandDepositAccount";
         Map<String,Object> body = generatorBodyWithHeader(url, userKey);
         body.put("accountNo", accountNo);
-        return postRequest(url, body);
+        ResponseEntity<Map> response = postRequest(url, body);
+        DemandDepositDetail result = objectMapper.convertValue(
+                response.getBody().get("REC"),
+                new TypeReference<>() {});
+        return result;
     }
+
+    @Transactional
+    public DepositDetail getDepositAccount(String userKey, String accountNo){
+        String url = "/edu/demandDeposit/inquireDemandDepositAccount";
+        Map<String,Object> body = generatorBodyWithHeader(url, userKey);
+        body.put("accountNo", accountNo);
+        ResponseEntity<Map> response = postRequest(url, body);
+        DepositDetail result = objectMapper.convertValue(
+                response.getBody().get("REC"),
+                new TypeReference<>() {});
+        return result;
+    }
+
 
     @Transactional
     public Object transferDemandDepositAccount(String userKey,
@@ -87,7 +111,7 @@ public class MasterBankService {
                                                String withdrawalAccountNo,
                                                String depositTransactionSummary,
                                                String withdrawalTransactionSummary){
-        String url = "/demandDeposit/updateDemandDepositAccountTransfer";
+        String url = "/edu/demandDeposit/updateDemandDepositAccountTransfer";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("depositAccountNo", depositAccountNo);
         body.put("transactionBalance", transactionBalance);
@@ -98,27 +122,30 @@ public class MasterBankService {
     }
 
     @Transactional
-    public Object getDemandDepositAccountHistory(String userKey,
-                                                 String accountNo,
-                                                 String startDate,
-                                                 String endDate,
-                                                 String transactionType,
-                                                 String orderByType){
-        String url = "/demandDeposit/inquireTransactionHistory";
+    public List<DemandDepositAccountTransaction> getDemandDepositAccountHistory(String userKey,
+                                                              String accountNo,
+                                                              String startDate,
+                                                              String endDate){
+        String url = "/edu/demandDeposit/inquireTransactionHistoryList";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("accountNo", accountNo);
         body.put("startDate", startDate);
         body.put("endDate", endDate);
-        body.put("transactionType", transactionType);
-        body.put("orderByType", orderByType);
-        return postRequest(url, body);
+        body.put("transactionType", "A");
+        body.put("orderByType", "DESC");
+        ResponseEntity<Map> response = postRequest(url, body);
+        Map<String, Object> sub = (Map<String, Object>)(response.getBody().get("REC"));
+        List<DemandDepositAccountTransaction> result = objectMapper.convertValue(
+                sub.get("list"),
+                new TypeReference<>() {});
+        return result;
     }
 
     @Transactional
     public Object deleteDemandDepositAccount(String userKey,
                                              String accountNo,
                                              String refundAccountNo){
-        String url = "/demandDeposit/deleteDemandDepositAccount";
+        String url = "/edu/demandDeposit/deleteDemandDepositAccount";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("accountNo", accountNo);
         body.put("refundAccountNo", refundAccountNo);
@@ -133,7 +160,7 @@ public class MasterBankService {
                                       Long maxSubscriptionBalance,
                                       Double interestRate,
                                       String rateDescription) {
-        String url = "/savings/createProduct";
+        String url = "/edu/savings/createProduct";
         Map<String, Object> body = generatorBodyWithHeader(url, null);
         body.put("bankCode", bankCode);
         body.put("accountName", accountName);
@@ -147,45 +174,48 @@ public class MasterBankService {
     }
 
     @Transactional
-    public Object getSavingProducts() {
-        String url = "/savings/inquireSavingsProducts";
+    public List<SavingProductDto> getSavingProducts() {
+        String url = "/edu/savings/inquireSavingsProducts";
         Map<String, Object> body = generatorBodyWithHeader(url, null);
-        return postRequest(url, body);
+        ResponseEntity<Map> response = postRequest(url, body);
+        List<SavingProductDto> result = objectMapper.convertValue(
+                response.getBody().get("REC"),
+                new TypeReference<>() {});
+        return result;
     }
 
     @Transactional
-    public Object createSavingAccount(String userKey,
+    public String createSavingAccount(String userKey,
                                       String withdrawalAccountNo,
                                       String accountTypeUniqueNo,
                                       Long depositBalance){
-        String url = "/savings/createAccount";
+        String url = "/edu/savings/createAccount";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("withdrawalAccountNo", withdrawalAccountNo);
         body.put("accountTypeUniqueNo", accountTypeUniqueNo);
         body.put("depositBalance", depositBalance);
-        return postRequest(url, body);
+        ResponseEntity<Map> response = postRequest(url, body);
+        Map<String, Object> sub = (Map<String, Object>)(response.getBody().get("REC"));
+        return sub.get("accountNo").toString();
     }
 
     @Transactional
-    public Object getSavingAccounts(String userKey){
-        String url = "/savings/inquireAccountList";
-        Map<String, Object> body = generatorBodyWithHeader(url, userKey);
-        return postRequest(url, body);
-    }
-
-    @Transactional
-    public Object getSavingAccount(String userKey,
-                                   String accountNo){
-        String url = "/savings/inquireAccount";
+    public SavingDetail getSavingAccount(String userKey,
+                                         String accountNo){
+        String url = "/edu/savings/inquireAccount";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("accountNo", accountNo);
-        return postRequest(url, body);
+        ResponseEntity<Map> response = postRequest(url, body);
+        SavingDetail result = objectMapper.convertValue(
+                response.getBody().get("REC"),
+                new TypeReference<>() {});
+        return result;
     }
 
     @Transactional
     public Object getSavingAccountPayment(String userKey,
                                           String accountNo){
-        String url = "/savings/inquirePayment";
+        String url = "/edu/savings/inquirePayment";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("accountNo", accountNo);
         return postRequest(url, body);
@@ -193,7 +223,7 @@ public class MasterBankService {
 
     @Transactional
     public Object getSavingAccountExpiryInterest(String userKey, String accountNo){
-        String url = "/savings/inquireExpiryInterest";
+        String url = "/edu/savings/inquireExpiryInterest";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("accountNo", accountNo);
         return postRequest(url, body);
@@ -201,7 +231,7 @@ public class MasterBankService {
 
     @Transactional
     public Object getSavingAccountEarlyTerminationInterest(String userKey, String accountNo){
-        String url = "/savings/inquireEarlyTerminationInterest";
+        String url = "/edu/savings/inquireEarlyTerminationInterest";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("accountNo", accountNo);
         return postRequest(url, body);
@@ -209,13 +239,33 @@ public class MasterBankService {
 
     @Transactional
     public Object deleteSavingAccount(String userKey, String accountNo){
-        String url = "/savings/deleteAccount";
+        String url = "/edu/savings/deleteAccount";
         Map<String, Object> body = generatorBodyWithHeader(url, userKey);
         body.put("accountNo", accountNo);
         return postRequest(url, body);
     }
 
-    private ResponseEntity<?> postRequest(String url, Map<String, Object> body){
+    @Transactional
+    public Object plusAccountMoney(String userKey, String accountNo, Long transactionBalance, String transactionSummary){
+        String url = "/edu/demandDeposit/updateDemandDepositAccountDeposit";
+        Map<String, Object> body = generatorBodyWithHeader(url, userKey);
+        body.put("accountNo", accountNo);
+        body.put("transactionBalance", transactionBalance);
+        body.put("transactionSummary", transactionSummary);
+        return postRequest(url, body);
+    }
+
+    @Transactional
+    public Object minusAccountMoney(String userKey, String accountNo, Long transactionBalance, String transactionSummary){
+        String url = "/edu/demandDeposit/updateDemandDepositAccountWithdrawal";
+        Map<String, Object> body = generatorBodyWithHeader(url, userKey);
+        body.put("accountNo", accountNo);
+        body.put("transactionBalance", transactionBalance);
+        body.put("transactionSummary", transactionSummary);
+        return postRequest(url, body);
+    }
+
+    private ResponseEntity<Map> postRequest(String url, Map<String, Object> body){
         RequestEntity<?> requestEntity = RequestEntity
                 .post(masterBankConfig.getBase()+url)
                 .body(body);
