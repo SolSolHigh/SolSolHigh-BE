@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
-@Table(name = "demand_deposit")
+@Table(name = "deposit")
 @Entity
 @DiscriminatorValue("b")
 @NoArgsConstructor
