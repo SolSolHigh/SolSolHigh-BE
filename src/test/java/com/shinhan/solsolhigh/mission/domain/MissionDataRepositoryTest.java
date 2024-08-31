@@ -53,7 +53,7 @@ class MissionDataRepositoryTest {
                 .currentExp(0)
                 .email("test@test.test")
                 .maxExp(0)
-                .goalMoney(0)
+                .depositGoalMoney(0)
                 .birthday(LocalDate.now())
                 .nickname("자식")
                 .name("자식임")

@@ -22,7 +22,6 @@ class QuizAiChatTest {
 
     @Test
     @DisplayName("퀴즈 요청")
-    @Disabled
     void getQuiz() {
         //given
         QuizKeyword givenKeyword = QuizKeyword.builder().keyword("이자").build();

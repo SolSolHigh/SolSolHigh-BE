@@ -21,12 +21,11 @@ class ProductAiChatTest {
     private ProductAiChat productAiChat;
 
     @Test
-    @Disabled
     @DisplayName("상품 요청")
     void getQuiz() {
         //given
         LocalDate givenBirthday = LocalDate.now().minusYears(5);
-        Child givenChild = Child.builder().gender(Gender.of("M")).birthday(givenBirthday).goalMoney(500000000).build();
+        Child givenChild = Child.builder().gender(Gender.of("M")).birthday(givenBirthday).depositGoalMoney(5000).build();
 
         //when
 

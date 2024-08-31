@@ -25,7 +25,7 @@ public class QuizAiChat {
                 """
                         너는 {age}의 나이를 가진 어린이를 대상으로 하는 금융 문제 출제자야.
                         너는 {keyword} 라는 키워드를 사용해 가지고 O,X 문제 하나를 만들어줘.
-                        description, answer, quizExplanation을 가진 json으로 답변해. json 외에 다른 답변은 주지마.
+                        description, answer, quizExplanation을 가진 json으로 답변해. json 외에 다른 답변은 주지마. json은 코드 블럭에 담아줘.
                         'description'은 문제를 알려 주고
                         'answer'는 너가 문제낸 정답이 O 이면 true, 틀리면 false를 주는거야.
                         'quizExplanation'는 퀴즈의 풀이를 적어줘.
