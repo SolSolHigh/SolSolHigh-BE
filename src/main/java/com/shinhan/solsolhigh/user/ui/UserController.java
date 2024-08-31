@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -116,4 +117,9 @@ public class UserController {
         return ResponseEntity.ok(ListUtils.applyFunctionToElements(infos, ChildRegisterRequestFromParentGetByChild::from));
     }
 
+    @PostMapping("/children/accounts/deposit/recommended")
+    public ResponseEntity<?> recommendStuff(@AuthenticationPrincipal UserPrinciple userPrinciple){
+        String imageUrl = userService.recommendStuff(userPrinciple.getId());
+        return ResponseEntity.ok(Map.of("imageUrl",imageUrl));
+    }
 }
