@@ -608,10 +608,12 @@ VALUES (4, 3, '2024-08-29 08:00:00', 1, 1, 5),
 INSERT INTO account(account_id, user_id, type, account_no)
 VALUES (1, 5, "a", "0884283034654375"),
        (2, 4, "a", "0883927112362781"),
-       (3, 4, "b", "0884355137682027");
+       (3, 4, "b", "0884355137682027"),
+       (4, 3, "a", "0881939882744862"),
+       (5, 3, "b", "0882096701635347");
 
 INSERT INTO deposit(account_id)
-VALUES (3);
+VALUES (3), (5);
 
 INSERT INTO demand_deposit(account_id)
-VALUES (1), (2);
+VALUES (1), (2), (4);
