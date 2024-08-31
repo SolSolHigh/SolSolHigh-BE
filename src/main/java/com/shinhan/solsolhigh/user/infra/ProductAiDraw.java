@@ -15,7 +15,7 @@ public class ProductAiDraw {
 
     public String createImageGetUrl(ProductRecommendDto dto) {
         String prompt = dto.getProduct() + "을 그려줘. " + dto.getDescription();
-        OpenAiImageOptions openai = OpenAiImageOptions.builder().withStyle("Vivid").withQuality("hd").withN(1).withHeight(1024).withWidth(1024).build();
+        OpenAiImageOptions openai = OpenAiImageOptions.builder().withStyle("vivid").withQuality("hd").withN(1).withHeight(1024).withWidth(1024).build();
         ImagePrompt imagePrompt = new ImagePrompt(prompt, openai);
         return openAiImageModel.call(imagePrompt).getResult().getOutput().getUrl();
     }

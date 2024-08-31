@@ -12,7 +12,6 @@ class ProductAiDrawTest {
     @Autowired
     private ProductAiDraw productAiDraw;
 
-    @Disabled
     @Test
     void test() {
         //given
