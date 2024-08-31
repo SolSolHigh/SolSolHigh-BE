@@ -17,7 +17,7 @@ public interface QuizSolveRepository extends JpaRepository<QuizSolve, Integer> {
             "FROM QuizSolve qs " +
             "JOIN FinancialQuiz fq ON fq = qs.financialQuiz " +
             "JOIN QuizKeyword qk ON fq.quizKeyword = qk " +
-            "WHERE qs.child.nickname = :nickname")
+            "WHERE qs.child.nickname = :nickname ORDER BY qs.id DESC")
     Slice<QuizSolveView> queryQuizSolveByChild_Nickname(@Param("nickname") String nickname, Pageable pageable);
 
     Boolean existsByChildIdAndCorrectedAtBetween(Integer childId, LocalDateTime todayStart, LocalDateTime todayEnd);

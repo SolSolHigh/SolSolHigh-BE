@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("")
 @RestController
 public class StrickController {
     private final BetweenOfDayQuizSolveLogFindService betweenOfDayQuizSolveLogFindService;
