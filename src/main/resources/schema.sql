@@ -540,10 +540,10 @@ VALUES (4, CURDATE(), CURDATE(), 100),
        (4, CURDATE(), CURDATE(), 100),
        (4, CURDATE(), CURDATE(), 100),
        (4, CURDATE(), CURDATE(), 100),
-       (4, CURDATE(), CURDATE(), 100),
-       (4, CURDATE(), CURDATE(), 100),
-       (4, CURDATE(), CURDATE(), 100),
-       (4, CURDATE(), CURDATE(), 100);
+#        (4, CURDATE(), CURDATE(), 100),
+#        (4, CURDATE(), CURDATE(), 100),
+#        (4, CURDATE(), CURDATE(), 100),
+#        (4, CURDATE(), CURDATE(), 100),
 
 -- Hold Special Egg
 INSERT INTO hold_special_egg(child_id, special_egg_id, egg_count)

@@ -20,7 +20,7 @@ public class SpecialEggRandomGenerateService {
         SecureRandom random = new SecureRandom();
 
         Double canEarn = random.nextDouble();
-        if (canEarn.compareTo(0.3) >= 0) {
+        if (canEarn.compareTo(0.5) >= 0) {
             return null;
         }
 
