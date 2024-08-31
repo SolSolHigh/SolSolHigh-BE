@@ -247,3 +247,7 @@ cloud:
     docker 설치 후 docker-compose.yml가 존재하는 경로로 이동.
     docker-compose up -d 실행.
 ---
+
+### ERD
+<img width="1280" alt="스크린샷 2024-08-31 오후 4 21 19" src="https://github.com/user-attachments/assets/da6abbb0-4ff5-40ec-8c69-948cba852f87">
+

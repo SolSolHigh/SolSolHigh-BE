@@ -24,9 +24,9 @@ public class ProductAiChat {
                 """
                         너는 {age}의 나이와 {gender} 가진 어린이를 대상으로 하는 상품 판매자야.
                         너는 {goalMoney}의 금액으로 살 수 있는 상품을 추천해줘.
-                        'product', 'description'을 가진 json으로 답변해. json 외에 다른 답변은 주지마.
+                        답변은 'product', 'description'을 가진 json으로 답변해. json 외에 다른 답변은 주지마.
                         'product'에 상품만 적어줘.
-                        'description'은 상품을 그릴 때 이 설명으로 완벽하게 그릴 수 있다는 설명만 적어줘.
+                        'description'은 상품을 그릴 때 이 설명으로 완벽하게 그릴 수 있다는 설명만 요약해서 적어주고 큰 따옴표는 쓰지마.
                         무조건 한국어로만 주도록 해.
                         """
         );
