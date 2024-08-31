@@ -72,12 +72,12 @@ create table parent
 
 create table child
 (
-    user_id     INT NOT NULL PRIMARY KEY,
-    parent_id   INT NULL,
-    current_exp INT NOT NULL,
-    max_exp     INT NOT NULL,
-    deposit_goal_money  INT NOT NULL,
-    deposit_reward_money  INT NOT NULL,
+    user_id              INT NOT NULL PRIMARY KEY,
+    parent_id            INT NULL,
+    current_exp          INT NOT NULL,
+    max_exp              INT NOT NULL,
+    deposit_goal_money   INT NOT NULL,
+    deposit_reward_money INT NOT NULL,
     saving_reward_money  INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (user_id),
     FOREIGN KEY (parent_id) REFERENCES parent (user_id)
@@ -85,8 +85,8 @@ create table child
 
 create table master_bank_member
 (
-    user_id    INT NOT NULL PRIMARY KEY,
-    user_key   varchar(60) NOT NULL,
+    user_id  INT         NOT NULL PRIMARY KEY,
+    user_key varchar(60) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 create table experience_log
@@ -121,26 +121,30 @@ create table notification_log
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 
-create table account(
-    account_id     INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id        INT         NOT NULL,
-    type   CHAR(1)     NOT NULL,
+create table account
+(
+    account_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id    INT         NOT NULL,
+    type       CHAR(1)     NOT NULL,
     account_no VARCHAR(20) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (user_id)
 );
 
-create table deposit(
-    account_id     INT         NOT NULL  PRIMARY KEY,
+create table deposit
+(
+    account_id INT NOT NULL PRIMARY KEY,
     FOREIGN KEY (account_id) REFERENCES account (account_id)
 );
 
-create table saving(
-    account_id     INT         NOT NULL  PRIMARY KEY,
+create table saving
+(
+    account_id INT NOT NULL PRIMARY KEY,
     FOREIGN KEY (account_id) REFERENCES account (account_id)
 );
 
-create table demand_deposit(
-    account_id     INT         NOT NULL  PRIMARY KEY,
+create table demand_deposit
+(
+    account_id INT NOT NULL PRIMARY KEY,
     FOREIGN KEY (account_id) REFERENCES account (account_id)
 );
 
@@ -310,17 +314,17 @@ VALUES (1),
        (2),
        (5);
 
-INSERT INTO child(user_id, parent_id, current_exp, max_exp, deposit_goal_money, deposit_reward_money, saving_reward_money)
+INSERT INTO child(user_id, parent_id, current_exp, max_exp, deposit_goal_money, deposit_reward_money,
+                  saving_reward_money)
 VALUES (3, 5, 132, 132, 0, 0, 0),
        (4, 5, 345, 345, 0, 0, 0);
 
 INSERT INTO master_bank_member(user_id, user_key)
-VALUES
-    (1, 'd7201dd7-6acb-4e09-9084-92c8a1e153f3'),
-    (2, '0f096f78-c0aa-4f61-9e5b-99a3a7e463b6'),
-    (3, 'b027eff3-1192-44bb-a025-6ee462608577'),
-    (4, 'ad218099-f7ae-4d42-95e0-ddb31f66254a'),
-    (5, 'c800771b-71f6-41ad-9a24-5a610834e2ad');
+VALUES (1, 'd7201dd7-6acb-4e09-9084-92c8a1e153f3'),
+       (2, '0f096f78-c0aa-4f61-9e5b-99a3a7e463b6'),
+       (3, 'b027eff3-1192-44bb-a025-6ee462608577'),
+       (4, 'ad218099-f7ae-4d42-95e0-ddb31f66254a'),
+       (5, 'c800771b-71f6-41ad-9a24-5a610834e2ad');
 
 INSERT INTO promise_ticket(child_id, published_at, used_at, requested_at, image_url, description)
 VALUES (4, '2024-08-26T00:00:00', '2024-08-28T00:00:00', NULL, NULL, '가족들과 함께 에버랜드 여행 가기'),
@@ -385,76 +389,106 @@ VALUES (4, '수학 숙제 완료하기', true, '2024-07-01 09:00:00', '2024-09-0
 
 -- 규현이에게 할당된 키워드
 INSERT INTO selected_quiz_keyword (child_id, quiz_keyword_id)
-SELECT 4, quiz_keyword_id FROM quiz_keyword ORDER BY RAND() LIMIT 3;
+SELECT 4, quiz_keyword_id
+FROM quiz_keyword
+ORDER BY RAND()
+LIMIT 3;
 
 -- 요하에게 할당된 키워드
 INSERT INTO selected_quiz_keyword (child_id, quiz_keyword_id)
-SELECT 3, quiz_keyword_id FROM quiz_keyword ORDER BY RAND() LIMIT 3;
+SELECT 3, quiz_keyword_id
+FROM quiz_keyword
+ORDER BY RAND()
+LIMIT 3;
 
 -- 규현이(7세)용 퀴즈 20개 생성
 INSERT INTO financial_quiz (description, answer, quiz_keyword_id, child_id, created_at, quiz_explanation)
-VALUES
-    ('은행 대출을 받으면 이자를 꼭 갚아야 할까요?', true, 1, 4, CURDATE() - INTERVAL 20 DAY, '이자는 빌린 돈에 대한 대가로 반드시 갚아야 합니다.'),
-    ('신용카드로 물건을 사면, 돈을 나중에 갚아야 할까요?', true, 3, 4, CURDATE() - INTERVAL 19 DAY, '신용카드는 돈을 빌려 쓰는 것이므로 나중에 갚아야 합니다.'),
-    ('핀테크는 전자 금융 서비스와 관련이 있을까요?', true, 5, 4, CURDATE() - INTERVAL 18 DAY, '핀테크는 금융(Finance)과 기술(Technology)을 결합한 서비스입니다.'),
-    ('환율은 외국 돈과 관련이 있을까요?', true, 6, 4, CURDATE() - INTERVAL 17 DAY, '환율은 한 나라의 돈과 다른 나라의 돈을 교환할 때 사용하는 비율입니다.'),
-    ('대포 통장은 범죄에 사용될 수 있을까요?', true, 4, 4, CURDATE() - INTERVAL 16 DAY, '대포 통장은 보통 불법적인 목적에 사용됩니다.'),
-    ('펀드는 다양한 사람들의 돈을 모아 투자하는 방법일까요?', true, 2, 4, CURDATE() - INTERVAL 15 DAY, '펀드는 많은 사람들의 돈을 모아 다양한 자산에 투자하는 방법입니다.'),
-    ('은행에서 돈을 빌리면 어떻게 될까요?', true, 1, 4, CURDATE() - INTERVAL 14 DAY, '은행에서 돈을 빌리면 이자를 갚아야 합니다.'),
-    ('신용카드는 돈을 바로 내지 않아도 될까요?', true, 3, 4, CURDATE() - INTERVAL 13 DAY, '신용카드는 사용 후 일정 기간 후에 갚는 방식입니다.'),
-    ('펀드는 위험이 있을까요?', true, 2, 4, CURDATE() - INTERVAL 12 DAY, '펀드는 투자이므로 손실의 위험이 있습니다.'),
-    ('은행 대출을 받을 때 이자율은 왜 중요할까요?', true, 1, 4, CURDATE() - INTERVAL 11 DAY, '이자율이 높을수록 갚아야 할 돈이 많아집니다.'),
-    ('대포 통장을 만들면 법에 저촉될까요?', true, 4, 4, CURDATE() - INTERVAL 10 DAY, '대포 통장은 불법으로 법에 저촉됩니다.'),
-    ('핀테크는 미래의 은행 역할을 할 수 있을까요?', true, 5, 4, CURDATE() - INTERVAL 9 DAY, '핀테크는 빠르고 편리한 금융 서비스를 제공하여 미래의 은행 역할을 할 수 있습니다.'),
-    ('환율은 매일 바뀔까요?', true, 6, 4, CURDATE() - INTERVAL 8 DAY, '환율은 경제 상황에 따라 매일 변동할 수 있습니다.'),
-    ('은행에 돈을 맡기면 안전할까요?', true, 1, 4, CURDATE() - INTERVAL 7 DAY, '은행은 돈을 안전하게 보관할 수 있는 장소입니다.'),
-    ('대출을 받을 때 상환 기간은 왜 중요할까요?', true, 1, 4, CURDATE() - INTERVAL 6 DAY, '상환 기간이 길면 이자가 많이 쌓일 수 있습니다.'),
-    ('펀드를 관리하는 사람은 누구일까요?', true, 2, 4, CURDATE() - INTERVAL 5 DAY, '펀드는 전문 투자자가 관리합니다.'),
-    ('신용카드를 잃어버리면 어떻게 될까요?', true, 3, 4, CURDATE() - INTERVAL 4 DAY, '신용카드를 잃어버리면 즉시 신고해야 합니다.'),
-    ('대포 통장은 왜 위험할까요?', true, 4, 4, CURDATE() - INTERVAL 3 DAY, '대포 통장은 범죄에 사용될 수 있어 위험합니다.'),
-    ('핀테크를 사용하면 편리할까요?', true, 5, 4, CURDATE() - INTERVAL 2 DAY, '핀테크는 온라인에서 편리하게 금융 서비스를 사용할 수 있습니다.'),
-    ('환율이 오르면 수입품 가격이 어떻게 될까요?', true, 6, 4, CURDATE() - INTERVAL 1 DAY, '환율이 오르면 수입품 가격이 상승할 수 있습니다.');
+VALUES ('은행 대출을 받으면 이자를 꼭 갚아야 할까요?', true, 1, 4, CURDATE() - INTERVAL 20 DAY, '이자는 빌린 돈에 대한 대가로 반드시 갚아야 합니다.'),
+       ('신용카드로 물건을 사면, 돈을 나중에 갚아야 할까요?', true, 3, 4, CURDATE() - INTERVAL 19 DAY, '신용카드는 돈을 빌려 쓰는 것이므로 나중에 갚아야 합니다.'),
+       ('핀테크는 전자 금융 서비스와 관련이 있을까요?', true, 5, 4, CURDATE() - INTERVAL 18 DAY,
+        '핀테크는 금융(Finance)과 기술(Technology)을 결합한 서비스입니다.'),
+       ('환율은 외국 돈과 관련이 있을까요?', true, 6, 4, CURDATE() - INTERVAL 17 DAY, '환율은 한 나라의 돈과 다른 나라의 돈을 교환할 때 사용하는 비율입니다.'),
+       ('대포 통장은 범죄에 사용될 수 있을까요?', true, 4, 4, CURDATE() - INTERVAL 16 DAY, '대포 통장은 보통 불법적인 목적에 사용됩니다.'),
+       ('펀드는 다양한 사람들의 돈을 모아 투자하는 방법일까요?', true, 2, 4, CURDATE() - INTERVAL 15 DAY,
+        '펀드는 많은 사람들의 돈을 모아 다양한 자산에 투자하는 방법입니다.'),
+       ('은행에서 돈을 빌리면 어떻게 될까요?', true, 1, 4, CURDATE() - INTERVAL 14 DAY, '은행에서 돈을 빌리면 이자를 갚아야 합니다.'),
+       ('신용카드는 돈을 바로 내지 않아도 될까요?', true, 3, 4, CURDATE() - INTERVAL 13 DAY, '신용카드는 사용 후 일정 기간 후에 갚는 방식입니다.'),
+       ('펀드는 위험이 있을까요?', true, 2, 4, CURDATE() - INTERVAL 12 DAY, '펀드는 투자이므로 손실의 위험이 있습니다.'),
+       ('은행 대출을 받을 때 이자율은 중요할까요?', true, 1, 4, CURDATE() - INTERVAL 11 DAY, '이자율이 높을수록 갚아야 할 돈이 많아집니다.'),
+       ('대포 통장을 만들면 법에 위반될까요?', true, 4, 4, CURDATE() - INTERVAL 10 DAY, '대포 통장은 불법으로 법에 위반됩니다.'),
+       ('핀테크는 미래의 은행 역할을 할 수 있을까요?', true, 5, 4, CURDATE() - INTERVAL 9 DAY,
+        '핀테크는 빠르고 편리한 금융 서비스를 제공하여 미래의 은행 역할을 할 수 있습니다.'),
+       ('환율은 매일 바뀔까요?', true, 6, 4, CURDATE() - INTERVAL 8 DAY, '환율은 경제 상황에 따라 매일 변동할 수 있습니다.'),
+       ('은행에 돈을 맡기면 안전할까요?', true, 1, 4, CURDATE() - INTERVAL 7 DAY, '은행은 돈을 안전하게 보관할 수 있는 장소입니다.'),
+       ('대출을 받을 때 상환 기간은 중요할까요?', true, 1, 4, CURDATE() - INTERVAL 6 DAY, '상환 기간이 길면 이자가 많이 쌓일 수 있습니다.'),
+       ('펀드를 관리하는 사람은 펀드 매니저 일까요?', true, 2, 4, CURDATE() - INTERVAL 5 DAY, '펀드는 전문 투자자가 관리합니다.'),
+       ('신용카드를 잃어버리면 신고해야 할까요?', true, 3, 4, CURDATE() - INTERVAL 4 DAY, '신용카드를 잃어버리면 즉시 신고해야 합니다.'),
+       ('대포 통장은 위험할까요?', true, 4, 4, CURDATE() - INTERVAL 3 DAY, '대포 통장은 범죄에 사용될 수 있어 위험합니다.'),
+       ('핀테크를 사용하면 편리할까요?', true, 5, 4, CURDATE() - INTERVAL 2 DAY, '핀테크는 온라인에서 편리하게 금융 서비스를 사용할 수 있습니다.'),
+       ('환율이 오르면 수입품 가격이 어떻게 될까요?', true, 6, 4, CURDATE() - INTERVAL 1 DAY, '환율이 오르면 수입품 가격이 상승할 수 있습니다.');
 
 -- 요하(4세)용 퀴즈 13개 생성
 INSERT INTO financial_quiz (description, answer, quiz_keyword_id, child_id, created_at, quiz_explanation)
-VALUES
-    ('돈은 어디서 나올까요? 집에서 찍어낼 수 있을까요?', false, 7, 3, CURDATE() - INTERVAL 13 DAY, '돈은 은행에서 만들어지는 것이며, 집에서 만들 수 없습니다.'),
-    ('찢어진 돈은 사용할 수 있을까요?', false, 8, 3, CURDATE() - INTERVAL 12 DAY, '찢어진 돈은 은행에서 교환해야 사용할 수 있습니다.'),
-    ('폐기된 돈은 다시 사용할 수 있을까요?', false, 9, 3, CURDATE() - INTERVAL 11 DAY, '폐기된 돈은 더 이상 사용할 수 없습니다.'),
-    ('핀테크는 어린이도 사용할 수 있을까요?', true, 5, 3, CURDATE() - INTERVAL 10 DAY, '핀테크 서비스는 어린이도 사용할 수 있는 서비스가 있습니다.'),
-    ('신용카드는 어린이도 사용할 수 있을까요?', false, 3, 3, CURDATE() - INTERVAL 9 DAY, '신용카드는 보통 성인만 사용할 수 있습니다.'),
-    ('은행에서 돈을 맡기면 이자를 받을 수 있을까요?', true, 1, 3, CURDATE() - INTERVAL 8 DAY, '은행에 돈을 맡기면 이자를 받을 수 있습니다.'),
-    ('돈은 무엇으로 만들어질까요?', true, 7, 3, CURDATE() - INTERVAL 7 DAY, '돈은 종이나 금속으로 만들어집니다.'),
-    ('폐기된 돈은 왜 사용할 수 없을까요?', true, 9, 3, CURDATE() - INTERVAL 6 DAY, '폐기된 돈은 가치가 없어졌기 때문에 사용할 수 없습니다.'),
-    ('은행 대출은 누구나 받을 수 있을까요?', false, 1, 3, CURDATE() - INTERVAL 5 DAY, '은행 대출은 신용이 있는 사람만 받을 수 있습니다.'),
-    ('찢어진 돈은 어디에서 교환할 수 있을까요?', true, 8, 3, CURDATE() - INTERVAL 4 DAY, '찢어진 돈은 은행에서 교환할 수 있습니다.'),
-    ('핀테크는 무엇일까요?', true, 5, 3, CURDATE() - INTERVAL 3 DAY, '핀테크는 금융과 기술을 결합한 서비스입니다.'),
-    ('신용카드를 사용할 때 조심해야 할 것은 무엇일까요?', true, 3, 3, CURDATE() - INTERVAL 2 DAY, '신용카드를 사용할 때는 과도한 지출을 조심해야 합니다.'),
-    ('은행은 돈을 어디에 보관할까요?', true, 7, 3, CURDATE() - INTERVAL 1 DAY, '은행은 돈을 안전한 금고에 보관합니다.');
+VALUES ('돈은 어디서 나올까요? 집에서 찍어낼 수 있을까요?', false, 7, 3, CURDATE() - INTERVAL 13 DAY, '돈은 은행에서 만들어지는 것이며, 집에서 만들 수 없습니다.'),
+       ('찢어진 돈은 사용할 수 있을까요?', false, 8, 3, CURDATE() - INTERVAL 12 DAY, '찢어진 돈은 은행에서 교환해야 사용할 수 있습니다.'),
+       ('폐기된 돈은 다시 사용할 수 있을까요?', false, 9, 3, CURDATE() - INTERVAL 11 DAY, '폐기된 돈은 더 이상 사용할 수 없습니다.'),
+       ('핀테크는 어린이도 사용할 수 있을까요?', true, 5, 3, CURDATE() - INTERVAL 10 DAY, '핀테크 서비스는 어린이도 사용할 수 있는 서비스가 있습니다.'),
+       ('신용카드는 어린이도 사용할 수 있을까요?', false, 3, 3, CURDATE() - INTERVAL 9 DAY, '신용카드는 보통 어른만 사용할 수 있습니다.'),
+       ('은행에서 돈을 맡기면 이자를 받을 수 있을까요?', true, 1, 3, CURDATE() - INTERVAL 8 DAY, '은행에 돈을 맡기면 이자를 받을 수 있습니다.'),
+       ('돈은 종이나 금속으로 만들어질까요?', true, 7, 3, CURDATE() - INTERVAL 7 DAY, '돈은 종이나 금속으로 만들어집니다.'),
+       ('폐기된 돈은 사용할 수 없을까요?', true, 9, 3, CURDATE() - INTERVAL 6 DAY, '폐기된 돈은 가치가 없어졌기 때문에 사용할 수 없습니다.'),
+       ('은행 대출은 누구나 받을 수 있을까요?', false, 1, 3, CURDATE() - INTERVAL 5 DAY, '은행 대출은 신용이 있는 사람만 받을 수 있습니다.'),
+       ('찢어진 돈은 은행에서 교환할 수 있을까요?', true, 8, 3, CURDATE() - INTERVAL 4 DAY, '찢어진 돈은 은행에서 교환할 수 있습니다.'),
+       ('핀테크는 금융과 기술을 결합한 서비스일까요?', true, 5, 3, CURDATE() - INTERVAL 3 DAY, '핀테크는 금융과 기술을 결합한 서비스입니다.'),
+       ('신용카드를 사용할 때 조심해야 할 것은 지출일까요?', true, 3, 3, CURDATE() - INTERVAL 2 DAY, '신용카드를 사용할 때는 과도한 지출을 조심해야 합니다.'),
+       ('은행은 돈을 금고에 보관할까요?', true, 7, 3, CURDATE() - INTERVAL 1 DAY, '은행은 돈을 안전한 금고에 보관합니다.');
 
-INSERT INTO quiz_solve (financial_quiz_id, child_id, is_correct, corrected_at)
-VALUES
-    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 6 DAY), 4, true, CURDATE() - INTERVAL 6 DAY),
-    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 5 DAY), 4, false, CURDATE() - INTERVAL 5 DAY),
-    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 4 DAY), 4, true, CURDATE() - INTERVAL 4 DAY),
-    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 3 DAY), 4, true, CURDATE() - INTERVAL 3 DAY),
-    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 2 DAY), 4, false, CURDATE() - INTERVAL 2 DAY),
-    ((SELECT financial_quiz_id FROM financial_quiz WHERE child_id = 4 AND created_at = CURDATE() - INTERVAL 1 DAY), 4, true, CURDATE() - INTERVAL 1 DAY);
 
 -- 규현이 20일치 퀴즈 풀이 내역
 INSERT INTO quiz_solve (financial_quiz_id, child_id, is_correct, corrected_at)
-SELECT financial_quiz_id, 4, (RAND() > 0.5), created_at
-FROM financial_quiz WHERE child_id = 4;
+VALUES (1, 4, false, CURDATE() - INTERVAL (20) DAY),
+       (2, 4, false, CURDATE() - INTERVAL (19) DAY),
+       (3, 4, true, CURDATE() - INTERVAL (18) DAY),
+       (4, 4, true, CURDATE() - INTERVAL (17) DAY),
+       (5, 4, true, CURDATE() - INTERVAL (16) DAY),
+       (6, 4, false, CURDATE() - INTERVAL (15) DAY),
+       (7, 4, true, CURDATE() - INTERVAL (14) DAY),
+       (8, 4, true, CURDATE() - INTERVAL (13) DAY),
+       (9, 4, true, CURDATE() - INTERVAL (12) DAY),
+       (10, 4, true, CURDATE() - INTERVAL (11) DAY),
+       (11, 4, false, CURDATE() - INTERVAL (10) DAY),
+       (12, 4, true, CURDATE() - INTERVAL (9) DAY),
+       (13, 4, false, CURDATE() - INTERVAL (8) DAY),
+       (14, 4, false, CURDATE() - INTERVAL (7) DAY),
+       (15, 4, true, CURDATE() - INTERVAL (6) DAY),
+       (16, 4, true, CURDATE() - INTERVAL (5) DAY),
+       (17, 4, true, CURDATE() - INTERVAL (4) DAY),
+       (18, 4, true, CURDATE() - INTERVAL (3) DAY),
+       (19, 4, true, CURDATE() - INTERVAL (2) DAY),
+       (20, 4, true, CURDATE() - INTERVAL (1) DAY);
+
 
 -- 요하 13일치 퀴즈 풀이 내역
 INSERT INTO quiz_solve (financial_quiz_id, child_id, is_correct, corrected_at)
-SELECT financial_quiz_id, 3, (RAND() > 0.5), created_at
-FROM financial_quiz WHERE child_id = 3;
+VALUES (21, 3, false, CURDATE() - INTERVAL (20) DAY),
+       (22, 3, false, CURDATE() - INTERVAL (19) DAY),
+       (23, 3, true, CURDATE() - INTERVAL (18) DAY),
+       (24, 3, true, CURDATE() - INTERVAL (17) DAY),
+       (25, 3, true, CURDATE() - INTERVAL (16) DAY),
+       (26, 3, false, CURDATE() - INTERVAL (15) DAY),
+       (27, 3, true, CURDATE() - INTERVAL (14) DAY),
+       (28, 3, true, CURDATE() - INTERVAL (13) DAY),
+       (29, 3, true, CURDATE() - INTERVAL (12) DAY),
+       (30, 3, true, CURDATE() - INTERVAL (11) DAY),
+       (31, 3, false, CURDATE() - INTERVAL (10) DAY),
+       (32, 3, true, CURDATE() - INTERVAL (9) DAY),
+       (33, 3, false, CURDATE() - INTERVAL (8) DAY);
 
 -- 규현이의 6일간 퀴즈 풀이 로그 (스트릭)
-INSERT INTO between_of_day_quiz_solve_log (child_id, started_at, end_at, count)
+    INSERT
+INTO between_of_day_quiz_solve_log (child_id, started_at, end_at, count)
 VALUES
-    (4, CURDATE() - INTERVAL 6 DAY, CURDATE() + INTERVAL 1 DAY, 6);
+    (4, CURDATE() - INTERVAL 6 DAY, CURDATE(), 6);
 
 # -- Financial Quiz
 # INSERT INTO financial_quiz(description, answer, quiz_keyword_id, child_id, created_at, quiz_explanation)
@@ -498,7 +532,7 @@ VALUES
 
 -- Egg Count
 INSERT INTO egg_count(child_id, egg_count)
-VALUES (4,10);
+VALUES (4, 10);
 
 INSERT INTO egg_destroy_log(child_id, created_at, destroyed_at, hit_count)
 VALUES (4, CURDATE(), CURDATE(), 100),
@@ -513,15 +547,15 @@ VALUES (4, CURDATE(), CURDATE(), 100),
 
 -- Hold Special Egg
 INSERT INTO hold_special_egg(child_id, special_egg_id, egg_count)
-VALUES (4,1,1),
-       (4,2,1),
-       (4,3,1),
-       (4,6,1),
-       (4,7,1),
-       (4,8,1),
-       (4,10,1),
-       (4,11,1),
-       (4,12,1);
+VALUES (4, 1, 1),
+       (4, 2, 1),
+       (4, 3, 1),
+       (4, 6, 1),
+       (4, 7, 1),
+       (4, 8, 1),
+       (4, 10, 1),
+       (4, 11, 1),
+       (4, 12, 1);
 
 -- Egg Sell Board
 INSERT INTO egg_sell_board(child_id, special_egg_id, wrote_at, egg_price_per_once, sell_count)
@@ -537,13 +571,13 @@ VALUES (3, 1, '2024-07-01 08:00:00', 1, 5),
        (3, 10, '2024-07-10 17:00:00', 1, 2);
 
 INSERT INTO egg_trade_log(seller_id, buyer_id, traded_at, special_egg_id, egg_stock_count, egg_price_per_once)
-VALUES (4,3,'2024-08-29 08:00:00', 1,1,5),
-       (4,3,'2024-08-29 08:00:00', 2,1,5),
-       (4,3,'2024-08-29 08:00:00', 4,1,5),
-       (4,3,'2024-08-29 08:00:00', 9,1,3),
-       (4,3,'2024-08-29 08:00:00', 3,1,3),
-       (4,3,'2024-08-29 08:00:00', 12,1,3),
-       (4,3,'2024-08-29 08:00:00', 7,1,3),
-       (4,3,'2024-08-29 08:00:00', 5,1,2),
-       (4,3,'2024-08-29 08:00:00', 11,1,2),
-       (4,3,'2024-08-29 08:00:00', 10,1,2);
+VALUES (4, 3, '2024-08-29 08:00:00', 1, 1, 5),
+       (4, 3, '2024-08-29 08:00:00', 2, 1, 5),
+       (4, 3, '2024-08-29 08:00:00', 4, 1, 5),
+       (4, 3, '2024-08-29 08:00:00', 9, 1, 3),
+       (4, 3, '2024-08-29 08:00:00', 3, 1, 3),
+       (4, 3, '2024-08-29 08:00:00', 12, 1, 3),
+       (4, 3, '2024-08-29 08:00:00', 7, 1, 3),
+       (4, 3, '2024-08-29 08:00:00', 5, 1, 2),
+       (4, 3, '2024-08-29 08:00:00', 11, 1, 2),
+       (4, 3, '2024-08-29 08:00:00', 10, 1, 2);
