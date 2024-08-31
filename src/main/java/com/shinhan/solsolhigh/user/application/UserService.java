@@ -8,6 +8,9 @@ import com.shinhan.solsolhigh.notification.domain.NotificationType;
 import com.shinhan.solsolhigh.notification.infra.NotificationRequestedEvent;
 import com.shinhan.solsolhigh.user.domain.*;
 import com.shinhan.solsolhigh.user.exception.*;
+import com.shinhan.solsolhigh.user.infra.ProductAiChat;
+import com.shinhan.solsolhigh.user.infra.ProductAiDraw;
+import com.shinhan.solsolhigh.user.infra.ProductRecommendDto;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -28,6 +31,9 @@ public class UserService {
     private final TemporaryUserRepository temporaryUserRepository;
     private final ParentRepository parentRepository;
     private final AccountService accountService;
+    private final ProductAiChat productAiChat;
+    private final ProductAiDraw productAiDraw;
+
 
     @Transactional(readOnly = true)
     public boolean checkDuplicatedNickname(String nickname) {
@@ -293,4 +299,13 @@ public class UserService {
         childRepository.removeParent(parent);
     }
 
+    @Transactional
+    @Authorized(allowed = User.Type.CHILD)
+    public String recommendStuff(Integer id) {
+        Child child = childRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        if(child.getIsDeleted())
+            throw new UserWithdrawalException();
+        ProductRecommendDto dto = productAiChat.getProductFromChildInfo(child);
+        return productAiDraw.createImageGetUrl(dto);
+    }
 }

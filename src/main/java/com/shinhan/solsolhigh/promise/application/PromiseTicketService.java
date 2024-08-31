@@ -41,7 +41,7 @@ public class PromiseTicketService {
     @Transactional
     @Authorized(allowed = User.Type.CHILD)
     public void useRequestPromiseTicket(@Valid PromiseTicketUseRequestDto dto) {
-        PromiseTicket ticket = promiseTicketRepository.findOneUnrequestedTicketByChildId(dto.getId()).orElseThrow(PromiseTicketNotExistsException::new);
+        PromiseTicket ticket = promiseTicketRepository.findFirstByChildIdAndRequestedAtIsNull(dto.getId()).orElseThrow(PromiseTicketNotExistsException::new);
         ticket.initRequestAt();
         ticket.changeDescription(dto.getDescription());
         //TODO. 부모에게 알림 전송
